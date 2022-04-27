@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"accounting-service/internal/router/api"
+	"accounting-service/internal/api"
 	"accounting-service/pkg/setting"
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +24,7 @@ func InitRouter() *gin.Engine {
 
 	ledger := r.Group("/")
 	// 查询账本
-	ledger.GET("/ledgers", api.ListLedger)
+	ledger.GET("/ledger", api.ListLedger)
 	// 创建账本
 	ledger.POST("/ledger", api.CreateLedger)
 	// 更新账本

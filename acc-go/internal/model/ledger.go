@@ -7,13 +7,13 @@ import (
 
 type Ledger struct {
 	ID          int64 `gorm:"primary_key"`
-	CreateTime  int64
-	UpdateTime  int64
-	OwnerId     int64
-	TplLedgerId int64
+	CreateTime  int64 `json:"-"`
+	UpdateTime  int64 `json:"-"`
+	OwnerId     int64 `json:"-"`
+	TplLedgerId int64 `json:"-"`
 	Name        string
 	Remark      string
-	SortNumber  int
+	SortNumber  int `json:"-"`
 }
 
 func (Ledger) TableName() string {
@@ -41,9 +41,9 @@ func DeleteLedger(tx *gorm.DB, ledgerId int64) error {
 	return nil
 }
 
-func ListLedger(ownerId int) ([]*Ledger, error) {
-	var ledgers []*Ledger
-	err := db.DB.Where("owner_id = ?", ownerId).Find(ledgers).Error
+func ListLedger(ownerId int64) (*[]Ledger, error) {
+	var ledgers *[]Ledger
+	err := db.DB.Where("owner_id = ?", ownerId).Find(&ledgers).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}

@@ -11,19 +11,21 @@ import (
 type Ledger struct {
 	LedgerId int64  `form:"ledgerId" binding:"required"`
 	Name     string `form:"name"`
+	OwnerId  int64  `form:"ownerId"`
 }
 
 func CreateLedger(tLedgerId int64, ownerId int64) error {
 	now := time.Now().UnixMilli()
+	ledger := model.Ledger{
+		OwnerId:     ownerId,
+		TplLedgerId: tLedgerId,
+		Name:        "标准账本",
+		SortNumber:  1,
+		CreateTime:  now,
+		UpdateTime:  now,
+	}
+
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
-		ledger := model.Ledger{
-			OwnerId:     ownerId,
-			TplLedgerId: tLedgerId,
-			Name:        "标准账本",
-			SortNumber:  1,
-			CreateTime:  now,
-			UpdateTime:  now,
-		}
 		ledgerId, err := model.InsertLedger(tx, &ledger)
 		if err != nil {
 			logger.Error("create ledger error, template ledger id: {}, details: ", tLedgerId, err)
@@ -74,4 +76,13 @@ func DeleteLedger(ledgerId int64) error {
 		return nil
 	})
 	return err
+}
+
+func ListLedger(ownerId int64) (*[]model.Ledger, error) {
+	ledgers, err := model.ListLedger(ownerId)
+	if err != nil {
+		logger.Error("Query user account error, user id: {}, details: ", ownerId, err)
+		return nil, err
+	}
+	return ledgers, nil
 }
