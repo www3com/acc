@@ -2,6 +2,7 @@ package api
 
 import (
 	"accounting-service/internal/service"
+	"accounting-service/pkg/logger"
 	"accounting-service/pkg/ret"
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,7 @@ const ownerId = 1
 func CreateLedger(c *gin.Context) {
 	if ledger, ok := valid(c); ok {
 		if err := service.CreateLedger(ledger.LedgerId, ownerId); err != nil {
+			logger.Error(err)
 			ret.RenderCode(c, ret.INTERNAL_ERROR)
 			return
 		}
@@ -23,6 +25,7 @@ func CreateLedger(c *gin.Context) {
 func UpdateLedger(c *gin.Context) {
 	if ledger, ok := valid(c); ok {
 		if err := service.UpdateLedger(ledger.LedgerId, ledger.Name); err != nil {
+			logger.Error("Update Ledger name error, ledger id: {}, details: ", ledger.LedgerId, err)
 			ret.RenderCode(c, ret.INTERNAL_ERROR)
 			return
 		}
@@ -34,6 +37,7 @@ func UpdateLedger(c *gin.Context) {
 func DeleteLedger(c *gin.Context) {
 	if ledger, ok := valid(c); ok {
 		if err := service.DeleteLedger(ledger.LedgerId); err != nil {
+			logger.Error(err)
 			ret.RenderCode(c, ret.INTERNAL_ERROR)
 			return
 		}
@@ -44,6 +48,7 @@ func DeleteLedger(c *gin.Context) {
 func ListLedger(c *gin.Context) {
 	ledgers, err := service.ListLedger(ownerId)
 	if err != nil {
+		logger.Error("Query user account error, user id: {}, details: ", ownerId, err)
 		ret.RenderCode(c, ret.INTERNAL_ERROR)
 		return
 	}
@@ -53,6 +58,7 @@ func ListLedger(c *gin.Context) {
 func valid(c *gin.Context) (*service.Ledger, bool) {
 	var ledger service.Ledger
 	if err := c.ShouldBindQuery(&ledger); err != nil {
+		logger.Error(err)
 		ret.RenderError(c, err)
 		return nil, false
 	}

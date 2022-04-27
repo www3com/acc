@@ -31,5 +31,7 @@ func InitRouter() *gin.Engine {
 	ledger.PUT("/ledger", api.UpdateLedger)
 	// 删除账本
 	ledger.DELETE("/ledger", api.DeleteLedger)
+
+	ledger.POST("/transaction", api.CreateTransaction)
 	return r
 }

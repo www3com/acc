@@ -17,6 +17,6 @@ const (
 	// TOO_MANY_REQUESTS : flow control limited.
 	TOO_MANY_REQUESTS = 429
 
-	// INTERNAL_ERROR : The server has an unknown err
+	// INTERNAL_ERROR : The server has an unknown e
 	INTERNAL_ERROR = 500
 )
