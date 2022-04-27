@@ -6,7 +6,9 @@ import (
 )
 
 type Ledger struct {
-	Model
+	ID          int64 `gorm:"primary_key"`
+	CreateTime  int64
+	UpdateTime  int64
 	OwnerId     int64
 	TplLedgerId int64
 	Name        string
@@ -25,15 +27,15 @@ func InsertLedger(tx *gorm.DB, ledger *Ledger) (int64, error) {
 	return ledger.ID, nil
 }
 
-func UpdateLedger(ledger Ledger) error {
+func UpdateLedger(ledger *Ledger) error {
 	if err := db.DB.Model(ledger).Where("id = ?", ledger.ID).Update("name", ledger.Name).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func DeleteLedger(tx *gorm.DB, id int64) error {
-	if err := db.DB.Delete(Ledger{}, "id = ?", id).Error; err != nil {
+func DeleteLedger(tx *gorm.DB, ledgerId int64) error {
+	if err := tx.Delete(Ledger{}, "id = ?", ledgerId).Error; err != nil {
 		return err
 	}
 	return nil

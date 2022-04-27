@@ -8,15 +8,21 @@ import (
 	"time"
 )
 
+type Ledger struct {
+	LedgerId int64  `form:"ledgerId" binding:"required"`
+	Name     string `form:"name"`
+}
+
 func CreateLedger(tLedgerId int64, ownerId int64) error {
 	now := time.Now().UnixMilli()
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		ledger := model.Ledger{
-			Model:       model.Model{CreateTime: now, UpdateTime: now},
 			OwnerId:     ownerId,
 			TplLedgerId: tLedgerId,
 			Name:        "标准账本",
 			SortNumber:  1,
+			CreateTime:  now,
+			UpdateTime:  now,
 		}
 		ledgerId, err := model.InsertLedger(tx, &ledger)
 		if err != nil {
@@ -39,20 +45,29 @@ func CreateLedger(tLedgerId int64, ownerId int64) error {
 	return err
 }
 
-func DeleteLedger(id int64) error {
+func UpdateLedger(ledgerId int64, name string) error {
+	ledger := model.Ledger{ID: ledgerId, Name: name}
+	if err := model.UpdateLedger(&ledger); err != nil {
+		logger.Error("Update Ledger name error, ledger id: {}, details: ", ledgerId, err)
+		return err
+	}
+	return nil
+}
+
+func DeleteLedger(ledgerId int64) error {
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
-		if err := model.DeleteLedger(tx, id); err != nil {
-			logger.Error("Delete ledger error, ledger id: {}, details: ", id, err)
+		if err := model.DeleteLedger(tx, ledgerId); err != nil {
+			logger.Error("Delete ledger error, ledger id: {}, details: ", ledgerId, err)
 			return err
 		}
 
-		if err := model.DeleteAccountByLedgerId(tx, id); err != nil {
-			logger.Error("Delete account error, ledger id: {}, details: ", id, err)
+		if err := model.DeleteAccountByLedgerId(tx, ledgerId); err != nil {
+			logger.Error("Delete account error, ledger id: {}, details: ", ledgerId, err)
 			return err
 		}
 
-		if err := model.DeleteDictByLedgerId(tx, id); err != nil {
-			logger.Error("Delete dict error, ledger id: {}, details: ", id, err)
+		if err := model.DeleteDictByLedgerId(tx, ledgerId); err != nil {
+			logger.Error("Delete dict error, ledger id: {}, details: ", ledgerId, err)
 			return err
 		}
 

@@ -6,12 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Ledger struct {
-	LedgerId int64 `form:"ledgerId" binding:"required"`
-}
-
+// CreateLedger 创建用户账本
 func CreateLedger(c *gin.Context) {
-	var ledger Ledger
+	var ledger service.Ledger
 	if err := c.ShouldBindQuery(&ledger); err != nil {
 		ret.RenderError(c, err)
 		return
@@ -24,12 +21,24 @@ func CreateLedger(c *gin.Context) {
 	ret.RenderOk(c, nil)
 }
 
+// UpdateLedger 更新用户账本的名称
 func UpdateLedger(c *gin.Context) {
+	var ledger service.Ledger
+	if err := c.ShouldBindQuery(&ledger); err != nil {
+		ret.RenderError(c, err)
+		return
+	}
 
+	if err := service.UpdateLedger(ledger.LedgerId, ledger.Name); err != nil {
+		ret.RenderCode(c, ret.INTERNAL_ERROR)
+		return
+	}
+	ret.RenderOk(c, nil)
 }
 
+// DeleteLedger 删除用户账本
 func DeleteLedger(c *gin.Context) {
-	var ledger Ledger
+	var ledger service.Ledger
 	if err := c.ShouldBindQuery(&ledger); err != nil {
 		ret.RenderError(c, err)
 		return

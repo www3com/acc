@@ -7,7 +7,9 @@ import (
 )
 
 type Account struct {
-	Model
+	ID         int64 `gorm:"primary_key"`
+	CreateTime int64
+	UpdateTime int64
 	LedgerId   int64
 	Type       int
 	Name       string
@@ -37,9 +39,27 @@ func InsertAccount(tx *gorm.DB, ledgerId, tLedgerId int64, now int64) error {
 	return nil
 }
 
-func DeleteAccountByLedgerId(tx *gorm.DB, ledgerId int64) error {
-	if err := db.DB.Delete(Account{}, "ledger_id = ?", ledgerId).Error; err != nil {
+func UpdateAccount(tx *gorm.DB, accountId int64, name string) error {
+	sql := "update acc_account set name = ? where id = ?"
+	if err := tx.Exec(sql, name, accountId).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+func DeleteAccountByLedgerId(tx *gorm.DB, ledgerId int64) error {
+	if err := tx.Delete(Account{}, "ledger_id = ?", ledgerId).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func ListAccount(ledgerId int64) ([]*Account, error) {
+	var accounts []*Account
+	err := db.DB.Model(Account{}).Where("ledger_id = ?", ledgerId).Find(accounts).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	return accounts, nil
 }
