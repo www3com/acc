@@ -11,14 +11,12 @@ const ownerId = 1
 
 // CreateLedger 创建用户账本
 func CreateLedger(c *gin.Context) {
-	if ledger, ok := valid(c); ok {
-		if err := service.CreateLedger(ledger.LedgerId, ownerId); err != nil {
-			logger.Error(err)
-			ret.RenderCode(c, ret.INTERNAL_ERROR)
-			return
-		}
-		ret.RenderOk(c, nil)
+	if err := service.CreateLedger(1, ownerId); err != nil {
+		logger.Error(err)
+		ret.RenderCode(c, ret.INTERNAL_ERROR)
+		return
 	}
+	ret.RenderOk(c, nil)
 }
 
 // UpdateLedger 更新用户账本的名称

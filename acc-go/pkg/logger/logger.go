@@ -39,6 +39,10 @@ func Setup() {
 	fmt.Println("初始化日志配置成功")
 }
 
+func GetLog() *logrus.Logger {
+	return log
+}
+
 func Debug(args ...interface{}) {
 	log.Debug(args...)
 }

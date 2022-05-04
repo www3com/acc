@@ -5,6 +5,7 @@ import (
 	"accounting-service/pkg/db"
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"time"
 )
@@ -32,7 +33,7 @@ func CreateLedger(tLedgerId int64, ownerId int64) error {
 			return errors.New(fmt.Sprintf("create ledger error, template ledger id: %d, details: %s", tLedgerId, err))
 		}
 
-		if err = model.InsertAccount(tx, ledgerId, tLedgerId, now); err != nil {
+		if err = createAccount(tx, tLedgerId, ledgerId, now); err != nil {
 			return errors.New(fmt.Sprintf("create account error, template ledger id: %d, details: %s", tLedgerId, err))
 		}
 
@@ -77,4 +78,54 @@ func ListLedger(ownerId int64) (*[]model.Ledger, error) {
 		return nil, err
 	}
 	return ledgers, nil
+}
+
+func createAccount(tx *gorm.DB, tLedgerId, ledgerId int64, now int64) error {
+	tplAccounts, err := model.ListTplAccount(tLedgerId)
+	if err != nil {
+		return err
+	}
+
+	for _, tplAccount := range tplAccounts {
+		if tplAccount.ParentId != 0 {
+			continue
+		}
+
+		parent := toAccount(ledgerId, now, 0, tplAccount)
+		if err := model.InsertAccount(tx, parent); err != nil {
+			return err
+		}
+
+		var children []model.Account
+		for _, tplItem := range tplAccounts {
+			if tplItem.ParentId == tplAccount.ID {
+				account := toAccount(ledgerId, now, parent.ID, tplItem)
+				children = append(children, *account)
+			}
+		}
+
+		if err := model.InsertAccounts(tx, &children); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func toAccount(ledgerId int64, now int64, parentId int64, tplAccount *model.TplAccount) *model.Account {
+	return &model.Account{
+		CreateTime: now,
+		UpdateTime: now,
+		LedgerId:   ledgerId,
+		Type:       tplAccount.Type,
+		Name:       tplAccount.Name,
+		Debit:      decimal.Decimal{},
+		Credit:     decimal.Decimal{},
+		Balance:    decimal.Decimal{},
+		ParentId:   parentId,
+		Icon:       tplAccount.Icon,
+		CurrencyId: tplAccount.CurrencyId,
+		InAsset:    tplAccount.InAsset,
+		Remark:     tplAccount.Remark,
+		SortNumber: tplAccount.SortNumber,
+	}
 }

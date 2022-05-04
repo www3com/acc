@@ -22,7 +22,7 @@ func InitRouter() *gin.Engine {
 	//tpl := r.Group("/t")
 	//tpl.GET("/ledgers", template.ListTemplateLedger)
 
-	ledger := r.Group("/")
+	ledger := r.Group("/api")
 	// 查询账本
 	ledger.GET("/ledger", api.ListLedger)
 	// 创建账本
@@ -31,6 +31,8 @@ func InitRouter() *gin.Engine {
 	ledger.PUT("/ledger", api.UpdateLedger)
 	// 删除账本
 	ledger.DELETE("/ledger", api.DeleteLedger)
+
+	ledger.GET("/account", api.ListAccount)
 
 	ledger.POST("/transaction", api.CreateTransaction)
 	return r
