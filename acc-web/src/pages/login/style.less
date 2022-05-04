@@ -1,14 +1,12 @@
 @width: 1024px;
 
 
-
 .headerWrapper {
   width: 100%;
   //padding: 0px 10px 5px 10px;
   border-bottom: 1px solid #f0f0f0;
-  background-color: white;
-  position: fixed;
-  top: 0px;
+  //background-color: white;
+
 
   .header {
     width: @width;
@@ -22,12 +20,20 @@
 }
 
 .main {
-  min-height: 600px;
+  min-height: 450px;
   width: @width;
   margin: auto;
 }
 
 .footer {
-  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
   border-top: 1px solid #f0f0f0;
 }
+
+.siteFormItemIcon {
+  color: rgba(0, 0, 0, 0.25);
+}
+
