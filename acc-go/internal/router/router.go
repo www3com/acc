@@ -2,13 +2,14 @@ package routers
 
 import (
 	"accounting-service/internal/api"
+	"accounting-service/pkg/logger"
 	"accounting-service/pkg/setting"
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
 	gin.SetMode(setting.ServerSetting.RunMode)
-
+	gin.DefaultErrorWriter = logger.GetLog().Out
 	r := gin.New()
 	//r.Use(gin.Logger())
 	r.Use(gin.Recovery())
@@ -17,23 +18,26 @@ func InitRouter() *gin.Engine {
 	//r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
 	//r.StaticFS("/qrcode", http.Dir(qrcode.GetQrCodeFullPath()))
 
-	//r.GET("/test", controller)
-
-	//tpl := r.Group("/t")
-	//tpl.GET("/ledgers", template.ListTemplateLedger)
-
-	ledger := r.Group("/api")
+	root := r.Group("/api")
+	ledger := root.Group("/ledger")
 	// 查询账本
-	ledger.GET("/ledger", api.ListLedger)
+	ledger.GET("/", api.ListLedger)
 	// 创建账本
-	ledger.POST("/ledger", api.CreateLedger)
+	ledger.POST("/", api.CreateLedger)
 	// 更新账本
-	ledger.PUT("/ledger", api.UpdateLedger)
+	ledger.PUT("/", api.UpdateLedger)
 	// 删除账本
-	ledger.DELETE("/ledger", api.DeleteLedger)
+	ledger.DELETE("/", api.DeleteLedger)
 
-	ledger.GET("/account", api.ListAccount)
+	account := root.Group("/account")
+	account.GET("/", api.ListAccount)
 
-	ledger.POST("/transaction", api.CreateTransaction)
+	transaction := root.Group("/transaction")
+	transaction.POST("/transaction", api.CreateTransaction)
+
+	user := root.Group("/user")
+	user.GET("/username", api.ExistUsername)
+	user.GET("/email", api.ExistEmail)
+	user.GET("/sign-up", api.SignIn)
 	return r
 }

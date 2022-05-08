@@ -163,7 +163,7 @@ alter table acc_dict owner to acc;
 -- 交易
 create table acc_transaction
 (
-    id                      bigint         not null  constraint pk_acc_transaction  primary key,
+    id                      bigserial      not null  constraint pk_acc_transaction  primary key,
     ledger_id               bigint         not null,
     type                    smallint       not null,
     debit_account_id        bigint         not null,
@@ -180,3 +180,38 @@ comment on table acc_dict is '交易';
 create index idx_acc_transaction_ledger_id on acc_transaction (ledger_id);
 
 alter table acc_transaction owner to acc;
+
+
+create table upm_user
+(
+    id          bigserial    not null  constraint pk_upm_user  primary key,
+    nickname    varchar(80)  not null,
+    username    varchar(59)  not null constraint uni_upm_user_username unique,
+    email       varchar(200) not null constraint uni_upm_user_email unique,
+    password    varchar(30)  not null,
+    agree       integer,
+    create_time bigint,
+    update_time bigint
+);
+
+comment on table upm_user is '用户';
+
+comment on column upm_user.id is '主键';
+
+comment on column upm_user.nickname is '姓名';
+
+comment on column upm_user.username is '用户名';
+
+comment on column upm_user.email is '电子邮箱';
+
+comment on column upm_user.password is '密码';
+
+comment on column upm_user.agree is '协议';
+
+comment on column upm_user.create_time is '创建时间';
+
+comment on column upm_user.update_time is '更新时间';
+
+alter table upm_user owner to acc;
+
+create index idx_username_password on upm_user (username, password);

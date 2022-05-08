@@ -8,9 +8,15 @@ import (
 )
 
 func ListAccount(c *gin.Context) {
+	//defer func() {
+	//	e := recover()
+	//	fmt.Println(e)
+	//	fmt.Println("释放数据库连接...")
+	//}()
+
 	accounts, err := service.ListAccount(ownerId, 7)
 	if err != nil {
-		logger.Error("Query user account error, user id: {}, details: ", ownerId, err)
+		logger.Error("Query user account e, user id: {}, details: ", ownerId, err)
 		ret.RenderCode(c, ret.INTERNAL_ERROR)
 		return
 	}

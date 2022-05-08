@@ -23,7 +23,7 @@ func CreateLedger(c *gin.Context) {
 func UpdateLedger(c *gin.Context) {
 	if ledger, ok := valid(c); ok {
 		if err := service.UpdateLedger(ledger.LedgerId, ledger.Name); err != nil {
-			logger.Error("Update Ledger name error, ledger id: {}, details: ", ledger.LedgerId, err)
+			logger.Error("Update Ledger name e, ledger id: {}, details: ", ledger.LedgerId, err)
 			ret.RenderCode(c, ret.INTERNAL_ERROR)
 			return
 		}
@@ -46,7 +46,7 @@ func DeleteLedger(c *gin.Context) {
 func ListLedger(c *gin.Context) {
 	ledgers, err := service.ListLedger(ownerId)
 	if err != nil {
-		logger.Error("Query user account error, user id: {}, details: ", ownerId, err)
+		logger.Error("Query user account e, user id: {}, details: ", ownerId, err)
 		ret.RenderCode(c, ret.INTERNAL_ERROR)
 		return
 	}

@@ -1,7 +1,7 @@
 import {useCallback, useState} from "react";
 import {listAccount} from '../services/account';
 
-export default function useAccountModel() {
+export default function accountModel() {
   const [accounts, setAccounts] = useState<any>();
 
   const list = async (ledgerId: number) => {

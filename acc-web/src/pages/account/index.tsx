@@ -70,7 +70,7 @@ const deleteAccount = () => {
 
 export default () => {
 
-  const model = useModel('useAccountModel');
+  const model = useModel('accountModel');
 
   useEffect(() => {
     model.list(4)

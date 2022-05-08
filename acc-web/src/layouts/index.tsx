@@ -1,9 +1,10 @@
-import {Row, Col, Layout, Menu, Space, Divider, Typography, Dropdown, message} from "antd";
+import {Row, Col, Layout, Menu, Space, Divider, Typography, Dropdown, message, ConfigProvider} from "antd";
 import style from './style.less'
 import {DownOutlined, LogoutOutlined, SoundOutlined} from "@ant-design/icons";
 import Login from '@/pages/login'
-
-const {Header, Content, Footer} = Layout;
+import Register from "@/pages/signUp";
+import Success from "@/pages/signUp/success";
+import zhCN from 'antd/lib/locale/zh_CN';
 
 const items: any = [
   {label: '概览'},
@@ -37,49 +38,55 @@ const menu = (
 );
 
 export default (props: any) => {
-  if (props.location.pathname === '/login') {
-    return <Login/>
+  switch (props.location.pathname) {
+    case '/': return <Login/>
+    case '/login': return <Login/>
+    case '/signUp': return <Register/>
+    case '/signUp/success': return <Success/>
   }
 
-  return (
-    <div>
-      <div className={style.headerWrapper}>
-        <Row className={style.header}>
-          <Col flex="100px" style={{margin: 'auto'}}>
-            <img src={'./logo.png'} width={110} height={30}/>
-          </Col>
-          <Col flex="auto">
-            <Menu className={style.ddd}
-                  mode="horizontal"
-                  items={items}
-            />
-          </Col>
-          <Col flex="300px" style={{margin: 'auto', textAlign: "right"}}>
-            <Space split={<Divider type="vertical"/>}>
 
-              <Dropdown overlay={menu}>
-                <a onClick={e => e.preventDefault()}>
-                  <Space>
-                    标准账户
-                    <DownOutlined/>
-                  </Space>
-                </a>
-              </Dropdown>
-              <Typography.Link>Jason</Typography.Link>
-              <SoundOutlined/>
-              <LogoutOutlined/>
-            </Space>
-          </Col>
-        </Row>
-      </div>
-      <div className={style.mainWrapper}>
-        <div className={style.main}>
-          {props.children}
+  return (
+    <ConfigProvider locale={zhCN}>
+      <div>
+        <div className={style.headerWrapper}>
+          <Row className={style.header}>
+            <Col flex="100px" style={{margin: 'auto'}}>
+              <img src={'./logo.png'} width={110} height={30}/>
+            </Col>
+            <Col flex="auto">
+              <Menu className={style.ddd}
+                    mode="horizontal"
+                    items={items}
+              />
+            </Col>
+            <Col flex="300px" style={{margin: 'auto', textAlign: "right"}}>
+              <Space split={<Divider type="vertical"/>}>
+
+                <Dropdown overlay={menu}>
+                  <a onClick={e => e.preventDefault()}>
+                    <Space>
+                      标准账户
+                      <DownOutlined/>
+                    </Space>
+                  </a>
+                </Dropdown>
+                <Typography.Link>Jason</Typography.Link>
+                <SoundOutlined/>
+                <LogoutOutlined/>
+              </Space>
+            </Col>
+          </Row>
         </div>
-        <div className={style.footer}>
-          border
+        <div className={style.mainWrapper}>
+          <div className={style.main}>
+            {props.children}
+          </div>
+          <div className={style.footer}>
+            border
+          </div>
         </div>
       </div>
-    </div>
+    </ConfigProvider>
   );
 }

@@ -29,13 +29,13 @@ func (Account) TableName() string {
 	return "acc_account"
 }
 
-//func InsertAccount(tx *gorm.DB, ledgerId, tLedgerId int64, now int64) error {
+//func InsertAccount(tx *gorm.DB, ledgerId, tLedgerId int64, now int64) e {
 //	sql := `insert into acc_account (ledger_id, type, name, debit, credit, balance, parent_id, icon, currency_id, in_asset,
 //                         sort_number, remark, create_time, update_time)
 //			select ?, type, name, 0, 0, 0, parent_id, icon, currency_id, in_asset, sort_number, remark, ?, ?
 //			from tpl_account where ledger_id = ?`
-//	if err := tx.Exec(sql, ledgerId, now, now, tLedgerId).Error; err != nil {
-//		return err
+//	if e := tx.Exec(sql, ledgerId, now, now, tLedgerId).Error; e != nil {
+//		return e
 //	}
 //	return nil
 //}

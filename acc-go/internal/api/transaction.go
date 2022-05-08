@@ -15,7 +15,7 @@ func CreateTransaction(c *gin.Context) {
 	}
 	trans.Recorder = 1
 	if err := service.CreateTransaction(&trans); err != nil {
-		logger.Error("create Transaction error, recorder: {}, details: ", ownerId, err)
+		logger.Error("create Transaction e, recorder: {}, details: ", ownerId, err)
 		ret.RenderCode(c, ret.INTERNAL_ERROR)
 		return
 	}

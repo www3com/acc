@@ -30,15 +30,15 @@ func CreateLedger(tLedgerId int64, ownerId int64) error {
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		ledgerId, err := model.InsertLedger(tx, &ledger)
 		if err != nil {
-			return errors.New(fmt.Sprintf("create ledger error, template ledger id: %d, details: %s", tLedgerId, err))
+			return errors.New(fmt.Sprintf("create ledger e, template ledger id: %d, details: %s", tLedgerId, err))
 		}
 
 		if err = createAccount(tx, tLedgerId, ledgerId, now); err != nil {
-			return errors.New(fmt.Sprintf("create account error, template ledger id: %d, details: %s", tLedgerId, err))
+			return errors.New(fmt.Sprintf("create account e, template ledger id: %d, details: %s", tLedgerId, err))
 		}
 
 		if err = model.InsertDict(tx, ledgerId, tLedgerId, now); err != nil {
-			return errors.New(fmt.Sprintf("create dict error, template ledger id: %d, details: %s", tLedgerId, err))
+			return errors.New(fmt.Sprintf("create dict e, template ledger id: %d, details: %s", tLedgerId, err))
 		}
 		return nil
 	})
@@ -56,15 +56,15 @@ func UpdateLedger(ledgerId int64, name string) error {
 func DeleteLedger(ledgerId int64) error {
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		if err := model.DeleteLedger(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete ledger error, ledger id: %d, details:  %s", ledgerId, err))
+			return errors.New(fmt.Sprintf("Delete ledger e, ledger id: %d, details:  %s", ledgerId, err))
 		}
 
 		if err := model.DeleteAccountByLedgerId(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete account error, ledger id: %d, details:  %s", ledgerId, err))
+			return errors.New(fmt.Sprintf("Delete account e, ledger id: %d, details:  %s", ledgerId, err))
 		}
 
 		if err := model.DeleteDictByLedgerId(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete dict error, ledger id: %d, details:  %s", ledgerId, err))
+			return errors.New(fmt.Sprintf("Delete dict e, ledger id: %d, details:  %s", ledgerId, err))
 		}
 
 		return nil

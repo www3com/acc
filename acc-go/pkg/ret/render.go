@@ -1,11 +1,12 @@
 package ret
 
 import (
+	"accounting-service/pkg/e"
 	"accounting-service/pkg/i18n"
 	"accounting-service/pkg/translator"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"net/http"
 	"strconv"
 )
 
@@ -22,24 +23,31 @@ func Render(c *gin.Context, status int, code int, message string, data interface
 }
 
 func RenderOk(c *gin.Context, data interface{}) {
-	Render(c, http.StatusOK, OK, "", data)
+	Render(c, OK, OK, "", data)
 }
 
 func RenderCode(c *gin.Context, code int) {
-	Render(c, http.StatusOK, code, getMessage(c, code), nil)
+	Render(c, OK, code, getMessage(c, code), nil)
 }
 
 func RenderError(c *gin.Context, err error) {
+	_, ok := err.(*json.UnmarshalTypeError)
+	if ok {
+		Render(c, INVALID_PARAMS, INVALID_PARAMS, getMessage(c, INVALID_PARAMS), nil)
+	}
+
 	errs, ok := err.(validator.ValidationErrors)
 	if ok {
-		Render(c, http.StatusOK, INVALID_PARAMS, translator.Translate(errs), nil)
-	} else {
-		Render(c, http.StatusInternalServerError, INTERNAL_ERROR, getMessage(c, INTERNAL_ERROR), nil)
+		Render(c, INVALID_PARAMS, INVALID_PARAMS, translator.Translate(errs), nil)
+		return
 	}
-}
 
-func RenderFail(c *gin.Context, status int, code int) {
-	Render(c, status, code, "", nil)
+	appErr, ok := err.(*e.AppError)
+	if ok {
+		RenderCode(c, appErr.Code)
+	} else {
+		Render(c, INTERNAL_ERROR, INTERNAL_ERROR, getMessage(c, INTERNAL_ERROR), nil)
+	}
 }
 
 func getMessage(c *gin.Context, code int) string {
