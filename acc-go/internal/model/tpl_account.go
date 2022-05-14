@@ -22,7 +22,7 @@ func (TplAccount) TableName() string {
 	return "tpl_account"
 }
 
-func ListTplAccount(ledgerId int64) ([]*TplAccount, error) {
+func ListTplAccounts(ledgerId int64) ([]*TplAccount, error) {
 	var accounts []*TplAccount
 	err := db.DB.Model(TplAccount{}).Where("ledger_id = ?", ledgerId).Find(&accounts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {

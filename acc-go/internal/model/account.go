@@ -69,7 +69,7 @@ func DeleteAccountByLedgerId(tx *gorm.DB, ledgerId int64) error {
 	return nil
 }
 
-func ListAccount(ledgerId int64) ([]*Account, error) {
+func ListAccounts(ledgerId int64) ([]*Account, error) {
 	var accounts []*Account
 	err := db.DB.Model(Account{}).Where("ledger_id = ?", ledgerId).Find(&accounts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {

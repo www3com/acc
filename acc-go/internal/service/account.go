@@ -7,7 +7,7 @@ import (
 
 func ListAccount(ownerId, ledgerId int64) ([]*model.Account, error) {
 
-	accounts, err := model.ListAccount(ledgerId)
+	accounts, err := model.ListAccounts(ledgerId)
 	if err != nil {
 		return nil, err
 	}

@@ -73,15 +73,16 @@ func DeleteLedger(ledgerId int64) error {
 }
 
 func ListLedger(ownerId int64) (*[]model.Ledger, error) {
-	ledgers, err := model.ListLedger(ownerId)
+	ledgers, err := model.ListLedgers(ownerId)
 	if err != nil {
 		return nil, err
 	}
+
 	return ledgers, nil
 }
 
 func createAccount(tx *gorm.DB, tLedgerId, ledgerId int64, now int64) error {
-	tplAccounts, err := model.ListTplAccount(tLedgerId)
+	tplAccounts, err := model.ListTplAccounts(tLedgerId)
 	if err != nil {
 		return err
 	}

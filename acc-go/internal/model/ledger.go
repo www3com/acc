@@ -41,7 +41,7 @@ func DeleteLedger(tx *gorm.DB, ledgerId int64) error {
 	return nil
 }
 
-func ListLedger(ownerId int64) (*[]Ledger, error) {
+func ListLedgers(ownerId int64) (*[]Ledger, error) {
 	var ledgers *[]Ledger
 	err := db.DB.Where("owner_id = ?", ownerId).Find(&ledgers).Error
 	if err != nil && err != gorm.ErrRecordNotFound {

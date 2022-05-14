@@ -44,7 +44,7 @@ func DeleteDictByLedgerId(tx *gorm.DB, ledgerId int64) error {
 	return nil
 }
 
-func ListDict(ledgerId int64, dictType int64) ([]*Dict, error) {
+func ListDicts(ledgerId int64, dictType int64) ([]*Dict, error) {
 	var dicts []*Dict
 	err := db.DB.Model(Dict{}).Where("ledger_id = ?, type = ?", ledgerId, dictType).Find(dicts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {

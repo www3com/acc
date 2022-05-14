@@ -213,5 +213,3 @@ comment on column upm_user.create_time is '创建时间';
 comment on column upm_user.update_time is '更新时间';
 
 alter table upm_user owner to acc;
-
-create index idx_username_password on upm_user (username, password);
