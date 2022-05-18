@@ -1,6 +1,7 @@
 package service
 
 import (
+	"accounting-service/internal/misc/md5"
 	"accounting-service/internal/model"
 	"accounting-service/pkg/db"
 	"gorm.io/gorm"
@@ -35,6 +36,7 @@ func (u *UserService) SignUp(user *model.User) (int64, error) {
 	now := time.Now().UnixMicro()
 	user.CreateTime = now
 	user.UpdateTime = now
+	user.Password = md5.Encrypt(user.Password)
 
 	if err := db.DB.Transaction(func(tx *gorm.DB) error {
 		if err := model.InsertUser(tx, user); err != nil {

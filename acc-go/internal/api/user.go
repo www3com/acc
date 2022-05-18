@@ -18,7 +18,7 @@ type user struct {
 }
 
 type signIn struct {
-	Type     string `form:"type" binding:"required,oneof=username email"`
+	Type     string `form:"type" binding:"required"`
 	LoginId  string `form:"loginId" binding:"required"`
 	Password string `form:"password"`
 	Captcha  int    `form:"captcha"`
@@ -62,7 +62,7 @@ func SignIn(c *gin.Context) {
 
 func SignUp(c *gin.Context) {
 	var userParam user
-	if err := c.BindJSON(&userParam); err != nil {
+	if err := c.Bind(&userParam); err != nil {
 		ret.RenderError(c, err)
 		return
 	}
@@ -103,7 +103,9 @@ func SignUp(c *gin.Context) {
 		Username: userParam.Username,
 		Email:    userParam.Email,
 		Password: userParam.Password,
-		Agree:    1,
+	}
+	if userParam.Agreement {
+		user.Agreement = 1
 	}
 	id, err := userService.SignUp(&user)
 	if err != nil {

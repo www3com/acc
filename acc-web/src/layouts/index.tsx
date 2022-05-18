@@ -1,7 +1,7 @@
 import {Row, Col, Layout, Menu, Space, Divider, Typography, Dropdown, message, ConfigProvider} from "antd";
 import style from './style.less'
 import {DownOutlined, LogoutOutlined, SoundOutlined} from "@ant-design/icons";
-import Login from '@/pages/login'
+import Login from '@/pages/signIn'
 import Register from "@/pages/signUp";
 import Success from "@/pages/signUp/success";
 import zhCN from 'antd/lib/locale/zh_CN';
@@ -40,7 +40,7 @@ const menu = (
 export default (props: any) => {
   switch (props.location.pathname) {
     case '/': return <Login/>
-    case '/login': return <Login/>
+    case '/signIn': return <Login/>
     case '/signUp': return <Register/>
     case '/signUp/success': return <Success/>
   }

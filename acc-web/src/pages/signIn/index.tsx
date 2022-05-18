@@ -1,10 +1,10 @@
 import {Row, Col, Tabs} from "antd";
 
 import React from "react";
-import style from "@/pages/login/style.less";
-import AccountForm from "@/pages/login/component/AccountForm";
-import EmailForm from "@/pages/login/component/EmailForm";
-import Header from "@/pages/login/component/Header";
+import style from "@/pages/signIn/style.less";
+import AccountForm from "@/pages/signIn/component/AccountForm";
+import EmailForm from "@/pages/signIn/component/EmailForm";
+import Header from "@/pages/signIn/component/Header";
 import Footer from "@/pages/components/Footer";
 
 const {TabPane} = Tabs;

@@ -8,7 +8,7 @@ import Footer from "@/pages/components/Footer";
 
 export default () => {
 const onClick= () => {
-  location.href = '/login'
+  location.href = '/signIn'
 }
   return (
     <div>

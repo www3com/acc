@@ -5,7 +5,7 @@ import React from "react";
 
 export default () => {
   return (<Form name="account">
-    <Form.Item name="username" rules={[{required: true, message: '请输入您的用户名'}]}>
+    <Form.Item name="loginId" rules={[{required: true, message: '请输入您的用户名'}]}>
       <Input prefix={<UserOutlined/>} placeholder="请输入用户名"/>
     </Form.Item>
     <Form.Item name="password" rules={[{required: true, message: '请输入您的密码'}]}>

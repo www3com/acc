@@ -13,7 +13,7 @@ type User struct {
 	Username   string `json:"username"`
 	Email      string `json:"email"`
 	Password   string `json:"password"`
-	Agree      int    `json:"agree"`
+	Agreement  int    `json:"agreement"`
 }
 
 func (User) TableName() string {

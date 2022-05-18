@@ -38,6 +38,6 @@ func InitRouter() *gin.Engine {
 	user := root.Group("/user")
 	user.GET("/username", api.ExistUsername)
 	user.GET("/email", api.ExistEmail)
-	user.GET("/sign-up", api.SignIn)
+	user.POST("/sign-up", api.SignUp)
 	return r
 }

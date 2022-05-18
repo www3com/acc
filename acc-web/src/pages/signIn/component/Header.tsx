@@ -1,4 +1,4 @@
-import style from "@/pages/login/style.less";
+import style from "@/pages/signIn/style.less";
 import {Col, Row} from "antd";
 import {Link} from "umi";
 import React from "react";

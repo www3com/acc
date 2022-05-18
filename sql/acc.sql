@@ -188,8 +188,8 @@ create table upm_user
     nickname    varchar(80)  not null,
     username    varchar(59)  not null constraint uni_upm_user_username unique,
     email       varchar(200) not null constraint uni_upm_user_email unique,
-    password    varchar(30)  not null,
-    agree       integer,
+    password    varchar(40)  not null,
+    agreement   integer,
     create_time bigint,
     update_time bigint
 );

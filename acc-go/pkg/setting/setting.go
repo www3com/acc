@@ -72,6 +72,20 @@ var DatabaseSetting = &Database{
 	Db:       "acc",
 }
 
+type Email struct {
+	Host     string
+	Port     int
+	UserName string
+	Password string
+}
+
+var EmailSetting = &Email{
+	Host:     "smtp.126.com",
+	Port:     25,
+	UserName: "wjzchina2008@126.com",
+	Password: "EJOSPQEVVBIDEIHJ",
+}
+
 func Setup() {
 	fmt.Println("读取参数文件成功")
 }

@@ -1,6 +1,6 @@
-package account_type
+package dict
 
-var accountType = map[int]string{
+var action = map[int]string{
 	1: "初始账户",
 	2: "余额调整",
 	3: "收入",
@@ -12,6 +12,6 @@ var accountType = map[int]string{
 	9: "转账",
 }
 
-func GetValue(key int) string {
-	return accountType[key]
+func GetActionValue(key int) string {
+	return action[key]
 }
