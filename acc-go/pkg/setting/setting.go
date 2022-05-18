@@ -83,7 +83,7 @@ var EmailSetting = &Email{
 	Host:     "smtp.126.com",
 	Port:     25,
 	UserName: "wjzchina2008@126.com",
-	Password: "EJOSPQEVVBIDEIHJ",
+	Password: "***",
 }
 
 func Setup() {
