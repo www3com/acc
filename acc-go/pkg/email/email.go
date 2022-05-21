@@ -2,8 +2,20 @@ package email
 
 import (
 	"accounting-service/pkg/setting"
+	"bytes"
 	"gopkg.in/gomail.v2"
+	"text/template"
 )
+
+func SendTemplateMail(mailAddr string, subject string, data interface{}, path string) {
+	t, err := template.ParseFiles(path)
+	var tmplBytes bytes.Buffer
+	err = t.Execute(&tmplBytes, data)
+	if err != nil {
+		panic(err)
+	}
+	SendMail(mailAddr, subject, tmplBytes.String())
+}
 
 func SendMail(mailAddr string, subject string, body string) error {
 	m := gomail.NewMessage()
