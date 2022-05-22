@@ -1,34 +1,45 @@
 package service
 
 import (
+	"accounting-service/internal/misc/consts"
 	"accounting-service/internal/misc/md5"
 	"accounting-service/internal/model"
-	"accounting-service/pkg/db"
+	"accounting-service/internal/pkg/db"
+	"accounting-service/internal/pkg/r"
 	"gorm.io/gorm"
 	"time"
 )
 
 type UserService struct {
 	Username string
-	Email    string
 	Password string
-	Captcha  int
 }
 
-func (u *UserService) SignInByUsername() (int64, error) {
+func (u *UserService) SignIn() (*r.R[int64], error) {
 	user, err := model.GetUserByUsername(u.Username)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	if user.Password == u.Password {
-		return user.ID, nil
-	} else {
-		return 0, nil
-	}
-}
 
-func (u *UserService) SignInByEmail() (int64, error) {
-	return 0, nil
+	if user.Username == "" {
+		return r.Fail[int64](consts.USER_SIGN_IN_ERROR), nil
+	}
+
+	if consts.IsUserFreeze(user.State) {
+		return r.Fail[int64](consts.USER_SIGN_IN_FREEZE), nil
+	}
+
+	if consts.IsUserClose(user.State) {
+		return r.Fail[int64](consts.USER_SIGN_IN_ERROR), nil
+	}
+
+	password := md5.Encrypt(u.Password)
+	if user.Password != password {
+		return r.Fail[int64](consts.USER_SIGN_IN_ERROR), nil
+	}
+
+	return r.Ok[int64](user.ID), nil
+
 }
 
 func (u *UserService) SignUp(user *model.User) (int64, error) {
@@ -52,19 +63,6 @@ func (u *UserService) SignUp(user *model.User) (int64, error) {
 
 func (u *UserService) ExistUsername() (bool, error) {
 	user, err := model.GetUserByUsername(u.Username)
-	if err != nil {
-		return false, err
-	}
-
-	if user.ID == 0 {
-		return false, nil
-	} else {
-		return true, nil
-	}
-}
-
-func (u *UserService) ExistEmail() (bool, error) {
-	user, err := model.GetUserByEmail(u.Email)
 	if err != nil {
 		return false, err
 	}

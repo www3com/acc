@@ -10,10 +10,9 @@ import zhCN from "antd/lib/locale/zh_CN";
 import {useModel} from "@@/plugin-model/useModel";
 
 export default () => {
-  const model = useModel('signUpModel');
+  const model = useModel('userModel');
 
   const onFinish = async (values: any) => {
-    values.captcha = Number(values.captcha)
     let res = await model.register(values)
 
     if (res.code == 1000) {
@@ -22,11 +21,8 @@ export default () => {
     } else if (res.code == 1001) {
       message.info('您输入的用户名已经存在！')
       return
-    } else if (res.code == 1002) {
-      message.info('您输入的电子邮箱已经存在！')
-      return
     }
-    location.href = './signUp/success'
+    location.href = './user/success'
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -49,15 +45,6 @@ export default () => {
             </div>
             <Form name="register" requiredMark={false} labelCol={{span: 8}} wrapperCol={{span: 16}} onFinish={onFinish}
                   onFinishFailed={onFinishFailed}>
-              <Form.Item name="email" label="电子邮箱" rules={[{required: true, message: '请输入电子邮箱'}, {type: 'email'}]}>
-                <Input/>
-              </Form.Item>
-              <Form.Item name="captcha" label='验证码' rules={[{required: true, message: '请输入验证码'}]}>
-                <Row gutter={8}>
-                  <Col flex='auto'><Input/> </Col>
-                  <Col flex='100px'><DelayButton>获取验证码</DelayButton> </Col>
-                </Row>
-              </Form.Item>
               <Form.Item name="username" label="用户名" rules={[{required: true, message: '请输入用户名'}]}>
                 <Input/>
               </Form.Item>

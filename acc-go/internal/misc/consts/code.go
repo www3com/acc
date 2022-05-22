@@ -1,4 +1,4 @@
-package ret
+package consts
 
 const (
 
@@ -23,8 +23,10 @@ const (
 	USER_DISAGREEMENT = 1000
 
 	USER_NO_USERNAME = 1001
+	//
+	//USER_NO_EMAIL = 1002
 
-	USER_NO_EMAIL = 1002
+	USER_SIGN_IN_FREEZE = 1002
 
 	USER_SIGN_IN_ERROR = 1003
 )

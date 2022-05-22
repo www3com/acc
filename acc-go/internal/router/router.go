@@ -2,8 +2,8 @@ package routers
 
 import (
 	"accounting-service/internal/api"
-	"accounting-service/pkg/logger"
-	"accounting-service/pkg/setting"
+	"accounting-service/internal/pkg/logger"
+	"accounting-service/internal/pkg/setting"
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,7 +37,7 @@ func InitRouter() *gin.Engine {
 
 	user := root.Group("/user")
 	user.GET("/username", api.ExistUsername)
-	user.GET("/email", api.ExistEmail)
+	user.POST("/sign-in", api.SignIn)
 	user.POST("/sign-up", api.SignUp)
 	return r
 }

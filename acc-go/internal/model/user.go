@@ -1,7 +1,7 @@
 package model
 
 import (
-	"accounting-service/pkg/db"
+	"accounting-service/internal/pkg/db"
 	"gorm.io/gorm"
 )
 
@@ -14,6 +14,7 @@ type User struct {
 	Email      string `json:"email"`
 	Password   string `json:"password"`
 	Agreement  int    `json:"agreement"`
+	State      int
 }
 
 func (User) TableName() string {

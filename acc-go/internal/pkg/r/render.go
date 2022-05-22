@@ -1,9 +1,10 @@
-package ret
+package r
 
 import (
-	"accounting-service/pkg/e"
-	"accounting-service/pkg/i18n"
-	"accounting-service/pkg/translator"
+	"accounting-service/internal/misc/consts"
+	"accounting-service/internal/pkg/e"
+	"accounting-service/internal/pkg/i18n"
+	"accounting-service/internal/pkg/translator"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -15,30 +16,30 @@ var (
 	acceptLanguageKey = "Accept-Language"
 )
 
-func Render(c *gin.Context, status int, code int, message string, data interface{}) {
-	c.JSON(status, &RetData{
+func Render[T any](c *gin.Context, status int, code int, message string, data T) {
+	c.JSON(status, &R[T]{
 		Code:    code,
 		Message: message,
 		Data:    data})
 }
 
 func RenderOk(c *gin.Context, data interface{}) {
-	Render(c, OK, OK, "", data)
+	Render(c, consts.OK, consts.OK, "", data)
 }
 
 func RenderCode(c *gin.Context, code int) {
-	Render(c, OK, code, getMessage(c, code), nil)
+	Render(c, consts.OK, code, getMessage(c, code), "")
 }
 
 func RenderError(c *gin.Context, err error) {
 	_, ok := err.(*json.UnmarshalTypeError)
 	if ok {
-		Render(c, INVALID_PARAMS, INVALID_PARAMS, getMessage(c, INVALID_PARAMS), nil)
+		Render(c, consts.INVALID_PARAMS, consts.INVALID_PARAMS, getMessage(c, consts.INVALID_PARAMS), "")
 	}
 
 	errs, ok := err.(validator.ValidationErrors)
 	if ok {
-		Render(c, INVALID_PARAMS, INVALID_PARAMS, translator.Translate(errs), nil)
+		Render(c, consts.INVALID_PARAMS, consts.INVALID_PARAMS, translator.Translate(errs), "")
 		return
 	}
 
@@ -46,7 +47,7 @@ func RenderError(c *gin.Context, err error) {
 	if ok {
 		RenderCode(c, appErr.Code)
 	} else {
-		Render(c, INTERNAL_ERROR, INTERNAL_ERROR, getMessage(c, INTERNAL_ERROR), nil)
+		Render(c, consts.INTERNAL_ERROR, consts.INTERNAL_ERROR, getMessage(c, consts.INTERNAL_ERROR), "")
 	}
 }
 

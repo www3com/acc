@@ -1,13 +1,13 @@
 package email
 
 import (
-	"accounting-service/pkg/setting"
+	"accounting-service/internal/pkg/setting"
 	"bytes"
 	"gopkg.in/gomail.v2"
 	"text/template"
 )
 
-func SendTemplateMail(mailAddr string, subject string, data interface{}, path string) {
+func SendTemplateMail[T](path string, mailAddr string, subject string, data T) {
 	t, err := template.ParseFiles(path)
 	var tmplBytes bytes.Buffer
 	err = t.Execute(&tmplBytes, data)

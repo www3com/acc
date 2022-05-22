@@ -1,9 +1,10 @@
 package api
 
 import (
+	"accounting-service/internal/misc/consts"
+	"accounting-service/internal/pkg/logger"
+	r "accounting-service/internal/pkg/r"
 	"accounting-service/internal/service"
-	"accounting-service/pkg/logger"
-	"accounting-service/pkg/ret"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,10 +14,10 @@ const ownerId = 1
 func CreateLedger(c *gin.Context) {
 	if err := service.CreateLedger(1, ownerId); err != nil {
 		logger.Error(err)
-		ret.RenderCode(c, ret.INTERNAL_ERROR)
+		r.RenderCode(c, consts.INTERNAL_ERROR)
 		return
 	}
-	ret.RenderOk(c, nil)
+	r.RenderOk(c, nil)
 }
 
 // UpdateLedger 更新用户账本的名称
@@ -24,10 +25,10 @@ func UpdateLedger(c *gin.Context) {
 	if ledger, ok := valid(c); ok {
 		if err := service.UpdateLedger(ledger.LedgerId, ledger.Name); err != nil {
 			logger.Error("Update Ledger name e, ledger id: {}, details: ", ledger.LedgerId, err)
-			ret.RenderCode(c, ret.INTERNAL_ERROR)
+			r.RenderCode(c, consts.INTERNAL_ERROR)
 			return
 		}
-		ret.RenderOk(c, nil)
+		r.RenderOk(c, nil)
 	}
 }
 
@@ -36,10 +37,10 @@ func DeleteLedger(c *gin.Context) {
 	if ledger, ok := valid(c); ok {
 		if err := service.DeleteLedger(ledger.LedgerId); err != nil {
 			logger.Error(err)
-			ret.RenderCode(c, ret.INTERNAL_ERROR)
+			r.RenderCode(c, consts.INTERNAL_ERROR)
 			return
 		}
-		ret.RenderOk(c, nil)
+		r.RenderOk(c, nil)
 	}
 }
 
@@ -47,17 +48,17 @@ func ListLedger(c *gin.Context) {
 	ledgers, err := service.ListLedger(ownerId)
 	if err != nil {
 		logger.Error("Query user account e, user id: {}, details: ", ownerId, err)
-		ret.RenderCode(c, ret.INTERNAL_ERROR)
+		r.RenderCode(c, consts.INTERNAL_ERROR)
 		return
 	}
-	ret.RenderOk(c, ledgers)
+	r.RenderOk(c, ledgers)
 }
 
 func valid(c *gin.Context) (*service.Ledger, bool) {
 	var ledger service.Ledger
 	if err := c.ShouldBindQuery(&ledger); err != nil {
 		logger.Error(err)
-		ret.RenderError(c, err)
+		r.RenderError(c, err)
 		return nil, false
 	}
 	return &ledger, true

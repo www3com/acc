@@ -1,12 +1,12 @@
 package main
 
 import (
+	"accounting-service/internal/pkg/db"
+	"accounting-service/internal/pkg/i18n"
+	"accounting-service/internal/pkg/logger"
+	"accounting-service/internal/pkg/setting"
+	"accounting-service/internal/pkg/translator"
 	"accounting-service/internal/router"
-	"accounting-service/pkg/db"
-	"accounting-service/pkg/i18n"
-	"accounting-service/pkg/logger"
-	"accounting-service/pkg/setting"
-	"accounting-service/pkg/translator"
 	"fmt"
 	"net/http"
 	"time"

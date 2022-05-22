@@ -1,11 +1,30 @@
-import {Button, Divider, Form, Input, Space} from "antd";
+import {Button, Divider, Form, Input, message, Space} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {Link} from "umi";
 import React from "react";
+import {useModel} from "@@/plugin-model/useModel";
 
 export default () => {
-  return (<Form name="account">
-    <Form.Item name="loginId" rules={[{required: true, message: '请输入您的用户名'}]}>
+  const model = useModel('userModel');
+
+  const onFinish = async (values: any) => {
+    debugger
+    let res = await model.login(values.username, values.password)
+
+    if (res.code == 1002) {
+      message.info('账号名被冻结！', 4)
+      return
+    } else if (res.code == 1003) {
+      message.info('账号名或者密码错误！', 4)
+      return
+    }
+    message.success("登录成功！", 1, ()=> {
+      location.href = './account'
+    })
+  };
+
+  return (<Form name="account" onFinish={onFinish}>
+    <Form.Item name="username" rules={[{required: true, message: '请输入您的用户名'}]}>
       <Input prefix={<UserOutlined/>} placeholder="请输入用户名"/>
     </Form.Item>
     <Form.Item name="password" rules={[{required: true, message: '请输入您的密码'}]}>

@@ -26,9 +26,6 @@ export default () => {
               <TabPane tab="账户登录" key="account">
                 <AccountForm/>
               </TabPane>
-              <TabPane tab="邮箱登录" key="email">
-                <EmailForm/>
-              </TabPane>
             </Tabs>
           </Col>
         </Row>

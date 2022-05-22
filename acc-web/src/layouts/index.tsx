@@ -41,8 +41,8 @@ export default (props: any) => {
   switch (props.location.pathname) {
     case '/': return <Login/>
     case '/signIn': return <Login/>
-    case '/signUp': return <Register/>
-    case '/signUp/success': return <Success/>
+    case '/user': return <Register/>
+    case '/user/success': return <Success/>
   }
 
 

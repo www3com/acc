@@ -23,7 +23,6 @@ const post = async (url: string, data?: object) => {
       data: data,
       headers: {'Content-Type': 'application/json;charset=UTF-8'},
     })
-    debugger
     return res.data
   } catch (err) {
     fail(err)

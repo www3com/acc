@@ -187,9 +187,10 @@ create table upm_user
     id          bigserial    not null  constraint pk_upm_user  primary key,
     nickname    varchar(80)  not null,
     username    varchar(59)  not null constraint uni_upm_user_username unique,
-    email       varchar(200) not null constraint uni_upm_user_email unique,
+    email       varchar(200) not null,
     password    varchar(40)  not null,
     agreement   integer,
+    state       smallint     not null,
     create_time bigint,
     update_time bigint
 );
@@ -206,7 +207,7 @@ comment on column upm_user.email is '电子邮箱';
 
 comment on column upm_user.password is '密码';
 
-comment on column upm_user.agree is '协议';
+comment on column upm_user.agreement is '协议';
 
 comment on column upm_user.create_time is '创建时间';
 

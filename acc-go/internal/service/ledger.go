@@ -2,7 +2,7 @@ package service
 
 import (
 	"accounting-service/internal/model"
-	"accounting-service/pkg/db"
+	"accounting-service/internal/pkg/db"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
