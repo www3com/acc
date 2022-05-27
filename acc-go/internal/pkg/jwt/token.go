@@ -1,26 +1,28 @@
-package token
+package jwt
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
+	uuid "github.com/satori/go.uuid"
 	"time"
 )
 
 type Claims struct {
-	userId string `json:"userId"`
-	jwt.StandardClaims
+	Uid int64  `json:"uid"`
+	IP  string `json:"ip"`
+	jwt.RegisteredClaims
 }
 
-const jwtSecret = "232323"
+var jwtSecret = []byte("ACC@@Jason.com@@20220606")
 
-func GenerateToken(username, password string) (string, error) {
-	nowTime := time.Now()                    //当前时间
-	expireTime := nowTime.Add(3 * time.Hour) //有效时间
-
+func GenerateToken(uid int64, ip string, duration time.Duration) (string, error) {
+	expireTime := time.Now().Add(duration) //有效时间
+	id := uuid.NewV4()
 	claims := Claims{
-		"2222",
-		jwt.StandardClaims{
-			ExpiresAt: expireTime.Unix(),
-			Issuer:    "its me",
+		Uid: uid,
+		IP:  ip,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expireTime),
+			ID:        id.String(),
 		},
 	}
 

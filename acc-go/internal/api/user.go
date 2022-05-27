@@ -6,8 +6,16 @@ import (
 	"accounting-service/internal/pkg/logger"
 	"accounting-service/internal/pkg/r"
 	"accounting-service/internal/service"
+	"github.com/allegro/bigcache/v3"
 	"github.com/gin-gonic/gin"
+	"time"
 )
+
+var cache *bigcache.BigCache
+
+func init() {
+	cache, _ = bigcache.NewBigCache(bigcache.DefaultConfig(10 * time.Minute))
+}
 
 type user struct {
 	Nickname  string `form:"nickname" binding:"required"`
@@ -22,17 +30,18 @@ type signIn struct {
 }
 
 func SignIn(c *gin.Context) {
+
 	var signInParam signIn
 	if err := c.Bind(&signInParam); err != nil {
 		r.RenderError(c, err)
 		return
 	}
 
-	userService := service.UserService{Username: signInParam.Username,
+	userService := service.UserService{
+		Username: signInParam.Username,
 		Password: signInParam.Password}
 
 	res, err := userService.SignIn()
-
 	if err != nil {
 		logger.Errorf("Sign in error, cause by: %v", err)
 		r.RenderError(c, err)
@@ -40,7 +49,7 @@ func SignIn(c *gin.Context) {
 	}
 
 	if res.Ok() {
-		r.RenderOk(c, map[string]int64{"userId": res.Data})
+		r.RenderOk(c, map[string]string{"userId": res.Data})
 	} else {
 		r.RenderCode(c, res.Code)
 	}
@@ -87,7 +96,7 @@ func SignUp(c *gin.Context) {
 		r.RenderError(c, err)
 		return
 	}
-	r.RenderOk(c, map[string]int64{"userId": id})
+	r.RenderOk(c, map[string]int64{"token": id})
 }
 
 func ExistUsername(c *gin.Context) {

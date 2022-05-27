@@ -52,7 +52,7 @@ export default (props: any) => {
         <div className={style.headerWrapper}>
           <Row className={style.header}>
             <Col flex="100px" style={{margin: 'auto'}}>
-              <img src={'./logo.png'} width={110} height={30}/>
+              <img src={'./logo3.png'} width={140} height={40}/>
             </Col>
             <Col flex="auto">
               <Menu className={style.ddd}

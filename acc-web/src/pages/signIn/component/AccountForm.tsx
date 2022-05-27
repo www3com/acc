@@ -8,9 +8,9 @@ export default () => {
   const model = useModel('userModel');
 
   const onFinish = async (values: any) => {
-    debugger
-    let res = await model.login(values.username, values.password)
 
+    let res = await model.login(values.username, values.password)
+    debugger
     if (res.code == 1002) {
       message.info('账号名被冻结！', 4)
       return
@@ -25,7 +25,7 @@ export default () => {
 
   return (<Form name="account" onFinish={onFinish}>
     <Form.Item name="username" rules={[{required: true, message: '请输入您的用户名'}]}>
-      <Input prefix={<UserOutlined/>} placeholder="请输入用户名"/>
+      <Input prefix={<UserOutlined/>} placeholder="请输入账号名"/>
     </Form.Item>
     <Form.Item name="password" rules={[{required: true, message: '请输入您的密码'}]}>
       <Input prefix={<LockOutlined/>} type="password" placeholder="请输入密码"/>

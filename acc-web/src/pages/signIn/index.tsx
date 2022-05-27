@@ -21,7 +21,7 @@ export default () => {
           <Col span={16}>
             <img src="./login2.png" width='500px' height='350px'/>
           </Col>
-          <Col span={8}>
+          <Col span={8} style={{paddingTop: 30}}>
             <Tabs>
               <TabPane tab="账户登录" key="account">
                 <AccountForm/>

@@ -18,11 +18,11 @@ package jwt
 //		var data interface{}
 //
 //		code = e.SUCCESS
-//		token := c.Query("token")
-//		if token == "" {
+//		jwt := c.Query("jwt")
+//		if jwt == "" {
 //			code = e.INVALID_PARAMS
 //		} else {
-//			_, e := util.ParseToken(token)
+//			_, e := util.ParseToken(jwt)
 //			if e != nil {
 //				switch e.(*jwt.ValidationError).Errors {
 //				case jwt.ValidationErrorExpired:

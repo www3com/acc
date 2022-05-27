@@ -6,6 +6,5 @@ export async function signUp(user: any) {
 
 
 export async function signIn(username: string, password: string) {
-  debugger
   return await request.post('/api/user/sign-in', {username: username, password: password})
 }

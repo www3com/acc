@@ -2,9 +2,10 @@ package service
 
 import (
 	"accounting-service/internal/misc/consts"
-	"accounting-service/internal/misc/md5"
 	"accounting-service/internal/model"
 	"accounting-service/internal/pkg/db"
+	"accounting-service/internal/pkg/jwt"
+	"accounting-service/internal/pkg/md5"
 	"accounting-service/internal/pkg/r"
 	"gorm.io/gorm"
 	"time"
@@ -13,32 +14,39 @@ import (
 type UserService struct {
 	Username string
 	Password string
+	IP       string
 }
 
-func (u *UserService) SignIn() (*r.R[int64], error) {
+func (u *UserService) SignIn() (*r.R[string], error) {
 	user, err := model.GetUserByUsername(u.Username)
 	if err != nil {
 		return nil, err
 	}
 
 	if user.Username == "" {
-		return r.Fail[int64](consts.USER_SIGN_IN_ERROR), nil
+		return r.Fail[string](consts.USER_SIGN_IN_ERROR), nil
 	}
 
 	if consts.IsUserFreeze(user.State) {
-		return r.Fail[int64](consts.USER_SIGN_IN_FREEZE), nil
+		return r.Fail[string](consts.USER_SIGN_IN_FREEZE), nil
 	}
 
 	if consts.IsUserClose(user.State) {
-		return r.Fail[int64](consts.USER_SIGN_IN_ERROR), nil
+		return r.Fail[string](consts.USER_SIGN_IN_ERROR), nil
 	}
 
 	password := md5.Encrypt(u.Password)
 	if user.Password != password {
-		return r.Fail[int64](consts.USER_SIGN_IN_ERROR), nil
+		return r.Fail[string](consts.USER_SIGN_IN_ERROR), nil
 	}
 
-	return r.Ok[int64](user.ID), nil
+	duration := 2 * time.Hour
+	token, err := jwt.GenerateToken(user.ID, u.IP, duration)
+	if err != nil {
+		return r.Fail[string](consts.USER_SIGN_IN_ERROR), nil
+	}
+
+	return r.Ok[string](token), nil
 
 }
 
