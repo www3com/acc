@@ -1,7 +1,7 @@
 package model
 
 import (
-	"accounting-service/internal/pkg/db"
+	"acc/internal/pkg/db"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )

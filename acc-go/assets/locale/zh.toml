@@ -1,7 +1,0 @@
-400 = "Invalid parameter"
-403 = "Forbidden"
-404 = "Requested resource not found"
-500 = "Server internal error"
-
-1001 = "用户名已经存在"
-1002 = "电子邮箱已经存在"

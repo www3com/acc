@@ -1,11 +1,12 @@
 package api
 
 import (
-	"accounting-service/internal/misc/consts"
-	"accounting-service/internal/model"
-	"accounting-service/internal/pkg/logger"
-	"accounting-service/internal/pkg/r"
-	"accounting-service/internal/service"
+	"acc/internal/misc/consts"
+	"acc/internal/model"
+	"acc/internal/pkg/e"
+	"acc/internal/pkg/logger"
+	"acc/internal/pkg/r"
+	"acc/internal/service"
 	"github.com/allegro/bigcache/v3"
 	"github.com/gin-gonic/gin"
 	"time"
@@ -32,8 +33,8 @@ type signIn struct {
 func SignIn(c *gin.Context) {
 
 	var signInParam signIn
-	if err := c.Bind(&signInParam); err != nil {
-		r.RenderError(c, err)
+	if code := r.BindAndValid(c, &signInParam); code != e.OK {
+		r.RenderFail(c, code)
 		return
 	}
 
@@ -41,29 +42,24 @@ func SignIn(c *gin.Context) {
 		Username: signInParam.Username,
 		Password: signInParam.Password}
 
-	res, err := userService.SignIn()
-	if err != nil {
-		logger.Errorf("Sign in error, cause by: %v", err)
-		r.RenderError(c, err)
-		return
-	}
-
-	if res.Ok() {
-		r.RenderOk(c, map[string]string{"userId": res.Data})
+	m := userService.SignIn()
+	if m.Ok() {
+		r.RenderOk(c, m.Data)
 	} else {
-		r.RenderCode(c, res.Code)
+		r.RenderFail(c, m.Code)
 	}
 }
 
 func SignUp(c *gin.Context) {
 	var userParam user
-	if err := c.Bind(&userParam); err != nil {
-		r.RenderError(c, err)
+
+	if code := r.BindAndValid(c, &userParam); e.IsFail(code) {
+		r.RenderFail(c, code)
 		return
 	}
 
 	if !userParam.Agreement {
-		r.RenderCode(c, consts.USER_DISAGREEMENT)
+		r.RenderFail(c, e.USER_DISAGREEMENT)
 		return
 	}
 
@@ -72,12 +68,12 @@ func SignUp(c *gin.Context) {
 	exist, err := userService.ExistUsername()
 	if err != nil {
 		logger.Errorf("Check if username exist, cause by: %v ", err)
-		r.RenderError(c, err)
+		r.RenderFail(c, e.ERROR)
 		return
 	}
 
 	if exist {
-		r.RenderCode(c, consts.USER_NO_USERNAME)
+		r.RenderFail(c, e.USER_NO_USERNAME)
 		return
 	}
 
@@ -93,10 +89,10 @@ func SignUp(c *gin.Context) {
 	id, err := userService.SignUp(&user)
 	if err != nil {
 		logger.Errorf("create user e, cause by: %v ", err)
-		r.RenderError(c, err)
+		r.RenderFail(c, e.ERROR)
 		return
 	}
-	r.RenderOk(c, map[string]int64{"token": id})
+	r.RenderOk(c, map[string]int64{"jwt": id})
 }
 
 func ExistUsername(c *gin.Context) {
@@ -104,7 +100,7 @@ func ExistUsername(c *gin.Context) {
 	exist, err := userService.ExistUsername()
 	if err != nil {
 		logger.Errorf("查询用户名是否重复，错误原因: %v", err)
-		r.RenderError(c, err)
+		r.RenderFail(c, e.ERROR)
 		return
 	}
 

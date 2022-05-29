@@ -1,12 +1,11 @@
 package main
 
 import (
-	"accounting-service/internal/pkg/db"
-	"accounting-service/internal/pkg/i18n"
-	"accounting-service/internal/pkg/logger"
-	"accounting-service/internal/pkg/setting"
-	"accounting-service/internal/pkg/translator"
-	"accounting-service/internal/router"
+	"acc/internal/pkg/db"
+	"acc/internal/pkg/logger"
+	"acc/internal/pkg/setting"
+	"acc/internal/pkg/translator"
+	"acc/internal/router"
 	"fmt"
 	"net/http"
 	"time"
@@ -17,7 +16,6 @@ func init() {
 	logger.Setup()
 	db.Setup()
 	translator.Setup()
-	i18n.Setup()
 }
 
 func main() {

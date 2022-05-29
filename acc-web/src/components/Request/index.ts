@@ -1,7 +1,7 @@
 import axios from "axios";
 import {message, notification} from "antd";
 
-const get = async (url: string, params?: object, options?: object) => {
+const get = async (url: string, params?: object) => {
   try {
     let res = await axios({
       method: 'get',
@@ -11,6 +11,7 @@ const get = async (url: string, params?: object, options?: object) => {
     return res.data
   } catch (err) {
     fail(err)
+    throw err
   }
 
 }
@@ -34,10 +35,10 @@ const post = async (url: string, data?: object) => {
 const fail = (err: any) => {
   switch (err.response.status) {
     case 400:
-      message.error("参数不合法!")
+      message.error("参数不合法！")
       return
     case 401:
-      message.error("请求要求身份验证!")
+      message.error("用户会话过期！")
       return
     case 403:
       message.error("服务器拒绝请求!")
@@ -51,7 +52,6 @@ const fail = (err: any) => {
     default:
       message.info("请求数据发生错误！")
   }
-
 }
 
 export default {

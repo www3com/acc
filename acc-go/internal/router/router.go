@@ -1,9 +1,10 @@
 package routers
 
 import (
-	"accounting-service/internal/api"
-	"accounting-service/internal/pkg/logger"
-	"accounting-service/internal/pkg/setting"
+	"acc/internal/api"
+	"acc/internal/middleware"
+	"acc/internal/pkg/logger"
+	"acc/internal/pkg/setting"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +20,7 @@ func InitRouter() *gin.Engine {
 	//r.StaticFS("/qrcode", http.Dir(qrcode.GetQrCodeFullPath()))
 
 	root := r.Group("/api")
+	root.Use(middleware.Auth())
 	ledger := root.Group("/ledger")
 	// 查询账本
 	ledger.GET("/", api.ListLedger)
@@ -35,7 +37,7 @@ func InitRouter() *gin.Engine {
 	transaction := root.Group("/transaction")
 	transaction.POST("/transaction", api.CreateTransaction)
 
-	user := root.Group("/user")
+	user := r.Group("/api/user")
 	user.GET("/username", api.ExistUsername)
 	user.POST("/sign-in", api.SignIn)
 	user.POST("/sign-up", api.SignUp)

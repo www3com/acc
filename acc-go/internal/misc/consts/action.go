@@ -1,4 +1,4 @@
-package dict
+package consts
 
 var action = map[int]string{
 	1: "初始账户",

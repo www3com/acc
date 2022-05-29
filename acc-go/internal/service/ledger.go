@@ -1,8 +1,8 @@
 package service
 
 import (
-	"accounting-service/internal/model"
-	"accounting-service/internal/pkg/db"
+	"acc/internal/model"
+	"acc/internal/pkg/db"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"

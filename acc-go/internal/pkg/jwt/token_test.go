@@ -14,7 +14,7 @@ func TestGenerateToken(t *testing.T) {
 		return
 	}
 
-	fmt.Printf("token: %s \n", token)
+	fmt.Printf("jwt: %s \n", token)
 }
 
 func TestParseToken(t *testing.T) {

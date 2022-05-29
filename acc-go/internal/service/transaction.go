@@ -1,8 +1,8 @@
 package service
 
 import (
-	"accounting-service/internal/model"
-	"accounting-service/internal/pkg/db"
+	"acc/internal/model"
+	"acc/internal/pkg/db"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"time"

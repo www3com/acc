@@ -1,7 +1,7 @@
 package service
 
 import (
-	"accounting-service/internal/model"
+	"acc/internal/model"
 	"github.com/shopspring/decimal"
 )
 

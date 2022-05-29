@@ -1,7 +1,7 @@
 package email
 
 import (
-	"accounting-service/internal/pkg/setting"
+	"acc/internal/pkg/setting"
 	"bytes"
 	"gopkg.in/gomail.v2"
 	"text/template"

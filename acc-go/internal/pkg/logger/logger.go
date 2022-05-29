@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"accounting-service/internal/pkg/setting"
+	"acc/internal/pkg/setting"
 	"fmt"
 	nested "github.com/antonfisher/nested-logrus-formatter"
 	"github.com/sirupsen/logrus"

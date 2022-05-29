@@ -1,8 +1,8 @@
 package db
 
 import (
-	"accounting-service/internal/pkg/logger"
-	"accounting-service/internal/pkg/setting"
+	"acc/internal/pkg/logger"
+	"acc/internal/pkg/setting"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
