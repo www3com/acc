@@ -51,7 +51,7 @@ func (u *UserService) SignIn() *r.Msg {
 
 	return &r.Msg{
 		Code: e.OK,
-		Data: token,
+		Data: map[string]string{"token": token},
 	}
 }
 

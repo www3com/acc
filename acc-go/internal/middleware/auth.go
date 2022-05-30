@@ -25,6 +25,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 
+		println(c.ClientIP())
 		if parsedToken.IP != c.ClientIP() {
 			r.Render(c, http.StatusUnauthorized, e.UNAUTHORIZED, nil)
 			c.Abort()

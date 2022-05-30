@@ -40,7 +40,8 @@ func SignIn(c *gin.Context) {
 
 	userService := service.UserService{
 		Username: signInParam.Username,
-		Password: signInParam.Password}
+		Password: signInParam.Password,
+		IP:       c.ClientIP()}
 
 	m := userService.SignIn()
 	if m.Ok() {
