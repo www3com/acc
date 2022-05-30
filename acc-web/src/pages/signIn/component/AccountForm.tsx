@@ -2,25 +2,22 @@ import {Button, Divider, Form, Input, message, Space} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {Link} from "umi";
 import React from "react";
-import {useModel} from "@@/plugin-model/useModel";
+import {UserStore} from "@/stores/userStore";
+import {inject, observer} from 'mobx-react';
 
-export default () => {
-  const model = useModel('userModel');
+interface AccountProps {
+  store?: UserStore
+}
 
+const accountForm = ({store}: AccountProps) => {
   const onFinish = async (values: any) => {
-
-    let res = await model.login(values.username, values.password)
-    debugger
-    if (res.code == 1002) {
-      message.info('账号名被冻结！', 4)
-      return
-    } else if (res.code == 1003) {
-      message.info('账号名或者密码错误！', 4)
-      return
-    }
-    message.success("登录成功！", 1, ()=> {
+    let r = await store.login(values.username, values.password);
+    if (r.code == 200) {
+      sessionStorage.setItem("ACC-TOKEN", r.data.token)
       location.href = './account'
-    })
+    } else {
+      message.info(r.message)
+    }
   };
 
   return (<Form name="account" onFinish={onFinish}>
@@ -41,3 +38,5 @@ export default () => {
     </Form.Item>
   </Form>)
 }
+
+export default inject('store')(observer(accountForm))

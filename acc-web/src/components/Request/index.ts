@@ -7,6 +7,9 @@ const get = async (url: string, params?: object) => {
       method: 'get',
       url: url,
       params: params,
+      headers: {
+        "ACC-TOKEN": sessionStorage.getItem("ACC-TOKEN")
+      },
     })
     return res.data
   } catch (err) {
@@ -22,7 +25,10 @@ const post = async (url: string, data?: object) => {
       method: 'post',
       url: url,
       data: data,
-      headers: {'Content-Type': 'application/json;charset=UTF-8'},
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "ACC-TOKEN": sessionStorage.getItem("ACC-TOKEN")
+      },
     })
     return res.data
   } catch (err) {
