@@ -7,8 +7,8 @@ server:
 data-source:
   host: 192.168.3.3
   port: 5432
-  user: acc
-  password: acc@2022
+  user: ${ACC_DB_USER}
+  password: ${ACC_DB_PASSWORD}
   database: acc
 
 # Send email configuration
