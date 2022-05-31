@@ -1,14 +1,14 @@
 @width: 1024px;
 
 
-.ddd {
+.menu {
   line-height: 60px!important;
   border: 0;
   border-bottom: 1px solid #f0f0f0;
   box-shadow: none;
 }
 
-.headerWrapper {
+.header {
   width: 100%;
   //padding: 0px 10px 5px 10px;
   border-bottom: 1px solid #f0f0f0;
@@ -16,22 +16,23 @@
   position: fixed;
   top: 0px;
 
-  .header {
+  .headerRow {
     width: @width;
     margin: auto;
   }
 }
 
-.mainWrapper {
+.main {
   width: 100%;
   padding-top: 80px;
+  .mainRow {
+    min-height: 600px;
+    width: @width;
+    margin: auto
+  }
 }
 
-.main {
-  min-height: 600px;
-  width: @width;
-  margin: auto
-}
+
 
 .footer {
   display: flex;

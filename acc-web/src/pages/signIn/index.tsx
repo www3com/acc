@@ -22,7 +22,7 @@ export default () => {
         <div className={style.main}>
           <Row className={style.mainRow}>
             <Col span={16}>
-              <img src="./login2.png" width='500px' height='350px'/>
+              <img src="./login.png" width='500px' height='350px'/>
             </Col>
             <Col span={8} style={{paddingTop: 30}}>
               <Tabs>

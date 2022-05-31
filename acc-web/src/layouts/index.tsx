@@ -6,37 +6,7 @@ import Register from "@/pages/signUp";
 import Success from "@/pages/signUp/success";
 import zhCN from 'antd/lib/locale/zh_CN';
 import Footer from "@/components/Footer";
-
-const items: any = [
-  {label: '概览'},
-  {label: '账户'},
-  {label: '记账'},
-  {label: '设置'},
-];
-
-const onClick = ({key}: any) => {
-  message.info(`Click on item ${key}`);
-};
-
-const menu = (
-  <Menu
-    onClick={onClick}
-    items={[
-      {
-        label: '1st menu item',
-        key: '1',
-      },
-      {
-        label: '2nd menu item',
-        key: '2',
-      },
-      {
-        label: '3rd menu item',
-        key: '3',
-      },
-    ]}
-  />
-);
+import Header from "@/layouts/component/Header";
 
 export default (props: any) => {
   switch (props.location.pathname) {
@@ -46,43 +16,14 @@ export default (props: any) => {
     case '/user/success': return <Success/>
   }
 
-
   return (
     <ConfigProvider locale={zhCN}>
       <div>
-        <div className={style.headerWrapper}>
-          <Row className={style.header}>
-            <Col flex="100px" style={{margin: 'auto'}}>
-              <a href='/sign-in'>
-                <img src={'./logo3.png'} width={140} height={40}/>
-              </a>
-            </Col>
-            <Col flex="auto">
-              <Menu className={style.ddd}
-                    mode="horizontal"
-                    items={items}
-              />
-            </Col>
-            <Col flex="300px" style={{margin: 'auto', textAlign: "right"}}>
-              <Space split={<Divider type="vertical"/>}>
-
-                <Dropdown overlay={menu}>
-                  <a onClick={e => e.preventDefault()}>
-                    <Space>
-                      标准账户
-                      <DownOutlined/>
-                    </Space>
-                  </a>
-                </Dropdown>
-                <Typography.Link>Jason</Typography.Link>
-                <SoundOutlined/>
-                <LogoutOutlined/>
-              </Space>
-            </Col>
-          </Row>
+        <div className={style.header}>
+          <Header/>
         </div>
-        <div className={style.mainWrapper}>
-          <div className={style.main}>
+        <div className={style.main}>
+          <div className={style.mainRow}>
             {props.children}
           </div>
           <div className={style.footer}>

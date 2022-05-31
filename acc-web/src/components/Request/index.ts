@@ -1,6 +1,8 @@
 import axios from "axios";
-import {message, notification} from "antd";
+import {message} from "antd";
 import {getToken} from "@/components/token";
+
+const json = "application/json;charset=UTF-8"
 
 const get = async (url: string, params?: object) => {
   try {
@@ -26,7 +28,7 @@ const post = async (url: string, data?: object) => {
       url: url,
       data: data,
       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+        'Content-Type': json,
         "ACC-TOKEN": getToken()
       },
     })
@@ -44,7 +46,7 @@ const put = async (url: string, data?: object) => {
       url: url,
       data: data,
       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+        'Content-Type': json,
         "ACC-TOKEN": getToken()
       },
     })

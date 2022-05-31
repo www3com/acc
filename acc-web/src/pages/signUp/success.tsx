@@ -7,9 +7,9 @@ import Footer from "@/components/Footer";
 
 
 export default () => {
-const onClick= () => {
-  location.href = '/signIn'
-}
+  const onClick = () => {
+    location.href = '/signIn'
+  }
   return (
     <div>
       <div className={style.header}>
