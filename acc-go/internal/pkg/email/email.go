@@ -20,12 +20,12 @@ func SendTemplateMail[T](path string, mailAddr string, subject string, data T) {
 func SendMail(mailAddr string, subject string, body string) error {
 	m := gomail.NewMessage()
 
-	from := "Acc Center" + "<" + setting.EmailSetting.UserName + ">"
+	from := "Acc Center" + "<" + setting.ConfigSetting.Email.User + ">"
 	m.SetHeader("From", from)
 	m.SetHeader("To", mailAddr)
 	m.SetHeader("Subject", subject)
 	m.SetBody("text/html", body)
-	d := gomail.NewDialer(setting.EmailSetting.Host, setting.EmailSetting.Port, setting.EmailSetting.UserName, setting.EmailSetting.Password)
+	d := gomail.NewDialer(setting.ConfigSetting.Email.Host, setting.ConfigSetting.Email.Port, setting.ConfigSetting.Email.User, setting.ConfigSetting.Email.Password)
 	err := d.DialAndSend(m)
 	return err
 }

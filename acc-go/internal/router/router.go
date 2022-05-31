@@ -10,7 +10,7 @@ import (
 )
 
 func InitRouter() *gin.Engine {
-	gin.SetMode(setting.ServerSetting.RunMode)
+	gin.SetMode(setting.ConfigSetting.Server.RunMode)
 	gin.DefaultErrorWriter = logger.GetLog().Out
 	r := gin.New()
 	//r.Use(gin.Logger())

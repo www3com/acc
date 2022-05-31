@@ -2,7 +2,6 @@ package logger
 
 import (
 	"acc/internal/pkg/setting"
-	"fmt"
 	nested "github.com/antonfisher/nested-logrus-formatter"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -16,16 +15,16 @@ func Setup() {
 	log.SetLevel(logrus.DebugLevel)
 
 	noColors := false
-	if setting.LoggerSetting.Output == setting.LOGGER_STDOUT {
+	if setting.ConfigSetting.Logger.Output == setting.LOGGER_STDOUT {
 		log.SetOutput(os.Stdout)
 	} else {
 		noColors = true
 		output := &lumberjack.Logger{
-			Filename:   setting.LoggerSetting.File.FileName,
-			MaxSize:    setting.LoggerSetting.File.MaxSize,
-			MaxBackups: setting.LoggerSetting.File.MaxBackups,
-			MaxAge:     setting.LoggerSetting.File.MaxAge,
-			Compress:   setting.LoggerSetting.File.Compress,
+			Filename:   setting.ConfigSetting.Logger.File.FileName,
+			MaxSize:    setting.ConfigSetting.Logger.File.MaxSize,
+			MaxBackups: setting.ConfigSetting.Logger.File.MaxBackups,
+			MaxAge:     setting.ConfigSetting.Logger.File.MaxAge,
+			Compress:   setting.ConfigSetting.Logger.File.Compress,
 		}
 		log.SetOutput(output)
 	}
@@ -35,8 +34,6 @@ func Setup() {
 		NoColors:        noColors,
 		ShowFullLevel:   true,
 	})
-
-	fmt.Println("初始化日志配置成功")
 }
 
 func GetLog() *logrus.Logger {

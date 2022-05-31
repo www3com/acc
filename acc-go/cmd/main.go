@@ -10,24 +10,22 @@ import (
 	"time"
 )
 
-func init() {
-	setting.Setup()
+func main() {
+	// 保证顺序
+	setting.Setup("./configs/config-dev.yaml")
 	logger.Setup()
 	db.Setup()
-}
 
-func main() {
-
-	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
+	endPoint := fmt.Sprintf(":%d", setting.ConfigSetting.Server.Port)
 	server := &http.Server{
 		Addr:           endPoint,
 		Handler:        routers.InitRouter(),
-		ReadTimeout:    setting.ServerSetting.ReadTimeout * time.Second,
-		WriteTimeout:   setting.ServerSetting.WriteTimeout * time.Second,
+		ReadTimeout:    setting.ConfigSetting.Server.ReadTimeout * time.Second,
+		WriteTimeout:   setting.ConfigSetting.Server.WriteTimeout * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	logger.Infof("start http server listening %s", endPoint)
+	logger.Infof("Start http server listening %s", endPoint)
 
 	server.ListenAndServe()
 }
