@@ -4,7 +4,7 @@ var en = map[int]string{
 	OK:             "",
 	ERROR:          "Internal server error",
 	INVALID_PARAMS: "Request parameter error",
-	UNAUTHORIZED:   "Token has timed out",
+	UNAUTHORIZED:   "Access token has timed out",
 	FORBIDDEN:      "No access rights",
 	NOT_FOUND:      "The accessed resource does not exist",
 

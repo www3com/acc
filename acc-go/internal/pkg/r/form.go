@@ -29,7 +29,7 @@ func BindAndValid(c *gin.Context, form interface{}) int {
 
 func markErrors(errors []*validation.Error) {
 	for _, err := range errors {
-		logger.Info(err.Key, err.Message)
+		logger.Info(err.Message)
 	}
 
 	return

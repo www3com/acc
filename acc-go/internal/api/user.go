@@ -19,15 +19,15 @@ func init() {
 }
 
 type user struct {
-	Nickname  string `form:"nickname" binding:"required"`
-	Username  string `form:"username" binding:"required"`
-	Password  string `form:"password" binding:"required"`
-	Agreement bool   `form:"agreement" binding:"required"`
+	Nickname  string `form:"nickname" valid:"Required"`
+	Username  string `form:"username" valid:"Required"`
+	Password  string `form:"password" valid:"Required"`
+	Agreement bool   `form:"agreement" valid:"Required"`
 }
 
 type signIn struct {
-	Username string `form:"username"`
-	Password string `form:"password"`
+	Username string `form:"username" valid:"Required"`
+	Password string `form:"password" valid:"Required"`
 }
 
 func SignIn(c *gin.Context) {

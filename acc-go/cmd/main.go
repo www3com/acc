@@ -4,7 +4,6 @@ import (
 	"acc/internal/pkg/db"
 	"acc/internal/pkg/logger"
 	"acc/internal/pkg/setting"
-	"acc/internal/pkg/translator"
 	"acc/internal/router"
 	"fmt"
 	"net/http"
@@ -15,7 +14,6 @@ func init() {
 	setting.Setup()
 	logger.Setup()
 	db.Setup()
-	translator.Setup()
 }
 
 func main() {
