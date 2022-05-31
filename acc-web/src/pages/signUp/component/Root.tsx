@@ -5,6 +5,7 @@ import Header from "@/pages/signUp/component/Header";
 import Footer from "@/components/Footer";
 import {UserStore} from "@/stores/userStore";
 import {inject, observer} from "mobx-react";
+import {OK} from "@/components/Request";
 
 interface SignUpProps {
   store?: UserStore
@@ -13,7 +14,7 @@ interface SignUpProps {
 const signUp = ({store}: SignUpProps) => {
   const onFinish = async (values: any) => {
     let r = await store.register(values)
-    if (r.code == 200) {
+    if (r.code == OK) {
       location.href = './user/success'
     } else if (r.code == 1000) {
       message.info('必须同意协议！')

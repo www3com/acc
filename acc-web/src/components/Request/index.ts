@@ -73,19 +73,25 @@ const del = async (url: string, params?: object) => {
 }
 
 const fail = (err: any) => {
-  debugger
   switch (err.response.status) {
-    case 400:
-    case 401:
-    case 403:
-    case 404:
-    case 500:
+    case INVALID_PARAMS:
+    case UNAUTHORIZED:
+    case FORBIDDEN:
+    case NOT_FOUND:
+    case ERROR:
       message.error(err.response.data.message)
       return
     default:
       message.info("请求数据发生错误！")
   }
 }
+
+export const OK = 200
+export const ERROR = 500
+export const INVALID_PARAMS = 400
+export const UNAUTHORIZED = 401
+export const FORBIDDEN = 403
+export const NOT_FOUND = 404
 
 export default {
   get: get,

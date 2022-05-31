@@ -5,6 +5,7 @@ import React from "react";
 import {UserStore} from "@/stores/userStore";
 import {inject, observer} from 'mobx-react';
 import {setToken} from "@/components/token";
+import {OK} from "@/components/Request";
 
 interface AccountProps {
   store?: UserStore
@@ -13,7 +14,7 @@ interface AccountProps {
 const accountForm = ({store}: AccountProps) => {
   const onFinish = async (values: any) => {
     let r = await store.login(values.username, values.password);
-    if (r.code == 200) {
+    if (r.code == OK) {
       setToken(r.data.token)
       location.href = './account'
     } else {
