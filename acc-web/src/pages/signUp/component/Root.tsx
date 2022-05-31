@@ -2,7 +2,7 @@ import style from "@/pages/signUp/style.less";
 import {Button, Checkbox, Form, Input, message, Space} from "antd";
 import React from "react";
 import Header from "@/pages/signUp/component/Header";
-import Footer from "@/pages/components/Footer";
+import Footer from "@/components/Footer";
 import {UserStore} from "@/stores/userStore";
 import {inject, observer} from "mobx-react";
 

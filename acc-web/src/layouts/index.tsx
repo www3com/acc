@@ -5,6 +5,7 @@ import Login from '@/pages/signIn'
 import Register from "@/pages/signUp";
 import Success from "@/pages/signUp/success";
 import zhCN from 'antd/lib/locale/zh_CN';
+import Footer from "@/components/Footer";
 
 const items: any = [
   {label: '概览'},
@@ -85,7 +86,7 @@ export default (props: any) => {
             {props.children}
           </div>
           <div className={style.footer}>
-            border
+            <Footer/>
           </div>
         </div>
       </div>

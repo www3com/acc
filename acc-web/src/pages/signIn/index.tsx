@@ -4,7 +4,7 @@ import React from "react";
 import style from "@/pages/signIn/style.less";
 import AccountForm from "@/pages/signIn/component/AccountForm";
 import Header from "@/pages/signIn/component/Header";
-import Footer from "@/pages/components/Footer";
+import Footer from "@/components/Footer";
 import {Provider} from "mobx-react";
 import {UserStore} from "@/stores/userStore";
 

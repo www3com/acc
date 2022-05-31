@@ -3,7 +3,7 @@ import {Button, Result} from "antd";
 import React from "react";
 import style from "@/pages/signUp/style.less";
 import Header from "@/pages/signUp/component/Header";
-import Footer from "@/pages/components/Footer";
+import Footer from "@/components/Footer";
 
 
 export default () => {

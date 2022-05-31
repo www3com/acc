@@ -4,6 +4,7 @@ import {Link} from "umi";
 import React from "react";
 import {UserStore} from "@/stores/userStore";
 import {inject, observer} from 'mobx-react';
+import {setToken} from "@/components/token";
 
 interface AccountProps {
   store?: UserStore
@@ -13,7 +14,7 @@ const accountForm = ({store}: AccountProps) => {
   const onFinish = async (values: any) => {
     let r = await store.login(values.username, values.password);
     if (r.code == 200) {
-      sessionStorage.setItem("ACC-TOKEN", r.data.token)
+      setToken(r.data.token)
       location.href = './account'
     } else {
       message.info(r.message)

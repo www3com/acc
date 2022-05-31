@@ -1,10 +1,10 @@
 import {Redirect} from 'umi'
+import {getToken} from "@/components/token";
 
 export default (props: any) => {
-  // const {isLogin} = useAuth();
-  if (true) {
-    return <div>{props.children}</div>;
-  } else {
+  if (getToken() == null) {
     return <Redirect to="/sign-in"/>;
+  } else {
+    return <div>{props.children}</div>;
   }
 }

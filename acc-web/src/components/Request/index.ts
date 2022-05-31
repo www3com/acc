@@ -1,5 +1,6 @@
 import axios from "axios";
 import {message, notification} from "antd";
+import {getToken} from "@/components/token";
 
 const get = async (url: string, params?: object) => {
   try {
@@ -8,7 +9,7 @@ const get = async (url: string, params?: object) => {
       url: url,
       params: params,
       headers: {
-        "ACC-TOKEN": sessionStorage.getItem("ACC-TOKEN")
+        "ACC-TOKEN": getToken()
       },
     })
     return res.data
@@ -16,7 +17,6 @@ const get = async (url: string, params?: object) => {
     fail(err)
     throw err
   }
-
 }
 
 const post = async (url: string, data?: object) => {
@@ -27,7 +27,7 @@ const post = async (url: string, data?: object) => {
       data: data,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        "ACC-TOKEN": sessionStorage.getItem("ACC-TOKEN")
+        "ACC-TOKEN": getToken()
       },
     })
     return res.data
@@ -35,25 +35,52 @@ const post = async (url: string, data?: object) => {
     fail(err)
     throw err
   }
+}
 
+const put = async (url: string, data?: object) => {
+  try {
+    let res = await axios({
+      method: 'put',
+      url: url,
+      data: data,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        "ACC-TOKEN": getToken()
+      },
+    })
+    return res.data
+  } catch (err) {
+    fail(err)
+    throw err
+  }
+}
+
+const del = async (url: string, params?: object) => {
+  try {
+    let res = await axios({
+      method: 'delete',
+      url: url,
+      params: params,
+      headers: {
+        "ACC-TOKEN": getToken()
+      },
+    })
+    return res.data
+  } catch (err) {
+    fail(err)
+    throw err
+  }
 }
 
 const fail = (err: any) => {
+  debugger
   switch (err.response.status) {
     case 400:
-      message.error("参数不合法！")
-      return
     case 401:
-      message.error("用户会话过期！")
-      return
     case 403:
-      message.error("服务器拒绝请求!")
-      return
     case 404:
-      message.error("请求资源不存在!")
-      return
     case 500:
-      message.error("服务器内部错误!")
+      message.error(err.response.data.message)
       return
     default:
       message.info("请求数据发生错误！")
@@ -62,5 +89,7 @@ const fail = (err: any) => {
 
 export default {
   get: get,
-  post: post
+  post: post,
+  put: put,
+  delete: del
 }
