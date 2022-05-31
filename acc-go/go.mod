@@ -3,16 +3,11 @@ module acc
 go 1.18
 
 require (
-	github.com/allegro/bigcache/v3 v3.0.2
+
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/astaxie/beego v1.12.3
 	github.com/gin-gonic/gin v1.7.7
-	github.com/go-playground/locales v0.14.0
-	github.com/go-playground/universal-translator v0.18.0
-	github.com/go-playground/validator/v10 v10.11.0
 	github.com/golang-jwt/jwt/v4 v4.4.1
-	github.com/nicksnyder/go-i18n/v2 v2.2.0
-	github.com/pelletier/go-toml v1.9.5
 	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/shopspring/decimal v1.3.1

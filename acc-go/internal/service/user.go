@@ -1,7 +1,7 @@
 package service
 
 import (
-	"acc/internal/misc/consts"
+	"acc/internal/consts"
 	"acc/internal/model"
 	"acc/internal/pkg/db"
 	"acc/internal/pkg/e"

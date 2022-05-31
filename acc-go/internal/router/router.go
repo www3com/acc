@@ -6,6 +6,7 @@ import (
 	"acc/internal/pkg/logger"
 	"acc/internal/pkg/setting"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func InitRouter() *gin.Engine {
@@ -15,9 +16,7 @@ func InitRouter() *gin.Engine {
 	//r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	//r.StaticFS("/export", http.Dir(export.GetExcelFullPath()))
-	//r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
-	//r.StaticFS("/qrcode", http.Dir(qrcode.GetQrCodeFullPath()))
+	r.StaticFS("/web", http.Dir("./"))
 
 	root := r.Group("/api")
 	root.Use(middleware.Auth())

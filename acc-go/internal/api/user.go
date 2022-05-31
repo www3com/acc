@@ -1,22 +1,14 @@
 package api
 
 import (
-	"acc/internal/misc/consts"
+	"acc/internal/consts"
 	"acc/internal/model"
 	"acc/internal/pkg/e"
 	"acc/internal/pkg/logger"
 	"acc/internal/pkg/r"
 	"acc/internal/service"
-	"github.com/allegro/bigcache/v3"
 	"github.com/gin-gonic/gin"
-	"time"
 )
-
-var cache *bigcache.BigCache
-
-func init() {
-	cache, _ = bigcache.NewBigCache(bigcache.DefaultConfig(10 * time.Minute))
-}
 
 type user struct {
 	Nickname  string `form:"nickname" valid:"Required"`
