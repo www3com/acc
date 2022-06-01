@@ -7,6 +7,7 @@ export default defineConfig({
   routes: [
     {path: '/sign-in', component: '@/pages/signIn/index'},
     {path: '/sign-up', component: '@/pages/signUp/index'},
+    {path: '/sign-up/success', component: '@/pages/signUp/success'},
     {
       path: '/', component: '@/layouts/index',
       wrappers: [

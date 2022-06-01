@@ -11,7 +11,7 @@ import Header from "@/layouts/component/Header";
 export default (props: any) => {
   switch (props.location.pathname) {
     case '/': return <Login/>
-    case '/signIn': return <Login/>
+    case '/sign-in': return <Login/>
     case '/user': return <Register/>
     case '/user/success': return <Success/>
   }

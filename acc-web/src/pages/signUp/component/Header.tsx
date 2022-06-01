@@ -9,7 +9,7 @@ export default () => {
       <img src={'/logo3.png'} width={170} height={45}/>
     </Col>
     <Col flex="auto" style={{margin: 'auto'}}>
-      <Link to='/login' style={{float: "right"}}>登录</Link>
+      <Link to='/sign-in' style={{float: "right"}}>登录</Link>
     </Col>
   </Row>)
 }

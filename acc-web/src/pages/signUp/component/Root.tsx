@@ -15,7 +15,7 @@ const signUp = ({store}: SignUpProps) => {
   const onFinish = async (values: any) => {
     let r = await store.register(values)
     if (r.code == OK) {
-      location.href = './user/success'
+      location.href = './sign-up/success'
     } else if (r.code == 1000) {
       message.info('必须同意协议！')
       return
