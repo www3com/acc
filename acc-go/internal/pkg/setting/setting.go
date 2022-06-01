@@ -102,7 +102,7 @@ func Setup(configPath string) {
 		fmt.Println("Read configuration file error")
 		os.Exit(1)
 	}
-	// 获取环境变量
+	// 替换环境变量
 	config = []byte(os.ExpandEnv(string(config)))
 	err = yaml.Unmarshal(config, ConfigSetting)
 	if err != nil {

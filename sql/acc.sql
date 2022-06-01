@@ -56,40 +56,56 @@ INSERT INTO public.tpl_account (id, ledger_id, type, name, parent_id, icon, curr
 INSERT INTO public.tpl_account (id, ledger_id, type, name, parent_id, icon, currency_id, in_asset, sort_number, remark) VALUES (16, 1, 1, '债权账户', 0, null, 1, 1, 6, null);
 INSERT INTO public.tpl_account (id, ledger_id, type, name, parent_id, icon, currency_id, in_asset, sort_number, remark) VALUES (4, 1, 1, '银行卡', 3, null, 1, 1, 1, null);
 
-
-
--- 模板字典
-create table tpl_dict
+-- 项目
+create table tpl_project
 (
-    id          bigint      not null  constraint pk_tpl_dict  primary key,
+    id          bigint      not null  constraint pk_tpl_project  primary key,
     ledger_id   int         not null,
-    type        smallint    not null,
     name        varchar(80) not null,
     remark      varchar(200),
     sort_number int         not null,
     create_time bigint      not null
 );
 
-comment on table tpl_dict is '模板字典';
+INSERT INTO public.tpl_project (id, ledger_id, name, remark, sort_number, create_time) VALUES (1, 1, '过年', '', 1, 1650986269537);
+INSERT INTO public.tpl_project (id, ledger_id, name, remark, sort_number, create_time) VALUES (2, 1, '装修', '', 2, 1650986269537);
+INSERT INTO public.tpl_project (id, ledger_id, name, remark, sort_number, create_time) VALUES (3, 1, '旅游', '', 3, 1650986269537);
+INSERT INTO public.tpl_project (id, ledger_id, name, remark, sort_number, create_time) VALUES (4, 1, '钓鱼', '', 4, 1650986269537);
 
-create index idx_tpl_dict_ledger_id
-    on tpl_dict (ledger_id);
 
-alter table tpl_dict owner to acc;
+-- 家庭成员
+create table tpl_member
+(
+    id          bigint      not null  constraint pk_tpl_member  primary key,
+    ledger_id   int         not null,
+    name        varchar(80) not null,
+    remark      varchar(200),
+    sort_number int         not null,
+    create_time bigint      not null
+);
 
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (1, 1, 1, '过年', '项目', 1, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (2, 1, 1, '装修', '项目', 2, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (3, 1, 1, '旅游', '项目', 3, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (4, 1, 1, '钓鱼', '项目', 4, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (5, 1, 2, '本人', '成员', 1, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (6, 1, 2, '老婆/老公', '成员', 2, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (7, 1, 2, '子女', '成员', 3, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (8, 1, 2, '父母', '成员', 4, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (9, 1, 2, '家庭公用', '成员', 5, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (10, 1, 3, '餐厅', '商家', 1, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (11, 1, 3, '商场', '商家', 2, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (12, 1, 3, '超市', '商家', 3, 1650986269537);
-INSERT INTO public.tpl_dict (id, ledger_id, type, name, remark, sort_number, create_time) VALUES (13, 1, 3, '其他', '商家', 4, 1650986269537);
+INSERT INTO public.tpl_member (id, ledger_id, name, remark, sort_number, create_time) VALUES (1, 1, '本人', '', 1, 1650986269537);
+INSERT INTO public.tpl_member (id, ledger_id, name, remark, sort_number, create_time) VALUES (2, 1, '老婆/老公', '', 2, 1650986269537);
+INSERT INTO public.tpl_member (id, ledger_id, name, remark, sort_number, create_time) VALUES (3, 1, '子女', '', 3, 1650986269537);
+INSERT INTO public.tpl_member (id, ledger_id, name, remark, sort_number, create_time) VALUES (4, 1, '父母', '', 4, 1650986269537);
+INSERT INTO public.tpl_member (id, ledger_id, name, remark, sort_number, create_time) VALUES (5, 1, '家庭公用', '', 5, 1650986269537);
+
+
+-- 供应商
+create table tpl_supplier
+(
+    id          bigint      not null  constraint pk_tpl_supplier  primary key,
+    ledger_id   int         not null,
+    name        varchar(80) not null,
+    remark      varchar(200),
+    sort_number int         not null,
+    create_time bigint      not null
+);
+
+INSERT INTO public.tpl_supplier (id, ledger_id, name, remark, sort_number, create_time) VALUES (1, 1, '餐厅', '', 1, 1650986269537);
+INSERT INTO public.tpl_supplier (id, ledger_id, name, remark, sort_number, create_time) VALUES (2, 1, '商场', '', 2, 1650986269537);
+INSERT INTO public.tpl_supplier (id, ledger_id, name, remark, sort_number, create_time) VALUES (3, 1, '超市', '', 3, 1650986269537);
+INSERT INTO public.tpl_supplier (id, ledger_id, name, remark, sort_number, create_time) VALUES (4, 1, '其他', '', 4, 1650986269537);
 
 
 
@@ -138,26 +154,57 @@ create index idx_acc_account_ledger_id on acc_account (ledger_id);
 alter table acc_account owner to acc;
 
 
-
--- 字典
-create table acc_dict
+-- 项目
+create table acc_project
 (
-    id          bigserial      not null  constraint pk_acc_dict  primary key,
-    ledger_id   bigint         not null,
-    type        smallint       not null,
-    name        varchar(80)    not null,
+    id          bigint      not null  constraint pk_acc_project  primary key,
+    ledger_id   int         not null,
+    name        varchar(80) not null,
     remark      varchar(200),
-    hide_flag   smallint       not null,
-    sort_number smallint       not null,
-    create_time bigint         not null,
-    update_time bigint         not null
+    hide_flag   smallint    not null,
+    sort_number int         not null,
+    create_time bigint      not null,
+    update_time bigint      not null
 );
 
-comment on table acc_dict is '字典';
-create index idx_acc_dict_ledger_id on acc_dict (ledger_id);
+create index idx_acc_project_ledger_id on acc_project (ledger_id);
 
-alter table acc_dict owner to acc;
+alter table acc_project owner to acc;
 
+
+-- 家庭成员
+create table acc_member
+(
+    id          bigint      not null  constraint pk_acc_member  primary key,
+    ledger_id   int         not null,
+    name        varchar(80) not null,
+    remark      varchar(200),
+    hide_flag   smallint       not null,
+    sort_number int         not null,
+    create_time bigint      not null,
+    update_time bigint      not null
+);
+
+create index idx_acc_member_ledger_id on acc_project (ledger_id);
+
+alter table acc_member owner to acc;
+
+-- 供应商
+create table acc_supplier
+(
+    id          bigint      not null  constraint pk_acc_supplier  primary key,
+    ledger_id   int         not null,
+    name        varchar(80) not null,
+    remark      varchar(200),
+    hide_flag   smallint       not null,
+    sort_number int         not null,
+    create_time bigint      not null,
+    update_time bigint      not null
+);
+
+create index idx_acc_supplier_ledger_id on acc_supplier (ledger_id);
+
+alter table acc_supplier owner to acc;
 
 
 -- 交易
@@ -176,7 +223,7 @@ create table acc_transaction
     update_time             bigint         not null
 );
 
-comment on table acc_dict is '交易';
+comment on table acc_transaction is '交易';
 create index idx_acc_transaction_ledger_id on acc_transaction (ledger_id);
 
 alter table acc_transaction owner to acc;

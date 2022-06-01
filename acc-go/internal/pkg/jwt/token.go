@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const ACC_TOKEN_KEY = "ACC-TOKEN"
+
 type Claims struct {
 	Uid int64  `json:"uid"`
 	IP  string `json:"ip"`

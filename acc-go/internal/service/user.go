@@ -55,7 +55,7 @@ func (u *UserService) SignIn() *r.Msg {
 	}
 }
 
-func (u *UserService) SignUp(user *model.User) (int64, error) {
+func (u *UserService) SignUp(userId int64, user *model.User) (int64, error) {
 
 	now := time.Now().UnixMicro()
 	user.CreateTime = now
@@ -66,7 +66,7 @@ func (u *UserService) SignUp(user *model.User) (int64, error) {
 		if err := model.InsertUser(tx, user); err != nil {
 			return err
 		}
-		return nil
+		return newLedger(tx, 1, "标准账本", userId)
 	}); err != nil {
 		return 0, err
 	}

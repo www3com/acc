@@ -51,7 +51,7 @@ func UpdateAccount(tx *gorm.DB, accountId int64, name string) error {
 	return nil
 }
 
-func DeleteAccountByLedgerId(tx *gorm.DB, ledgerId int64) error {
+func DeleteAccount(tx *gorm.DB, ledgerId int64) error {
 	if err := tx.Delete(Account{}, "ledger_id = ?", ledgerId).Error; err != nil {
 		return err
 	}

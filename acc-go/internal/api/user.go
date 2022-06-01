@@ -3,11 +3,13 @@ package api
 import (
 	"acc/internal/consts"
 	"acc/internal/model"
+	"acc/internal/pkg/context"
 	"acc/internal/pkg/e"
 	"acc/internal/pkg/logger"
 	"acc/internal/pkg/r"
 	"acc/internal/service"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type user struct {
@@ -61,7 +63,7 @@ func SignUp(c *gin.Context) {
 	exist, err := userService.ExistUsername()
 	if err != nil {
 		logger.Errorf("Check if username exist, cause by: %v ", err)
-		r.RenderFail(c, e.ERROR)
+		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
@@ -79,10 +81,11 @@ func SignUp(c *gin.Context) {
 	if userParam.Agreement {
 		user.Agreement = 1
 	}
-	id, err := userService.SignUp(&user)
+	ownerId := context.GetUserId(c)
+	id, err := userService.SignUp(ownerId, &user)
 	if err != nil {
-		logger.Errorf("create user e, cause by: %v ", err)
-		r.RenderFail(c, e.ERROR)
+		logger.Errorf("create user error, cause by: %v ", err)
+		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 	r.RenderOk(c, map[string]int64{"jwt": id})
@@ -93,7 +96,7 @@ func ExistUsername(c *gin.Context) {
 	exist, err := userService.ExistUsername()
 	if err != nil {
 		logger.Errorf("查询用户名是否重复，错误原因: %v", err)
-		r.RenderFail(c, e.ERROR)
+		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 

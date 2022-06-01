@@ -16,33 +16,45 @@ type Ledger struct {
 	OwnerId  int64  `form:"ownerId"`
 }
 
-func CreateLedger(tLedgerId int64, ownerId int64) error {
+func CreateLedger(tLedgerId int64, tLedgerName string, ownerId int64) error {
+	err := db.DB.Transaction(func(tx *gorm.DB) error {
+		return newLedger(tx, tLedgerId, tLedgerName, ownerId)
+	})
+	return err
+}
+
+func newLedger(tx *gorm.DB, tLedgerId int64, tLedgerName string, ownerId int64) error {
 	now := time.Now().UnixMilli()
 	ledger := model.Ledger{
 		OwnerId:     ownerId,
 		TplLedgerId: tLedgerId,
-		Name:        "标准账本",
+		Name:        tLedgerName,
 		SortNumber:  1,
 		CreateTime:  now,
 		UpdateTime:  now,
 	}
 
-	err := db.DB.Transaction(func(tx *gorm.DB) error {
-		ledgerId, err := model.InsertLedger(tx, &ledger)
-		if err != nil {
-			return errors.New(fmt.Sprintf("create ledger e, template ledger id: %d, details: %s", tLedgerId, err))
-		}
+	ledgerId, err := model.InsertLedger(tx, &ledger)
+	if err != nil {
+		return errors.New(fmt.Sprintf("create ledger error, details: %s", err))
+	}
 
-		if err = createAccount(tx, tLedgerId, ledgerId, now); err != nil {
-			return errors.New(fmt.Sprintf("create account e, template ledger id: %d, details: %s", tLedgerId, err))
-		}
+	if err = createAccount(tx, tLedgerId, ledgerId, now); err != nil {
+		return errors.New(fmt.Sprintf("create account error, details: %s", err))
+	}
 
-		if err = model.InsertDict(tx, ledgerId, tLedgerId, now); err != nil {
-			return errors.New(fmt.Sprintf("create dict e, template ledger id: %d, details: %s", tLedgerId, err))
-		}
-		return nil
-	})
-	return err
+	if err = model.InsertProject(tx, ledgerId, tLedgerId, now); err != nil {
+		return errors.New(fmt.Sprintf("create project error, details: %s", err))
+	}
+
+	if err = model.InsertMember(tx, ledgerId, tLedgerId, now); err != nil {
+		return errors.New(fmt.Sprintf("create member error, details: %s", err))
+	}
+
+	if err = model.InsertSupplier(tx, ledgerId, tLedgerId, now); err != nil {
+		return errors.New(fmt.Sprintf("create supplier error, details: %s", err))
+	}
+	return nil
 }
 
 func UpdateLedger(ledgerId int64, name string) error {
@@ -56,15 +68,19 @@ func UpdateLedger(ledgerId int64, name string) error {
 func DeleteLedger(ledgerId int64) error {
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		if err := model.DeleteLedger(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete ledger e, ledger id: %d, details:  %s", ledgerId, err))
+			return errors.New(fmt.Sprintf("Delete ledger error, details:  %s", err))
 		}
 
-		if err := model.DeleteAccountByLedgerId(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete account e, ledger id: %d, details:  %s", ledgerId, err))
+		if err := model.DeleteAccount(tx, ledgerId); err != nil {
+			return errors.New(fmt.Sprintf("Delete account error, details:  %s", err))
 		}
 
-		if err := model.DeleteDictByLedgerId(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete dict e, ledger id: %d, details:  %s", ledgerId, err))
+		if err := model.DeleteMember(tx, ledgerId); err != nil {
+			return errors.New(fmt.Sprintf("Delete member error, details:  %s", err))
+		}
+
+		if err := model.DeleteSupplier(tx, ledgerId); err != nil {
+			return errors.New(fmt.Sprintf("Delete supplier error, details:  %s", err))
 		}
 
 		return nil
