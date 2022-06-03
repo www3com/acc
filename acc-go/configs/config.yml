@@ -1,6 +1,5 @@
 # Web Server configuration
 server:
-  run-mode: "release"
   port: 8989
 
 # Database configuration
@@ -23,7 +22,7 @@ logger:
   level: debug
   output: stdout    #file, stdout
   file:
-    file-name: ./logs/acc.log
+    file-name: ./logs/acc.logger
     max-size: 100
     max-backups: 3
     max-age: 15

@@ -5,27 +5,33 @@ import (
 	"acc/internal/pkg/logger"
 	"acc/internal/pkg/setting"
 	"acc/internal/router"
+	"flag"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
 
 func main() {
-	// 保证顺序
-	setting.Setup("./configs/config-dev.yaml")
+	var config string
+	flag.StringVar(&config, "config", "./configs/config.yml", "Configuration file")
+	flag.Parse()
+
+	setting.Setup(config)
 	logger.Setup()
 	db.Setup()
 
-	endPoint := fmt.Sprintf(":%d", setting.ConfigSetting.Server.Port)
+	serverConf := setting.ConfigSetting.Server
+	addr := fmt.Sprintf(":%d", serverConf.Port)
 	server := &http.Server{
-		Addr:           endPoint,
+		Addr:           addr,
 		Handler:        routers.InitRouter(),
-		ReadTimeout:    setting.ConfigSetting.Server.ReadTimeout * time.Second,
-		WriteTimeout:   setting.ConfigSetting.Server.WriteTimeout * time.Second,
+		ReadTimeout:    serverConf.ReadTimeout * time.Second,
+		WriteTimeout:   serverConf.WriteTimeout * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	logger.Infof("Start http server listening %s", endPoint)
-
-	server.ListenAndServe()
+	logrus.Infof("Start http server listening %s", addr)
+	err := server.ListenAndServe()
+	logrus.Errorf("Start http server error, detail: %v", err)
 }

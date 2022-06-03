@@ -2,72 +2,70 @@ package logger
 
 import (
 	"acc/internal/pkg/setting"
+	"bytes"
 	nested "github.com/antonfisher/nested-logrus-formatter"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"io"
 	"os"
+	"path"
+	"runtime"
+	"strconv"
+	"strings"
 )
 
-var log = logrus.New()
-
 func Setup() {
+	var (
+		writer   io.Writer = os.Stdout
+		noColors           = false
+	)
 
-	log.SetLevel(logrus.DebugLevel)
-
-	noColors := false
-	if setting.ConfigSetting.Logger.Output == setting.LOGGER_STDOUT {
-		log.SetOutput(os.Stdout)
-	} else {
-		noColors = true
-		output := &lumberjack.Logger{
-			Filename:   setting.ConfigSetting.Logger.File.FileName,
-			MaxSize:    setting.ConfigSetting.Logger.File.MaxSize,
-			MaxBackups: setting.ConfigSetting.Logger.File.MaxBackups,
-			MaxAge:     setting.ConfigSetting.Logger.File.MaxAge,
-			Compress:   setting.ConfigSetting.Logger.File.Compress,
+	if setting.ConfigSetting.Logger.Output == setting.LOGGER_FILE {
+		file := setting.ConfigSetting.Logger.File
+		writer = &lumberjack.Logger{
+			Filename:   file.FileName,
+			MaxSize:    file.MaxSize,
+			MaxBackups: file.MaxBackups,
+			MaxAge:     file.MaxAge,
+			Compress:   file.Compress,
 		}
-		log.SetOutput(output)
+		noColors = true
 	}
 
-	log.SetFormatter(&nested.Formatter{
+	formatter := nested.Formatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 		NoColors:        noColors,
 		ShowFullLevel:   true,
-	})
+		CallerFirst:     true,
+		CustomCallerFormatter: func(frame *runtime.Frame) string {
+			b := &bytes.Buffer{}
+			b.WriteString(" ")
+			b.WriteString(path.Base(frame.File))
+			b.WriteString(":")
+
+			b.WriteString(strconv.Itoa(frame.Line))
+			return b.String()
+		},
+	}
+
+	logrus.SetOutput(writer)
+	logrus.SetLevel(getLevel())
+	logrus.SetReportCaller(true)
+	logrus.SetFormatter(&formatter)
 }
 
-func GetLog() *logrus.Logger {
-	return log
-}
-
-func Debug(args ...interface{}) {
-	log.Debug(args...)
-}
-
-func Debugf(format string, args ...interface{}) {
-	log.Debugf(format, args...)
-}
-
-func Info(args ...interface{}) {
-	log.Info(args...)
-}
-
-func Infof(format string, args ...interface{}) {
-	log.Infof(format, args...)
-}
-
-func Warn(args ...interface{}) {
-	log.Warn(args...)
-}
-
-func Warnf(format string, args ...interface{}) {
-	log.Warnf(format, args...)
-}
-
-func Error(args ...interface{}) {
-	log.Error(args...)
-}
-
-func Errorf(format string, args ...interface{}) {
-	log.Errorf(format, args...)
+func getLevel() logrus.Level {
+	level := strings.ToLower(setting.ConfigSetting.Logger.Level)
+	switch level {
+	case "trace":
+		return logrus.TraceLevel
+	case "debug":
+		return logrus.DebugLevel
+	case "info":
+		return logrus.InfoLevel
+	case "warn":
+		return logrus.WarnLevel
+	default:
+		return logrus.ErrorLevel
+	}
 }

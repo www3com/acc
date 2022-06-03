@@ -157,7 +157,7 @@ alter table acc_account owner to acc;
 -- 项目
 create table acc_project
 (
-    id          bigint      not null  constraint pk_acc_project  primary key,
+    id          bigserial   not null  constraint pk_acc_project  primary key,
     ledger_id   int         not null,
     name        varchar(80) not null,
     remark      varchar(200),
@@ -175,11 +175,11 @@ alter table acc_project owner to acc;
 -- 家庭成员
 create table acc_member
 (
-    id          bigint      not null  constraint pk_acc_member  primary key,
+    id          bigserial   not null  constraint pk_acc_member  primary key,
     ledger_id   int         not null,
     name        varchar(80) not null,
     remark      varchar(200),
-    hide_flag   smallint       not null,
+    hide_flag   smallint    not null,
     sort_number int         not null,
     create_time bigint      not null,
     update_time bigint      not null
@@ -192,11 +192,11 @@ alter table acc_member owner to acc;
 -- 供应商
 create table acc_supplier
 (
-    id          bigint      not null  constraint pk_acc_supplier  primary key,
+    id          bigserial   not null  constraint pk_acc_supplier  primary key,
     ledger_id   int         not null,
     name        varchar(80) not null,
     remark      varchar(200),
-    hide_flag   smallint       not null,
+    hide_flag   smallint    not null,
     sort_number int         not null,
     create_time bigint      not null,
     update_time bigint      not null

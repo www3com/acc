@@ -2,6 +2,7 @@ package service
 
 import (
 	"acc/internal/model"
+	"acc/internal/pkg/e"
 	"github.com/shopspring/decimal"
 )
 
@@ -9,7 +10,7 @@ func ListAccount(ownerId, ledgerId int64) ([]*model.Account, error) {
 
 	accounts, err := model.ListAccounts(ledgerId)
 	if err != nil {
-		return nil, err
+		return nil, e.New(e.ERROR, err.Error())
 	}
 
 	var accountMap = make(map[int64]*model.Account, len(accounts))
@@ -23,9 +24,6 @@ func ListAccount(ownerId, ledgerId int64) ([]*model.Account, error) {
 			continue
 		}
 		parent := accountMap[account.ParentId]
-		//if parent.Children == nil {
-		//	parent.Children = []*model.Account{}
-		//}
 		parent.Children = append(parent.Children, account)
 	}
 

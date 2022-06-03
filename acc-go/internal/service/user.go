@@ -6,9 +6,9 @@ import (
 	"acc/internal/pkg/db"
 	"acc/internal/pkg/e"
 	"acc/internal/pkg/jwt"
-	"acc/internal/pkg/logger"
 	"acc/internal/pkg/md5"
 	"acc/internal/pkg/r"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
 )
@@ -22,7 +22,7 @@ type UserService struct {
 func (u *UserService) SignIn() *r.Msg {
 	user, err := model.GetUserByUsername(u.Username)
 	if err != nil {
-		logger.Error("Get user by username, detail: %v", err)
+		logrus.Errorf("Get user by username, detail: %v", err)
 		return &r.Msg{Code: e.ERROR}
 	}
 

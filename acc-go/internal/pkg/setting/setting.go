@@ -1,6 +1,7 @@
 package setting
 
 import (
+	"acc/internal/consts"
 	"acc/internal/pkg/util"
 	"fmt"
 	"gopkg.in/yaml.v3"
@@ -10,7 +11,6 @@ import (
 )
 
 type Server struct {
-	RunMode      string        `yaml:"run-mode"`
 	Port         int           `yaml:"port"`
 	ReadTimeout  time.Duration `yaml:"read-timeout"`
 	WriteTimeout time.Duration `yaml:"write-timeout"`
@@ -61,7 +61,6 @@ var (
 
 var ConfigSetting = &Config{
 	Server: Server{
-		RunMode:      "release",
 		Port:         8989,
 		ReadTimeout:  60,
 		WriteTimeout: 60,
@@ -93,20 +92,17 @@ var ConfigSetting = &Config{
 }
 
 func Setup(configPath string) {
-	if configPath == "" {
-		configPath = "./configs/config.yaml"
-	}
 	path := util.GetAbsPath(util.GetCwd(), configPath)
 	config, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Println("Read configuration file error")
+		fmt.Printf(consts.RedBold+"Read configuration file error, detail: %s\n", err)
 		os.Exit(1)
 	}
 	// 替换环境变量
 	config = []byte(os.ExpandEnv(string(config)))
 	err = yaml.Unmarshal(config, ConfigSetting)
 	if err != nil {
-		fmt.Println("Parsing configuration file error")
+		fmt.Printf(consts.RedBold+"Parsing configuration file error, detail: %s\n", err)
 		os.Exit(1)
 	}
 }

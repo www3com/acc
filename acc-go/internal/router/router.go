@@ -3,18 +3,15 @@ package routers
 import (
 	"acc/internal/api"
 	"acc/internal/middleware"
-	"acc/internal/pkg/logger"
-	"acc/internal/pkg/setting"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func InitRouter() *gin.Engine {
-	gin.SetMode(setting.ConfigSetting.Server.RunMode)
-	gin.DefaultErrorWriter = logger.GetLog().Out
+	gin.SetMode("release")
 	r := gin.New()
-	//r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+
+	r.Use(middleware.Recovery())
 
 	r.StaticFS("/web", http.Dir("./"))
 

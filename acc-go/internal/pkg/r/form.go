@@ -2,9 +2,9 @@ package r
 
 import (
 	"acc/internal/pkg/e"
-	"acc/internal/pkg/logger"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 // BindAndValid binds and validates data
@@ -29,7 +29,7 @@ func BindAndValid(c *gin.Context, form interface{}) int {
 
 func markErrors(errors []*validation.Error) {
 	for _, err := range errors {
-		logger.Info(err.Message)
+		logrus.Info(err.Message)
 	}
 
 	return

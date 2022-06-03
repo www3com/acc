@@ -5,10 +5,10 @@ import (
 	"acc/internal/model"
 	"acc/internal/pkg/context"
 	"acc/internal/pkg/e"
-	"acc/internal/pkg/logger"
 	"acc/internal/pkg/r"
 	"acc/internal/service"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -26,6 +26,10 @@ type signIn struct {
 
 func SignIn(c *gin.Context) {
 
+	i := 0
+	j := 0
+	cc := i / j
+	println(cc)
 	var signInParam signIn
 	if code := r.BindAndValid(c, &signInParam); code != e.OK {
 		r.RenderFail(c, code)
@@ -62,7 +66,7 @@ func SignUp(c *gin.Context) {
 
 	exist, err := userService.ExistUsername()
 	if err != nil {
-		logger.Errorf("Check if username exist, cause by: %v ", err)
+		logrus.Errorf("Check if username exist, cause by: %v ", err)
 		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
@@ -84,7 +88,7 @@ func SignUp(c *gin.Context) {
 	ownerId := context.GetUserId(c)
 	id, err := userService.SignUp(ownerId, &user)
 	if err != nil {
-		logger.Errorf("create user error, cause by: %v ", err)
+		logrus.Errorf("create user error, cause by: %v ", err)
 		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
@@ -95,7 +99,7 @@ func ExistUsername(c *gin.Context) {
 	userService := service.UserService{Username: c.Query("username")}
 	exist, err := userService.ExistUsername()
 	if err != nil {
-		logger.Errorf("查询用户名是否重复，错误原因: %v", err)
+		logrus.Errorf("查询用户名是否重复，错误原因: %v", err)
 		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
