@@ -2,6 +2,7 @@ package r
 
 import (
 	"acc/internal/pkg/e"
+	"acc/internal/pkg/i18n"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -42,5 +43,5 @@ func getMessage(c *gin.Context, code int) string {
 		lang = "zh"
 	}
 
-	return e.GetMessage(lang, code)
+	return i18n.GetMessage(lang, code)
 }

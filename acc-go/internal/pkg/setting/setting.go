@@ -2,7 +2,7 @@ package setting
 
 import (
 	"acc/internal/consts"
-	"acc/internal/pkg/util"
+	"acc/internal/pkg/file"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
@@ -33,13 +33,12 @@ type Email struct {
 
 // Logger 系统日志配置
 type Logger struct {
-	Level  string `yaml:"level"`  // 日志级别
-	Output string `yaml:"output"` // 输出对象，stdout,file
-	File   file   `yaml:"file"`   // 文件保存配置
+	Level       string      `yaml:"level"` // 日志级别
+	Target      string      `yaml:"target"`
+	RollingFile RollingFile `yaml:"file"` // 文件保存配置
 }
 
-// 系统日志滚动策略
-type file struct {
+type RollingFile struct {
 	FileName   string `yaml:"file-name"`   // 文件路径
 	MaxSize    int    `yaml:"max-size"`    // 每个日志文件保存的最大尺寸 单位：M
 	MaxBackups int    `yaml:"max-backups"` // 日志文件最多保存多少个备份
@@ -53,11 +52,6 @@ type Config struct {
 	Logger     Logger     `yaml:"logger"`
 	Email      Email      `yaml:"email"`
 }
-
-var (
-	LOGGER_STDOUT = "stdout"
-	LOGGER_FILE   = "file"
-)
 
 var ConfigSetting = &Config{
 	Server: Server{
@@ -80,8 +74,8 @@ var ConfigSetting = &Config{
 	},
 	Logger: Logger{
 		Level:  "debug",
-		Output: LOGGER_STDOUT,
-		File: file{
+		Target: "console",
+		RollingFile: RollingFile{
 			FileName:   "./logs/acc.log",
 			MaxSize:    100,
 			MaxBackups: 3,
@@ -92,17 +86,17 @@ var ConfigSetting = &Config{
 }
 
 func Setup(configPath string) {
-	path := util.GetAbsPath(util.GetCwd(), configPath)
+	path := file.GetAbsPath(file.GetCwd(), configPath)
 	config, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Printf(consts.RedBold+"Read configuration file error, detail: %s\n", err)
+		fmt.Printf(consts.RedBold+"Read configuration error, detail: %s\n", err)
 		os.Exit(1)
 	}
 	// 替换环境变量
 	config = []byte(os.ExpandEnv(string(config)))
 	err = yaml.Unmarshal(config, ConfigSetting)
 	if err != nil {
-		fmt.Printf(consts.RedBold+"Parsing configuration file error, detail: %s\n", err)
+		fmt.Printf(consts.RedBold+"Parsing configuration error, detail: %s\n", err)
 		os.Exit(1)
 	}
 }

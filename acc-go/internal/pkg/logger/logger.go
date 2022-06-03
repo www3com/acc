@@ -20,8 +20,8 @@ func Setup() {
 		noColors           = false
 	)
 
-	if setting.ConfigSetting.Logger.Output == setting.LOGGER_FILE {
-		file := setting.ConfigSetting.Logger.File
+	if setting.ConfigSetting.Logger.Target == "file" {
+		file := setting.ConfigSetting.Logger.RollingFile
 		writer = &lumberjack.Logger{
 			Filename:   file.FileName,
 			MaxSize:    file.MaxSize,

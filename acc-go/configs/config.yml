@@ -20,9 +20,9 @@ email:
 # Log configuration
 logger:
   level: debug
-  output: stdout    #file, stdout
+  target: console    #console, file
   file:
-    file-name: ./logs/acc.logger
+    file-name: ./logs/acc.log
     max-size: 100
     max-backups: 3
     max-age: 15
