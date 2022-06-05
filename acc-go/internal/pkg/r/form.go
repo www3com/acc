@@ -8,23 +8,23 @@ import (
 )
 
 // BindAndValid binds and validates data
-func BindAndValid(c *gin.Context, form interface{}) int {
+func BindAndValid(c *gin.Context, form interface{}) error {
 	err := c.Bind(form)
 	if err != nil {
-		return e.INVALID_PARAMS
+		return e.New(e.INVALID_PARAMS)
 	}
 
 	valid := validation.Validation{}
 	check, err := valid.Valid(form)
 	if err != nil {
-		return e.ERROR
+		return e.Wrap(e.ERROR, err, "valid params")
 	}
 	if !check {
 		markErrors(valid.Errors)
-		return e.INVALID_PARAMS
+		return e.New(e.INVALID_PARAMS)
 	}
 
-	return e.OK
+	return nil
 }
 
 func markErrors(errors []*validation.Error) {

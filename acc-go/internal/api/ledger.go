@@ -58,8 +58,8 @@ func ListLedger(c *gin.Context) {
 func valid(c *gin.Context) (*service.Ledger, bool) {
 	var ledger service.Ledger
 
-	if code := r.BindAndValid(c, &ledger); code != e.OK {
-		r.RenderFail(c, code)
+	if err := r.BindAndValid(c, &ledger); err != nil {
+		r.RenderFail(c, err)
 		return nil, false
 	}
 	return &ledger, true

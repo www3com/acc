@@ -12,8 +12,8 @@ import (
 
 func CreateTransaction(c *gin.Context) {
 	var trans service.Transaction
-	if code := r.BindAndValid(c, &trans); code != e.OK {
-		r.RenderFail(c, code)
+	if err := r.BindAndValid(c, &trans); err != nil {
+		r.RenderFail(c, err)
 		return
 	}
 	trans.Recorder = 1

@@ -7,8 +7,6 @@ import (
 	"acc/internal/pkg/e"
 	"acc/internal/pkg/jwt"
 	"acc/internal/pkg/md5"
-	"acc/internal/pkg/r"
-	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
 )
@@ -19,40 +17,36 @@ type UserService struct {
 	IP       string
 }
 
-func (u *UserService) SignIn() *r.Msg {
+func (u *UserService) SignIn() (string, error) {
 	user, err := model.GetUserByUsername(u.Username)
 	if err != nil {
-		logrus.Errorf("Get user by username, detail: %v", err)
-		return &r.Msg{Code: e.ERROR}
+		return "", e.WithStack(e.ERROR, err)
 	}
 
-	if user.Username == "" {
-		return &r.Msg{Code: e.USER_AUTH_ERROR}
+	if user == nil {
+		return "", e.New(e.USER_AUTH_ERROR)
 	}
 
 	if consts.IsUserFreeze(user.State) {
-		return &r.Msg{Code: e.USER_FREEZE}
+		return "", e.New(e.USER_FREEZE)
 	}
 
 	if consts.IsUserClose(user.State) {
-		return &r.Msg{Code: e.USER_AUTH_ERROR}
+		return "", e.New(e.USER_AUTH_ERROR)
 	}
 
 	password := md5.Encrypt(u.Password)
 	if user.Password != password {
-		return &r.Msg{Code: e.USER_AUTH_ERROR}
+		return "", e.New(e.USER_AUTH_ERROR)
 	}
 
 	duration := 2 * time.Hour
 	token, err := jwt.GenerateToken(user.ID, u.IP, duration)
 	if err != nil {
-		return &r.Msg{Code: e.USER_AUTH_ERROR}
+		return "", e.New(e.USER_AUTH_ERROR)
 	}
 
-	return &r.Msg{
-		Code: e.OK,
-		Data: map[string]string{"token": token},
-	}
+	return token, nil
 }
 
 func (u *UserService) SignUp(userId int64, user *model.User) (int64, error) {

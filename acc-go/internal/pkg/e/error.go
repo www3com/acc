@@ -1,19 +1,34 @@
 package e
 
-import "fmt"
+import (
+	"github.com/pkg/errors"
+)
 
 type Error struct {
-	Code    int
-	Message string
+	Code  int
+	Cause error
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("[%d]%v", e.Code, e.Message)
+	return e.Cause.Error()
 }
 
-func New(code int, message string) error {
+func Wrap(code int, err error, message string) error {
 	return &Error{
-		Code:    code,
-		Message: message,
+		Code:  code,
+		Cause: errors.Wrap(err, message),
+	}
+}
+
+func WithStack(code int, err error) error {
+	return &Error{
+		Code:  code,
+		Cause: errors.WithStack(err),
+	}
+}
+
+func New(code int) *Error {
+	return &Error{
+		Code: code,
 	}
 }

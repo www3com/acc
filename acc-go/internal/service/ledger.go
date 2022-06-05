@@ -36,23 +36,23 @@ func newLedger(tx *gorm.DB, tLedgerId int64, tLedgerName string, ownerId int64) 
 
 	ledgerId, err := model.InsertLedger(tx, &ledger)
 	if err != nil {
-		return errors.New(fmt.Sprintf("create ledger error, details: %s", err))
+		return errors.New(fmt.Sprintf("Create ledger, error: %s", err))
 	}
 
 	if err = createAccount(tx, tLedgerId, ledgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("create account error, details: %s", err))
+		return errors.New(fmt.Sprintf("Create account, error: %s", err))
 	}
 
 	if err = model.InsertProject(tx, ledgerId, tLedgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("create project error, details: %s", err))
+		return errors.New(fmt.Sprintf("Create project, error: %s", err))
 	}
 
 	if err = model.InsertMember(tx, ledgerId, tLedgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("create member error, details: %s", err))
+		return errors.New(fmt.Sprintf("Create member, error: %s", err))
 	}
 
 	if err = model.InsertSupplier(tx, ledgerId, tLedgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("create supplier error, details: %s", err))
+		return errors.New(fmt.Sprintf("Create supplier, error: %s", err))
 	}
 	return nil
 }

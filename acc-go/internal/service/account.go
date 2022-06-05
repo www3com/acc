@@ -10,7 +10,7 @@ func ListAccount(ownerId, ledgerId int64) ([]*model.Account, error) {
 
 	accounts, err := model.ListAccounts(ledgerId)
 	if err != nil {
-		return nil, e.New(e.ERROR, err.Error())
+		return nil, e.Wrap(e.ERROR, err, "")
 	}
 
 	var accountMap = make(map[int64]*model.Account, len(accounts))

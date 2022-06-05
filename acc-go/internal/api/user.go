@@ -25,14 +25,9 @@ type signIn struct {
 }
 
 func SignIn(c *gin.Context) {
-
-	i := 0
-	j := 0
-	cc := i / j
-	println(cc)
 	var signInParam signIn
-	if code := r.BindAndValid(c, &signInParam); code != e.OK {
-		r.RenderFail(c, code)
+	if err := r.BindAndValid(c, &signInParam); err != nil {
+		r.RenderFail(c, err)
 		return
 	}
 
@@ -41,24 +36,24 @@ func SignIn(c *gin.Context) {
 		Password: signInParam.Password,
 		IP:       c.ClientIP()}
 
-	m := userService.SignIn()
-	if m.Ok() {
-		r.RenderOk(c, m.Data)
+	token, err := userService.SignIn()
+	if err == nil {
+		r.RenderOk(c, token)
 	} else {
-		r.RenderFail(c, m.Code)
+		r.RenderFail(c, err)
 	}
 }
 
 func SignUp(c *gin.Context) {
 	var userParam user
 
-	if code := r.BindAndValid(c, &userParam); e.IsFail(code) {
-		r.RenderFail(c, code)
+	if err := r.BindAndValid(c, &userParam); err != nil {
+		r.RenderFail(c, err)
 		return
 	}
 
 	if !userParam.Agreement {
-		r.RenderFail(c, e.USER_DISAGREEMENT)
+		r.RenderFail(c, e.New(e.USER_DISAGREEMENT))
 		return
 	}
 
@@ -72,7 +67,7 @@ func SignUp(c *gin.Context) {
 	}
 
 	if exist {
-		r.RenderFail(c, e.USER_NO_USERNAME)
+		r.RenderFail(c, e.New(e.USER_NO_USERNAME))
 		return
 	}
 
