@@ -32,6 +32,7 @@ func RenderFail(c *gin.Context, err error) {
 		Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
+
 	switch v.Code {
 	case e.ERROR:
 		logrus.Errorf("%+v", v.Cause)
