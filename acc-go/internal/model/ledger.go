@@ -28,7 +28,8 @@ func InsertLedger(tx *gorm.DB, ledger *Ledger) (int64, error) {
 }
 
 func UpdateLedger(ledger *Ledger) error {
-	if err := db.DB.Model(ledger).Where("id = ?", ledger.ID).Update("name", ledger.Name).Error; err != nil {
+	err := db.DB.Model(ledger).Where("id = ?", ledger.ID).Update("name", ledger.Name).Error
+	if err != nil {
 		return err
 	}
 	return nil

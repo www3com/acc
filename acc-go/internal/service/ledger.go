@@ -3,9 +3,9 @@ package service
 import (
 	"acc/internal/model"
 	"acc/internal/pkg/db"
-	"fmt"
-	"github.com/pkg/errors"
+	"acc/internal/pkg/e"
 	"github.com/shopspring/decimal"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
 )
@@ -36,31 +36,38 @@ func newLedger(tx *gorm.DB, tLedgerId int64, tLedgerName string, ownerId int64) 
 
 	ledgerId, err := model.InsertLedger(tx, &ledger)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Create ledger, error: %s", err))
+		logrus.Errorf("create ledger failed: %s", err)
+		return e.Error
 	}
 
 	if err = createAccount(tx, tLedgerId, ledgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("Create account, error: %s", err))
+		logrus.Errorf("create account failed: %s", err)
+		return e.Error
 	}
 
 	if err = model.InsertProject(tx, ledgerId, tLedgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("Create project, error: %s", err))
+		logrus.Errorf("create project failed: %s", err)
+		return e.Error
 	}
 
 	if err = model.InsertMember(tx, ledgerId, tLedgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("Create member, error: %s", err))
+		logrus.Errorf("create member failed: %s", err)
+		return e.Error
 	}
 
 	if err = model.InsertSupplier(tx, ledgerId, tLedgerId, now); err != nil {
-		return errors.New(fmt.Sprintf("Create supplier, error: %s", err))
+		logrus.Errorf("create supplier failed: %s", err)
+		return e.Error
 	}
+
 	return nil
 }
 
 func UpdateLedger(ledgerId int64, name string) error {
 	ledger := model.Ledger{ID: ledgerId, Name: name}
 	if err := model.UpdateLedger(&ledger); err != nil {
-		return err
+		logrus.Errorf("update ledger failed: %s", err)
+		return e.Error
 	}
 	return nil
 }
@@ -68,19 +75,23 @@ func UpdateLedger(ledgerId int64, name string) error {
 func DeleteLedger(ledgerId int64) error {
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		if err := model.DeleteLedger(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete ledger error, details:  %s", err))
+			logrus.Errorf("delete ledger failed: %s", err)
+			return e.Error
 		}
 
 		if err := model.DeleteAccount(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete account error, details:  %s", err))
+			logrus.Errorf("delete account failed: %s", err)
+			return e.Error
 		}
 
 		if err := model.DeleteMember(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete member error, details:  %s", err))
+			logrus.Errorf("delete member failed: %s", err)
+			return e.Error
 		}
 
 		if err := model.DeleteSupplier(tx, ledgerId); err != nil {
-			return errors.New(fmt.Sprintf("Delete supplier error, details:  %s", err))
+			logrus.Errorf("delete supplier failed: %s", err)
+			return e.Error
 		}
 
 		return nil
@@ -91,7 +102,8 @@ func DeleteLedger(ledgerId int64) error {
 func ListLedger(ownerId int64) (*[]model.Ledger, error) {
 	ledgers, err := model.ListLedgers(ownerId)
 	if err != nil {
-		return nil, err
+		logrus.Errorf("list ledger failed: %s", err)
+		return nil, e.Error
 	}
 
 	return ledgers, nil
@@ -100,7 +112,8 @@ func ListLedger(ownerId int64) (*[]model.Ledger, error) {
 func createAccount(tx *gorm.DB, tLedgerId, ledgerId int64, now int64) error {
 	tplAccounts, err := model.ListTplAccounts(tLedgerId)
 	if err != nil {
-		return err
+		logrus.Errorf("list template account failed: %s", err)
+		return e.Error
 	}
 
 	for _, tplAccount := range tplAccounts {
@@ -110,7 +123,8 @@ func createAccount(tx *gorm.DB, tLedgerId, ledgerId int64, now int64) error {
 
 		parent := toAccount(ledgerId, now, 0, tplAccount)
 		if err := model.InsertAccount(tx, parent); err != nil {
-			return err
+			logrus.Errorf("insert root account failed: %s", err)
+			return e.Error
 		}
 
 		var children []model.Account
@@ -122,7 +136,8 @@ func createAccount(tx *gorm.DB, tLedgerId, ledgerId int64, now int64) error {
 		}
 
 		if err := model.InsertAccounts(tx, &children); err != nil {
-			return err
+			logrus.Errorf("batch insert account failed: %s", err)
+			return e.Error
 		}
 	}
 	return nil

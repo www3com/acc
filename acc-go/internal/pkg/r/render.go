@@ -26,24 +26,23 @@ func RenderOk(c *gin.Context, data interface{}) {
 }
 
 func RenderFail(c *gin.Context, err error) {
-	v, ok := err.(*e.Error)
+	v, ok := err.(*e.WrapError)
 	if !ok {
-		logrus.Errorf("%+v", err)
+		logrus.Errorf("%v", err)
 		Render(c, http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 
 	switch v.Code {
 	case e.ERROR:
-		logrus.Errorf("%+v", v.Cause)
 		Render(c, http.StatusInternalServerError, v.Code, nil)
-	case e.INVALID_PARAMS:
+	case e.InvalidParams:
 		Render(c, http.StatusBadRequest, v.Code, nil)
 	case e.UNAUTHORIZED:
 		Render(c, http.StatusUnauthorized, v.Code, nil)
 	case e.FORBIDDEN:
 		Render(c, http.StatusForbidden, v.Code, nil)
-	case e.NOT_FOUND:
+	case e.NotFound:
 		Render(c, http.StatusNotFound, v.Code, nil)
 	default:
 		Render(c, http.StatusOK, v.Code, nil)

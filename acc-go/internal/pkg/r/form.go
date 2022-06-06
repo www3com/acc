@@ -11,17 +11,17 @@ import (
 func BindAndValid(c *gin.Context, form interface{}) error {
 	err := c.Bind(form)
 	if err != nil {
-		return e.New(e.INVALID_PARAMS)
+		return e.New(e.InvalidParams)
 	}
 
 	valid := validation.Validation{}
 	check, err := valid.Valid(form)
 	if err != nil {
-		return e.Wrap(e.ERROR, err, "valid params")
+		return e.Wrap(err, "valid params")
 	}
 	if !check {
 		markErrors(valid.Errors)
-		return e.New(e.INVALID_PARAMS)
+		return e.New(e.InvalidParams)
 	}
 
 	return nil

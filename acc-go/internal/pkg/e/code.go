@@ -8,8 +8,8 @@ const (
 	// ERROR : The server has an unknown e
 	ERROR = 500
 
-	// INVALID_PARAMS : The client's request has illegal parameters
-	INVALID_PARAMS = 400
+	// InvalidParams : The client's request has illegal parameters
+	InvalidParams = 400
 
 	// UNAUTHORIZED 请求要求身份验证
 	UNAUTHORIZED = 401
@@ -17,13 +17,13 @@ const (
 	// FORBIDDEN : The client does not have access rights to the content
 	FORBIDDEN = 403
 
-	// NOT_FOUND : The server can not find the requested resource
-	NOT_FOUND = 404
+	// NotFound : The server can not find the requested resource
+	NotFound = 404
 
-	USER_DISAGREEMENT = 1000
-	USER_NO_USERNAME  = 1001
-	USER_FREEZE       = 1002
-	USER_AUTH_ERROR   = 1003
+	UserDisagreement = 1000
+	UserNoUsername   = 1001
+	UserFreeze       = 1002
+	UserAuthFailed   = 1003
 )
 
 func IsOk(code int) bool {
@@ -33,3 +33,13 @@ func IsOk(code int) bool {
 func IsFail(code int) bool {
 	return code != OK
 }
+
+var Error = New(ERROR)
+
+var UserDisagreementError = New(UserDisagreement)
+
+var UserNoUsernameError = New(UserNoUsername)
+
+var UserFreezeError = New(UserFreeze)
+
+var UserAuthFailedError = New(UserAuthFailed)

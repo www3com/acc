@@ -53,7 +53,7 @@ func SignUp(c *gin.Context) {
 	}
 
 	if !userParam.Agreement {
-		r.RenderFail(c, e.New(e.USER_DISAGREEMENT))
+		r.RenderFail(c, e.New(e.UserDisagreement))
 		return
 	}
 
@@ -61,13 +61,12 @@ func SignUp(c *gin.Context) {
 
 	exist, err := userService.ExistUsername()
 	if err != nil {
-		logrus.Errorf("Check if username exist, cause by: %v ", err)
-		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
+		r.RenderFail(c, err)
 		return
 	}
 
 	if exist {
-		r.RenderFail(c, e.New(e.USER_NO_USERNAME))
+		r.RenderFail(c, e.New(e.UserNoUsername))
 		return
 	}
 

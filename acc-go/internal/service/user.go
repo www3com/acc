@@ -7,6 +7,7 @@ import (
 	"acc/internal/pkg/e"
 	"acc/internal/pkg/jwt"
 	"acc/internal/pkg/md5"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
 )
@@ -20,30 +21,31 @@ type UserService struct {
 func (u *UserService) SignIn() (string, error) {
 	user, err := model.GetUserByUsername(u.Username)
 	if err != nil {
-		return "", e.WithStack(e.ERROR, err)
+		logrus.Errorf("get user by username failed: %v", err)
+		return "", e.Error
 	}
 
-	if user == nil {
-		return "", e.New(e.USER_AUTH_ERROR)
+	if user.Username == "" {
+		return "", e.UserAuthFailedError
 	}
 
 	if consts.IsUserFreeze(user.State) {
-		return "", e.New(e.USER_FREEZE)
+		return "", e.UserFreezeError
 	}
 
 	if consts.IsUserClose(user.State) {
-		return "", e.New(e.USER_AUTH_ERROR)
+		return "", e.UserAuthFailedError
 	}
 
 	password := md5.Encrypt(u.Password)
 	if user.Password != password {
-		return "", e.New(e.USER_AUTH_ERROR)
+		return "", e.UserAuthFailedError
 	}
 
 	duration := 2 * time.Hour
 	token, err := jwt.GenerateToken(user.ID, u.IP, duration)
 	if err != nil {
-		return "", e.New(e.USER_AUTH_ERROR)
+		return "", e.UserAuthFailedError
 	}
 
 	return token, nil
@@ -56,13 +58,16 @@ func (u *UserService) SignUp(userId int64, user *model.User) (int64, error) {
 	user.UpdateTime = now
 	user.Password = md5.Encrypt(user.Password)
 
-	if err := db.DB.Transaction(func(tx *gorm.DB) error {
+	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		if err := model.InsertUser(tx, user); err != nil {
 			return err
 		}
 		return newLedger(tx, 1, "标准账本", userId)
-	}); err != nil {
-		return 0, err
+	})
+
+	if err != nil {
+		logrus.Errorf("insert user failed: %s", err)
+		return 0, e.Error
 	}
 
 	return user.ID, nil
@@ -71,10 +76,11 @@ func (u *UserService) SignUp(userId int64, user *model.User) (int64, error) {
 func (u *UserService) ExistUsername() (bool, error) {
 	user, err := model.GetUserByUsername(u.Username)
 	if err != nil {
-		return false, err
+		logrus.Errorf("exist username failed: %s", err)
+		return false, e.Error
 	}
 
-	if user.ID == 0 {
+	if user.Username == "" {
 		return false, nil
 	} else {
 		return true, nil

@@ -3,7 +3,9 @@ package service
 import (
 	"acc/internal/model"
 	"acc/internal/pkg/db"
+	"acc/internal/pkg/e"
 	"github.com/shopspring/decimal"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
 )
@@ -45,5 +47,6 @@ func CreateTransaction(transaction *Transaction) error {
 		}
 	})
 
-	return err
+	logrus.Errorf("create transaction failed: %s", err)
+	return e.Error
 }

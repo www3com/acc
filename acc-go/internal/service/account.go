@@ -4,13 +4,15 @@ import (
 	"acc/internal/model"
 	"acc/internal/pkg/e"
 	"github.com/shopspring/decimal"
+	"github.com/sirupsen/logrus"
 )
 
 func ListAccount(ownerId, ledgerId int64) ([]*model.Account, error) {
 
 	accounts, err := model.ListAccounts(ledgerId)
 	if err != nil {
-		return nil, e.Wrap(e.ERROR, err, "")
+		logrus.Errorf("Query account failed: %v", err)
+		return nil, e.Error
 	}
 
 	var accountMap = make(map[int64]*model.Account, len(accounts))
@@ -27,18 +29,18 @@ func ListAccount(ownerId, ledgerId int64) ([]*model.Account, error) {
 		parent.Children = append(parent.Children, account)
 	}
 
-	var calcedAccounts []*model.Account
+	var calcAccounts []*model.Account
 	for _, account := range accounts {
 		if account.ParentId == 0 {
-			calcedAccounts = append(calcedAccounts, account)
+			calcAccounts = append(calcAccounts, account)
 		}
 	}
 
-	for _, account := range calcedAccounts {
+	for _, account := range calcAccounts {
 		calc(account)
 	}
 
-	return calcedAccounts, nil
+	return calcAccounts, nil
 }
 
 func calc(account *model.Account) {

@@ -8,7 +8,6 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 	"io"
 	"os"
-	"path"
 	"runtime"
 	"strconv"
 	"strings"
@@ -40,7 +39,7 @@ func Setup() {
 		CustomCallerFormatter: func(frame *runtime.Frame) string {
 			b := &bytes.Buffer{}
 			b.WriteString(" ")
-			b.WriteString(path.Base(frame.File))
+			b.WriteString(frame.File)
 			b.WriteString(":")
 
 			b.WriteString(strconv.Itoa(frame.Line))

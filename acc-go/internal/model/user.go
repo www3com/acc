@@ -31,20 +31,6 @@ func InsertUser(tx *gorm.DB, user *User) error {
 func GetUserByUsername(username string) (*User, error) {
 	var user User
 	err := db.DB.Where("username = ?", username).First(&user).Error
-	if err == nil {
-		return &user, nil
-	}
-
-	if err == gorm.ErrRecordNotFound {
-		return nil, nil
-	}
-
-	return nil, err
-}
-
-func GetUserByEmail(email string) (*User, error) {
-	var user User
-	err := db.DB.Where("email = ?", email).First(&user).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
