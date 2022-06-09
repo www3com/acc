@@ -73,16 +73,16 @@ func (u *UserService) SignUp(userId int64, user *model.User) (int64, error) {
 	return user.ID, nil
 }
 
-func (u *UserService) ExistUsername() (bool, error) {
+func (u *UserService) ExistUsername() error {
 	user, err := model.GetUserByUsername(u.Username)
 	if err != nil {
 		logrus.Errorf("exist username failed: %s", err)
-		return false, e.Error
+		return e.Error
 	}
 
 	if user.Username == "" {
-		return false, nil
-	} else {
-		return true, nil
+		return e.UserNoUsernameError
 	}
+
+	return nil
 }

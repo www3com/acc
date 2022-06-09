@@ -10,9 +10,5 @@ import (
 func ListAccount(c *gin.Context) {
 	ownerId := context.GetUserId(c)
 	accounts, err := service.ListAccount(ownerId, 7)
-	if err != nil {
-		r.RenderFail(c, err)
-	} else {
-		r.RenderOk(c, accounts)
-	}
+	r.Render(c, accounts, err)
 }

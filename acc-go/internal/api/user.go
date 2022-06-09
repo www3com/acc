@@ -8,8 +8,6 @@ import (
 	"acc/internal/pkg/r"
 	"acc/internal/service"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type user struct {
@@ -37,11 +35,7 @@ func SignIn(c *gin.Context) {
 		IP:       c.ClientIP()}
 
 	token, err := userService.SignIn()
-	if err == nil {
-		r.RenderOk(c, token)
-	} else {
-		r.RenderFail(c, err)
-	}
+	r.Render(c, token, err)
 }
 
 func SignUp(c *gin.Context) {
@@ -59,14 +53,8 @@ func SignUp(c *gin.Context) {
 
 	userService := service.UserService{Username: userParam.Username}
 
-	exist, err := userService.ExistUsername()
-	if err != nil {
+	if err := userService.ExistUsername(); err != nil {
 		r.RenderFail(c, err)
-		return
-	}
-
-	if exist {
-		r.RenderFail(c, e.New(e.UserNoUsername))
 		return
 	}
 
@@ -79,24 +67,21 @@ func SignUp(c *gin.Context) {
 	if userParam.Agreement {
 		user.Agreement = 1
 	}
-	ownerId := context.GetUserId(c)
-	id, err := userService.SignUp(ownerId, &user)
-	if err != nil {
-		logrus.Errorf("create user error, cause by: %v ", err)
-		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
-		return
-	}
-	r.RenderOk(c, map[string]int64{"jwt": id})
+	id, err := userService.SignUp(context.GetUserId(c), &user)
+	r.Render(c, map[string]int64{"jwt": id}, err)
 }
 
 func ExistUsername(c *gin.Context) {
 	userService := service.UserService{Username: c.Query("username")}
-	exist, err := userService.ExistUsername()
-	if err != nil {
-		logrus.Errorf("查询用户名是否重复，错误原因: %v", err)
-		r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
-		return
+	err := userService.ExistUsername()
+	exist := false
+	if err == nil {
+		exist = false
+	} else {
+		if err == e.UserNoUsernameError {
+			exist = true
+		}
 	}
 
-	r.RenderOk(c, map[string]bool{"exist": exist})
+	r.Render(c, map[string]bool{"exist": exist}, err)
 }

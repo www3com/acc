@@ -13,40 +13,46 @@ var (
 	acceptLanguageKey = "Accept-Language"
 )
 
-func Render(c *gin.Context, status int, code int, data interface{}) {
-	c.JSON(status, &R{
-		Code:    code,
-		Message: getMessage(c, code),
-		Data:    data})
-	return
+func Render(c *gin.Context, data interface{}, err error) {
+	if err == nil {
+		RenderOk(c, data)
+	} else {
+		RenderFail(c, err)
+	}
 }
 
 func RenderOk(c *gin.Context, data interface{}) {
-	Render(c, http.StatusOK, e.OK, data)
+	render(c, http.StatusOK, e.OK, data)
 }
 
 func RenderFail(c *gin.Context, err error) {
 	v, ok := err.(*e.WrapError)
 	if !ok {
 		logrus.Errorf("%v", err)
-		Render(c, http.StatusInternalServerError, e.ERROR, nil)
-		return
+		render(c, http.StatusInternalServerError, e.ERROR, nil)
 	}
 
 	switch v.Code {
 	case e.ERROR:
-		Render(c, http.StatusInternalServerError, v.Code, nil)
+		render(c, http.StatusInternalServerError, v.Code, nil)
 	case e.InvalidParams:
-		Render(c, http.StatusBadRequest, v.Code, nil)
+		render(c, http.StatusBadRequest, v.Code, nil)
 	case e.UNAUTHORIZED:
-		Render(c, http.StatusUnauthorized, v.Code, nil)
+		render(c, http.StatusUnauthorized, v.Code, nil)
 	case e.FORBIDDEN:
-		Render(c, http.StatusForbidden, v.Code, nil)
+		render(c, http.StatusForbidden, v.Code, nil)
 	case e.NotFound:
-		Render(c, http.StatusNotFound, v.Code, nil)
+		render(c, http.StatusNotFound, v.Code, nil)
 	default:
-		Render(c, http.StatusOK, v.Code, nil)
+		render(c, http.StatusOK, v.Code, nil)
 	}
+}
+
+func render(c *gin.Context, status int, code int, data interface{}) {
+	c.JSON(status, &R{
+		Code:    code,
+		Message: getMessage(c, code),
+		Data:    data})
 }
 
 func getMessage(c *gin.Context, code int) string {
