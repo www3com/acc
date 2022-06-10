@@ -43,3 +43,8 @@ func Wrap(err error, message string) error {
 func Wrapf(err error, format string, args ...interface{}) error {
 	return WithCodef(ERROR, err, format, args...)
 }
+
+func UnWrap(err error) (*WrapError, bool) {
+	v, ok := err.(*WrapError)
+	return v, ok
+}
