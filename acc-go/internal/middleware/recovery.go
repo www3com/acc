@@ -10,7 +10,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net"
-	"net/http"
 	"os"
 	"runtime"
 	"strings"
@@ -38,7 +37,7 @@ func Recovery() gin.HandlerFunc {
 					logrus.Errorf("%s\n%s", err, string(stack(3)))
 				}
 
-				r.Render(c, http.StatusInternalServerError, e.ERROR, nil)
+				r.RenderFail(c, e.Error)
 				c.Abort()
 			}
 		}()

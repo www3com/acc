@@ -11,11 +11,11 @@ const (
 	// InvalidParams : The client's request has illegal parameters
 	InvalidParams = 400
 
-	// UNAUTHORIZED 请求要求身份验证
-	UNAUTHORIZED = 401
+	// Unauthorized 请求要求身份验证
+	Unauthorized = 401
 
-	// FORBIDDEN : The client does not have access rights to the content
-	FORBIDDEN = 403
+	// Forbidden The client does not have access rights to the content
+	Forbidden = 403
 
 	// NotFound : The server can not find the requested resource
 	NotFound = 404
@@ -26,15 +26,13 @@ const (
 	UserAuthFailed   = 1003
 )
 
-func IsOk(code int) bool {
-	return code == OK
-}
-
-func IsFail(code int) bool {
-	return code != OK
-}
-
 var Error = New(ERROR)
+
+var InvalidParamsError = New(InvalidParams)
+
+var UnauthorizedError = New(Unauthorized)
+
+var ForbiddenError = New(Forbidden)
 
 var UserDisagreementError = New(UserDisagreement)
 

@@ -6,8 +6,8 @@ var en = map[int]string{
 	e.OK:            "",
 	e.ERROR:         "Internal server error",
 	e.InvalidParams: "Request parameter error",
-	e.UNAUTHORIZED:  "Access token has timed out",
-	e.FORBIDDEN:     "No access rights",
+	e.Unauthorized:  "Access token has timed out",
+	e.Forbidden:     "No access rights",
 	e.NotFound:      "The accessed resource does not exist",
 
 	e.UserDisagreement: "Must agree to the agreement",
