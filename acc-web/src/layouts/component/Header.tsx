@@ -1,35 +1,16 @@
-import React from 'react';
-import {Col, Divider, Dropdown, Menu, MenuProps, message, Row, Space, Typography} from "antd";
+import React, {useEffect, useState} from 'react';
+import {Col, Divider, Dropdown, Menu, message, Row, Space, Typography} from "antd";
 import {
   WalletOutlined,
   AppstoreOutlined,
   DownOutlined,
-  LogoutOutlined,
   AccountBookOutlined,
   SettingOutlined,
-  SoundOutlined,
-  LineChartOutlined, PlusOutlined
+  LineChartOutlined
 } from "@ant-design/icons";
 import style from "@/layouts/style.less";
+import {getSelectLedger, listLedgers, selectLedger} from "@/services/ledger";
 
-const onClick = ({key}: any) => {
-  message.info(`Click on item ${key}`);
-};
-
-const menu = (
-  <Menu
-    onClick={onClick}
-    items={[
-
-      <Divider/>,
-      {
-        icon: <PlusOutlined />,
-        label: '新建账本',
-        key: '3',
-      },
-    ]}
-  />
-);
 
 const items = [{
   label: '概览',
@@ -54,8 +35,31 @@ const items = [{
 }
 ];
 
-export default function () {
+export default () => {
 
+  const [ledgers, setLedgers] = useState([]);
+  const [ledger, setLedger] = useState({key: "", label: ""});
+
+  const init = async () => {
+    let ledgerArr = await listLedgers()
+    let sLedger = getSelectLedger()
+
+    ledgerArr = ledgerArr.filter(item => item.key != sLedger.key)
+
+    setLedgers(ledgerArr)
+    setLedger(sLedger)
+  }
+
+  const onClick = ({key}: any) => {
+    selectLedger(key)
+    init()
+  };
+
+  useEffect(() => {
+    init()
+  }, [])
+
+  const menu = (<Menu onClick={onClick} items={ledgers}/>);
 
   return (
     <Row className={style.headerRow}>
@@ -75,7 +79,7 @@ export default function () {
           <Dropdown overlay={menu}>
             <a onClick={e => e.preventDefault()}>
               <Space>
-                标准账本
+                {ledger.label}
                 <DownOutlined/>
               </Space>
             </a>
@@ -86,3 +90,4 @@ export default function () {
     </Row>
   );
 };
+

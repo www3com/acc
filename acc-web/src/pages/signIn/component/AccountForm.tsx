@@ -15,7 +15,7 @@ const accountForm = ({store}: AccountProps) => {
   const onFinish = async (values: any) => {
     let r = await store.login(values.username, values.password);
     if (r.code == OK) {
-      setToken(r.data.token)
+      setToken(r.data)
       location.href = './account'
     } else {
       message.info(r.message)

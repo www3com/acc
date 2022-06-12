@@ -16,12 +16,8 @@ const signUp = ({store}: SignUpProps) => {
     let r = await store.register(values)
     if (r.code == OK) {
       location.href = './sign-up/success'
-    } else if (r.code == 1000) {
-      message.info('必须同意协议！')
-      return
     } else {
-      message.info('您输入的用户名已经存在！')
-      return
+      message.info(r.message)
     }
   };
 
