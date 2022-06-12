@@ -27,7 +27,7 @@ func Auth() gin.HandlerFunc {
 		}
 
 		userId := uid.Uid2Id(parsedToken.Uid)
-		c.Header("userId", strconv.FormatInt(userId, 10))
+		c.Request.Header.Set("userId", strconv.FormatInt(userId, 10))
 
 		if parsedToken.IP != c.ClientIP() {
 			r.RenderFail(c, e.UnauthorizedError)

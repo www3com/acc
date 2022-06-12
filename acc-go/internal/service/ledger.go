@@ -40,7 +40,7 @@ func newLedger(tx *gorm.DB, tLedgerId int64, tLedgerName string, ownerId int64) 
 		return e.Error
 	}
 
-	if err = createAccount(tx, tLedgerId, ledgerId, now); err != nil {
+	if err = initAccount(tx, tLedgerId, ledgerId, now); err != nil {
 		logrus.Errorf("create account failed: %s", err)
 		return e.Error
 	}
@@ -99,7 +99,7 @@ func DeleteLedger(ledgerId int64) error {
 	return err
 }
 
-func ListLedger(ownerId int64) (*[]model.Ledger, error) {
+func ListLedgers(ownerId int64) (*[]model.Ledger, error) {
 	ledgers, err := model.ListLedgers(ownerId)
 	if err != nil {
 		logrus.Errorf("list ledger failed: %s", err)
@@ -109,7 +109,7 @@ func ListLedger(ownerId int64) (*[]model.Ledger, error) {
 	return ledgers, nil
 }
 
-func createAccount(tx *gorm.DB, tLedgerId, ledgerId int64, now int64) error {
+func initAccount(tx *gorm.DB, tLedgerId, ledgerId int64, now int64) error {
 	tplAccounts, err := model.ListTplAccounts(tLedgerId)
 	if err != nil {
 		logrus.Errorf("list template account failed: %s", err)

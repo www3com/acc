@@ -10,8 +10,8 @@ var zh = map[int]string{
 	e.Forbidden:     "无权限访问",
 	e.NotFound:      "访问的资源不存在",
 
-	e.UserDisagreement: "必须同意协议",
-	e.UserNoUsername:   "没有此账号名",
-	e.UserFreeze:       "账号被冻结",
-	e.UserAuthFailed:   "账号名或密码错误",
+	e.UserDisagreement:      "必须同意协议",
+	e.UserDuplicateUsername: "用户名重复",
+	e.UserFreeze:            "账号被冻结",
+	e.UserAuthFailed:        "账号名或密码错误",
 }

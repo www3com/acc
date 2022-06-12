@@ -42,6 +42,6 @@ func DeleteLedger(c *gin.Context) {
 
 func ListLedger(c *gin.Context) {
 	userId := context.GetUserId(c)
-	ledgers, err := service.ListLedger(userId)
+	ledgers, err := service.ListLedgers(userId)
 	r.Render(c, ledgers, err)
 }

@@ -4,7 +4,6 @@ import (
 	"acc/internal/api"
 	"acc/internal/middleware"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func InitRouter() *gin.Engine {
@@ -13,25 +12,23 @@ func InitRouter() *gin.Engine {
 
 	r.Use(middleware.Recovery())
 
-	r.StaticFS("/web", http.Dir("./"))
+	//r.StaticFS("/web", http.Dir("./"))
 
 	root := r.Group("/api")
 	root.Use(middleware.Auth())
-	ledger := root.Group("/ledger")
+
 	// 查询账本
-	ledger.GET("/", api.ListLedger)
+	root.GET("/ledger", api.ListLedger)
 	// 创建账本
-	ledger.POST("/", api.CreateLedger)
+	root.POST("/ledger", api.CreateLedger)
 	// 更新账本
-	ledger.PUT("/", api.UpdateLedger)
+	root.PUT("/ledger", api.UpdateLedger)
 	// 删除账本
-	ledger.DELETE("/", api.DeleteLedger)
+	root.DELETE("/ledger", api.DeleteLedger)
 
-	account := root.Group("/account")
-	account.GET("/", api.ListAccount)
+	root.GET("/account", api.ListAccount)
 
-	transaction := root.Group("/transaction")
-	transaction.POST("/transaction", api.CreateTransaction)
+	root.POST("/transaction", api.CreateTransaction)
 
 	user := r.Group("/api/user")
 	user.GET("/username", api.ExistUsername)

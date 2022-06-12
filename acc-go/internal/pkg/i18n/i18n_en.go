@@ -10,8 +10,8 @@ var en = map[int]string{
 	e.Forbidden:     "No access rights",
 	e.NotFound:      "The accessed resource does not exist",
 
-	e.UserDisagreement: "Must agree to the agreement",
-	e.UserNoUsername:   "No such account name",
-	e.UserFreeze:       "Account is frozen",
-	e.UserAuthFailed:   "Wrong account name or password",
+	e.UserDisagreement:      "Must agree to the agreement",
+	e.UserDuplicateUsername: "Duplicate username",
+	e.UserFreeze:            "Account is frozen",
+	e.UserAuthFailed:        "Wrong account name or password",
 }

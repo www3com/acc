@@ -6,14 +6,14 @@ import (
 )
 
 type Ledger struct {
-	ID          int64 `gorm:"primary_key"`
-	CreateTime  int64 `json:"-"`
-	UpdateTime  int64 `json:"-"`
-	OwnerId     int64 `json:"-"`
-	TplLedgerId int64 `json:"-"`
-	Name        string
-	Remark      string
-	SortNumber  int `json:"-"`
+	ID          int64  `json:"key" gorm:"primary_key"`
+	CreateTime  int64  `json:"-"`
+	UpdateTime  int64  `json:"-"`
+	OwnerId     int64  `json:"-"`
+	TplLedgerId int64  `json:"-"`
+	Name        string `json:"label"`
+	Remark      string `json:"remark"`
+	SortNumber  int    `json:"-"`
 }
 
 func (Ledger) TableName() string {

@@ -7,6 +7,7 @@ import (
 	"acc/internal/pkg/e"
 	"acc/internal/pkg/jwt"
 	"acc/internal/pkg/md5"
+	"acc/internal/pkg/uid"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"time"
@@ -43,7 +44,8 @@ func (u *UserService) SignIn() (string, error) {
 	}
 
 	duration := 2 * time.Hour
-	token, err := jwt.GenerateToken(user.ID, u.IP, duration)
+
+	token, err := jwt.GenerateToken(uid.Id2Uid(user.ID), u.IP, duration)
 	if err != nil {
 		return "", e.UserAuthFailedError
 	}
@@ -51,7 +53,7 @@ func (u *UserService) SignIn() (string, error) {
 	return token, nil
 }
 
-func (u *UserService) SignUp(userId int64, user *model.User) (int64, error) {
+func (u *UserService) SignUp(user *model.User) error {
 
 	now := time.Now().UnixMicro()
 	user.CreateTime = now
@@ -62,27 +64,27 @@ func (u *UserService) SignUp(userId int64, user *model.User) (int64, error) {
 		if err := model.InsertUser(tx, user); err != nil {
 			return err
 		}
-		return newLedger(tx, 1, "标准账本", userId)
+		return newLedger(tx, 1, "标准账本", user.ID)
 	})
 
 	if err != nil {
 		logrus.Errorf("insert user failed: %s", err)
-		return 0, e.Error
-	}
-
-	return user.ID, nil
-}
-
-func (u *UserService) ExistUsername() error {
-	user, err := model.GetUserByUsername(u.Username)
-	if err != nil {
-		logrus.Errorf("exist username failed: %s", err)
 		return e.Error
 	}
 
-	if user.Username == "" {
-		return e.UserNoUsernameError
+	return nil
+}
+
+func (u *UserService) ExistUsername() (bool, error) {
+	user, err := model.GetUserByUsername(u.Username)
+	if err != nil {
+		logrus.Errorf("exist username failed: %s", err)
+		return false, e.Error
 	}
 
-	return nil
+	if user.Username == "" {
+		return false, nil
+	}
+
+	return true, nil
 }

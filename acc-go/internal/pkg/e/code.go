@@ -20,10 +20,10 @@ const (
 	// NotFound : The server can not find the requested resource
 	NotFound = 404
 
-	UserDisagreement = 1000
-	UserNoUsername   = 1001
-	UserFreeze       = 1002
-	UserAuthFailed   = 1003
+	UserDisagreement      = 1000
+	UserDuplicateUsername = 1001
+	UserFreeze            = 1002
+	UserAuthFailed        = 1003
 )
 
 var Error = New(ERROR)
@@ -36,7 +36,7 @@ var ForbiddenError = New(Forbidden)
 
 var UserDisagreementError = New(UserDisagreement)
 
-var UserNoUsernameError = New(UserNoUsername)
+var UserDuplicateUsernameError = New(UserDuplicateUsername)
 
 var UserFreezeError = New(UserFreeze)
 

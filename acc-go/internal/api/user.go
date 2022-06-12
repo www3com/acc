@@ -3,7 +3,6 @@ package api
 import (
 	"acc/internal/consts"
 	"acc/internal/model"
-	"acc/internal/pkg/context"
 	"acc/internal/pkg/e"
 	"acc/internal/pkg/r"
 	"acc/internal/service"
@@ -53,8 +52,15 @@ func SignUp(c *gin.Context) {
 
 	userService := service.UserService{Username: userParam.Username}
 
-	if err := userService.ExistUsername(); err != nil {
+	exist, err := userService.ExistUsername()
+
+	if err != nil {
 		r.RenderFail(c, err)
+		return
+	}
+
+	if exist {
+		r.RenderFail(c, e.UserDuplicateUsernameError)
 		return
 	}
 
@@ -67,21 +73,12 @@ func SignUp(c *gin.Context) {
 	if userParam.Agreement {
 		user.Agreement = 1
 	}
-	id, err := userService.SignUp(context.GetUserId(c), &user)
-	r.Render(c, map[string]int64{"jwt": id}, err)
+	err = userService.SignUp(&user)
+	r.Render(c, nil, err)
 }
 
 func ExistUsername(c *gin.Context) {
 	userService := service.UserService{Username: c.Query("username")}
-	err := userService.ExistUsername()
-	exist := false
-	if err == nil {
-		exist = false
-	} else {
-		if err == e.UserNoUsernameError {
-			exist = true
-		}
-	}
-
+	exist, err := userService.ExistUsername()
 	r.Render(c, map[string]bool{"exist": exist}, err)
 }
