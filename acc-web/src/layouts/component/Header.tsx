@@ -1,44 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {Col, Divider, Dropdown, Menu, message, Row, Space, Typography} from "antd";
+import {Col, Divider, Dropdown, Menu, message, Row, Space} from "antd";
 import {
   WalletOutlined,
   AppstoreOutlined,
   DownOutlined,
   AccountBookOutlined,
   SettingOutlined,
-  LineChartOutlined
+  LineChartOutlined, PoweroffOutlined, UserOutlined, PayCircleOutlined, PlusCircleOutlined, PlusOutlined
 } from "@ant-design/icons";
 import style from "@/layouts/style.less";
-import {getSelectLedger, listLedgers, selectLedger} from "@/services/ledger";
+import {clearAll, getSelectLedger, Ledger, listLedgers, selectLedger} from "@/services/ledger";
 
-
-const items = [{
-  label: '概览',
-  key: 'total',
-  icon: <AppstoreOutlined/>,
-}, {
-  label: '记账',
-  key: 'app',
-  icon: <AccountBookOutlined/>,
-}, {
-  label: '账户',
-  key: 'account',
-  icon: <WalletOutlined/>,
-}, {
-  label: '报表',
-  key: 'report',
-  icon: <LineChartOutlined/>,
-}, {
-  label: '设置',
-  key: 'setup',
-  icon: <SettingOutlined/>,
-}
-];
+const items = [
+  {label: '概览', key: 'total', icon: <AppstoreOutlined/>},
+  {label: '记账', key: 'app', icon: <AccountBookOutlined/>},
+  {label: '账户', key: 'account', icon: <WalletOutlined/>},
+  {label: '报表', key: 'report', icon: <LineChartOutlined/>},
+  {label: '设置', key: 'setup', icon: <SettingOutlined/>}];
 
 export default () => {
 
   const [ledgers, setLedgers] = useState([]);
-  const [ledger, setLedger] = useState({key: "", label: ""});
+  const [ledger, setLedger] = useState({key: "", label: "", icon: <PlusOutlined/>});
 
   const init = async () => {
     let ledgerArr = await listLedgers()
@@ -46,20 +29,41 @@ export default () => {
 
     ledgerArr = ledgerArr.filter(item => item.key != sLedger.key)
 
+    ledgerArr.map((value: Ledger) => {
+      value.icon = <PayCircleOutlined/>
+      return value
+    })
+
+    ledgerArr.push({type: 'divider'})
+    ledgerArr.push({key: "new", label: "新建账本", icon: <PlusOutlined/>})
     setLedgers(ledgerArr)
-    setLedger(sLedger)
+    setLedger({key: sLedger.key, label: sLedger.label, icon: <PlusOutlined/>})
   }
 
-  const onClick = ({key}: any) => {
+  const onClickLedger = ({key}: any) => {
+    if (key == 'new') {
+      message.info('暂时不支持新建账本')
+      return
+    }
     selectLedger(key)
     init()
   };
+
+  const onClickUser = () => {
+    message.info("用户设置")
+  }
+
+  const onClickQuit = () => {
+    clearAll()
+    location.href = '/sign-in'
+  }
+
 
   useEffect(() => {
     init()
   }, [])
 
-  const menu = (<Menu onClick={onClick} items={ledgers}/>);
+  const menu = (<Menu onClick={onClickLedger} items={ledgers}/>);
 
   return (
     <Row className={style.headerRow}>
@@ -69,23 +73,17 @@ export default () => {
         </a>
       </Col>
       <Col flex="auto">
-        <Menu className={style.menu}
-              mode="horizontal"
-              items={items}
-        />
+        <Menu className={style.menu} mode="horizontal" defaultSelectedKeys={['total']} items={items}/>
       </Col>
       <Col flex="300px" style={{margin: 'auto', textAlign: "right"}}>
-        <Space split={<Divider type="vertical"/>} size={3}>
+        <Space split={<Divider type="vertical"/>} size={0}>
           <Dropdown overlay={menu}>
-            <a onClick={e => e.preventDefault()}>
-              <Space>
-                {ledger.label}
-                <DownOutlined/>
-              </Space>
-            </a>
+            <a style={{color: 'black'}}><PayCircleOutlined/> {ledger?.label} <DownOutlined/></a>
           </Dropdown>
-          <Typography.Link>Jason</Typography.Link>
+          <a style={{color: 'black'}} onClick={onClickUser}><UserOutlined/> Jason</a>
+          <a style={{color: 'black'}} onClick={onClickQuit}><PoweroffOutlined/> 退出</a>
         </Space>
+
       </Col>
     </Row>
   );

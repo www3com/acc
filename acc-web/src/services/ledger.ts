@@ -4,8 +4,14 @@ const SESSION_LEDGERS_KEY = "LEDGERS"
 const SESSION_SELECTED_LEDGER_KEY = "SELECTED_LEDGER"
 
 export interface Ledger {
-  key: string
-  label: string
+  key?: string
+  label?: string
+  icon?: any
+  type?: string
+}
+
+export function clearAll() {
+  sessionStorage.clear()
 }
 
 export function selectLedger(ledgerId: number) {
