@@ -9,7 +9,7 @@ import (
 
 // CreateLedger 创建用户账本
 func CreateLedger(c *gin.Context) {
-	err := service.CreateLedger(1, "标准账本", context.GetUserId(c))
+	err := service.CreateLedger(1, "标准账本", "", context.GetUserId(c))
 	r.Render(c, nil, err)
 }
 

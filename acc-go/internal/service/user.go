@@ -64,7 +64,7 @@ func (u *UserService) SignUp(user *model.User) error {
 		if err := model.InsertUser(tx, user); err != nil {
 			return err
 		}
-		return newLedger(tx, 1, "标准账本", user.ID)
+		return newLedger(tx, 1, "标准账本", "", user.ID)
 	})
 
 	if err != nil {

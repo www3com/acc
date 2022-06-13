@@ -12,6 +12,7 @@ type Ledger struct {
 	OwnerId     int64  `json:"-"`
 	TplLedgerId int64  `json:"-"`
 	Name        string `json:"label"`
+	Icon        string `json:"icon"`
 	Remark      string `json:"remark"`
 	SortNumber  int    `json:"-"`
 }

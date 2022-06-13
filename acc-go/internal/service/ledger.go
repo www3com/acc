@@ -16,19 +16,20 @@ type Ledger struct {
 	OwnerId  int64  `form:"ownerId"`
 }
 
-func CreateLedger(tLedgerId int64, tLedgerName string, ownerId int64) error {
+func CreateLedger(tLedgerId int64, name string, icon string, ownerId int64) error {
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
-		return newLedger(tx, tLedgerId, tLedgerName, ownerId)
+		return newLedger(tx, tLedgerId, name, icon, ownerId)
 	})
 	return err
 }
 
-func newLedger(tx *gorm.DB, tLedgerId int64, tLedgerName string, ownerId int64) error {
+func newLedger(tx *gorm.DB, tLedgerId int64, name string, icon string, ownerId int64) error {
 	now := time.Now().UnixMilli()
 	ledger := model.Ledger{
 		OwnerId:     ownerId,
 		TplLedgerId: tLedgerId,
-		Name:        tLedgerName,
+		Name:        name,
+		Icon:        icon,
 		SortNumber:  1,
 		CreateTime:  now,
 		UpdateTime:  now,

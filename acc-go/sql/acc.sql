@@ -3,6 +3,7 @@ create table tpl_ledger
 (
     id          bigint       not null constraint pk_tpl_ledger primary key,
     name        varchar(80)  not null,
+    icon        varchar(100) not null,
     remark      varchar(200),
     create_time bigint       not null
 );
@@ -27,7 +28,7 @@ create table tpl_account
     in_asset    smallint default 1 not null,
     sort_number int                not null,
     remark      varchar(200)
-    
+
 );
 
 comment on table tpl_account is '模板账户';
@@ -115,6 +116,7 @@ create table acc_ledger
     id             bigserial      not null constraint pk_acc_ledger primary key,
     tpl_ledger_id  int            not null,
     name           varchar(80)    not null,
+    icon           varchar(100)   not null ,
     owner_id       bigint         not null,
     remark         varchar(200),
     sort_number    int            not null,
