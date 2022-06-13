@@ -1,7 +1,7 @@
 import request from "@/components/Request";
 
 const SESSION_LEDGERS_KEY = "LEDGERS"
-const SESSION_SELECTED_LEDGER_KEY = "SELECTED_LEDGER"
+const SESSION_SELECTED_LEDGER_KEY = "SELECTED-LEDGER"
 
 export interface Ledger {
   key?: string
