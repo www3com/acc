@@ -24,13 +24,13 @@ func init() {
 	hashID, _ = hashids.NewWithData(hd)
 }
 
-func Id2Uid(id int64) int64 {
+func Uid(id int64) int64 {
 	hash, _ := hashID.EncodeInt64([]int64{id})
 	uid, _ := strconv.ParseInt(hash, base, bitSize)
 	return uid
 }
 
-func Uid2Id(uid int64) int64 {
+func Id(uid int64) int64 {
 	hex := strconv.FormatInt(uid, base)
 	id, _ := hashID.DecodeInt64WithError(hex)
 	return id[0]

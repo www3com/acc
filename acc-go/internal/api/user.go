@@ -22,15 +22,15 @@ type signIn struct {
 }
 
 func SignIn(c *gin.Context) {
-	var signInParam signIn
-	if err := r.BindAndValid(c, &signInParam); err != nil {
+	var param signIn
+	if err := r.BindAndValid(c, &param); err != nil {
 		r.RenderFail(c, err)
 		return
 	}
 
 	userService := service.UserService{
-		Username: signInParam.Username,
-		Password: signInParam.Password,
+		Username: param.Username,
+		Password: param.Password,
 		IP:       c.ClientIP()}
 
 	token, err := userService.SignIn()
@@ -38,19 +38,19 @@ func SignIn(c *gin.Context) {
 }
 
 func SignUp(c *gin.Context) {
-	var userParam user
+	var param user
 
-	if err := r.BindAndValid(c, &userParam); err != nil {
+	if err := r.BindAndValid(c, &param); err != nil {
 		r.RenderFail(c, err)
 		return
 	}
 
-	if !userParam.Agreement {
+	if !param.Agreement {
 		r.RenderFail(c, e.New(e.UserDisagreement))
 		return
 	}
 
-	userService := service.UserService{Username: userParam.Username}
+	userService := service.UserService{Username: param.Username}
 
 	exist, err := userService.ExistUsername()
 
@@ -65,12 +65,12 @@ func SignUp(c *gin.Context) {
 	}
 
 	user := model.User{
-		Nickname: userParam.Nickname,
-		Username: userParam.Username,
-		Password: userParam.Password,
-		State:    consts.USER_STATE_NORMAL,
+		Nickname: param.Nickname,
+		Username: param.Username,
+		Password: param.Password,
+		State:    consts.UserStateNormal,
 	}
-	if userParam.Agreement {
+	if param.Agreement {
 		user.Agreement = 1
 	}
 	err = userService.SignUp(&user)

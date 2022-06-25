@@ -1,29 +1,29 @@
 package consts
 
 const (
-	USER_STATE_NORMAL = 1
+	UserStateNormal = 1
 
-	USER_STATE_FREEZE = 2
+	UserStateFreeze = 2
 
-	USER_STATE_CLOSE = 3
+	UserStateClose = 3
 )
 
 func IsUserNormal(state int) bool {
-	if USER_STATE_NORMAL == state {
+	if UserStateNormal == state {
 		return true
 	}
 	return false
 }
 
 func IsUserFreeze(state int) bool {
-	if USER_STATE_FREEZE == state {
+	if UserStateFreeze == state {
 		return true
 	}
 	return false
 }
 
 func IsUserClose(state int) bool {
-	if USER_STATE_CLOSE == state {
+	if UserStateClose == state {
 		return true
 	}
 	return false

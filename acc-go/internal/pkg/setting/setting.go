@@ -1,7 +1,6 @@
 package setting
 
 import (
-	"acc/internal/consts"
 	"acc/internal/pkg/file"
 	"fmt"
 	"gopkg.in/yaml.v3"
@@ -85,18 +84,20 @@ var ConfigSetting = &Config{
 	},
 }
 
+const redBold = "\033[31;1m"
+
 func Setup(configPath string) {
 	path := file.GetAbsPath(file.GetCwd(), configPath)
 	config, err := ioutil.ReadFile(path)
 	if err != nil {
-		fmt.Printf(consts.RedBold+"Read configuration error, detail: %s\n", err)
+		fmt.Printf(redBold+"Read configuration error, detail: %s\n", err)
 		os.Exit(1)
 	}
 	// 替换环境变量
 	config = []byte(os.ExpandEnv(string(config)))
 	err = yaml.Unmarshal(config, ConfigSetting)
 	if err != nil {
-		fmt.Printf(consts.RedBold+"Parsing configuration error, detail: %s\n", err)
+		fmt.Printf(redBold+"Parsing configuration error, detail: %s\n", err)
 		os.Exit(1)
 	}
 }

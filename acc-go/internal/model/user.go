@@ -28,10 +28,13 @@ func InsertUser(tx *gorm.DB, user *User) error {
 	return nil
 }
 
-func GetUserByUsername(username string) (*User, error) {
+func GetUser(username string) (*User, error) {
 	var user User
 	err := db.DB.Where("username = ?", username).First(&user).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
 		return nil, err
 	}
 

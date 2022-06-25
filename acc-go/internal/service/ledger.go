@@ -18,12 +18,12 @@ type Ledger struct {
 
 func CreateLedger(tLedgerId int64, name string, icon string, ownerId int64) error {
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
-		return newLedger(tx, tLedgerId, name, icon, ownerId)
+		return initLedger(tx, tLedgerId, name, icon, ownerId)
 	})
 	return err
 }
 
-func newLedger(tx *gorm.DB, tLedgerId int64, name string, icon string, ownerId int64) error {
+func initLedger(tx *gorm.DB, tLedgerId int64, name string, icon string, ownerId int64) error {
 	now := time.Now().UnixMilli()
 	ledger := model.Ledger{
 		OwnerId:     ownerId,

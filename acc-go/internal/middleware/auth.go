@@ -26,7 +26,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 
-		userId := uid.Uid2Id(parsedToken.Uid)
+		userId := uid.Id(parsedToken.Uid)
 		c.Request.Header.Set("userId", strconv.FormatInt(userId, 10))
 
 		if parsedToken.IP != c.ClientIP() {

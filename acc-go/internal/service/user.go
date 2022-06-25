@@ -20,34 +20,34 @@ type UserService struct {
 }
 
 func (u *UserService) SignIn() (string, error) {
-	user, err := model.GetUserByUsername(u.Username)
+	user, err := model.GetUser(u.Username)
 	if err != nil {
 		logrus.Errorf("get user by username failed: %v", err)
-		return "", e.Error
+		return consts.Empty, e.Error
 	}
 
-	if user.Username == "" {
-		return "", e.UserAuthFailedError
+	if user == nil {
+		return consts.Empty, e.UserAuthFailedError
 	}
 
 	if consts.IsUserFreeze(user.State) {
-		return "", e.UserFreezeError
+		return consts.Empty, e.UserFreezeError
 	}
 
 	if consts.IsUserClose(user.State) {
-		return "", e.UserAuthFailedError
+		return consts.Empty, e.UserAuthFailedError
 	}
 
 	password := md5.Encrypt(u.Password)
 	if user.Password != password {
-		return "", e.UserAuthFailedError
+		return consts.Empty, e.UserAuthFailedError
 	}
 
 	duration := 2 * time.Hour
 
-	token, err := jwt.GenerateToken(uid.Id2Uid(user.ID), u.IP, duration)
+	token, err := jwt.GenerateToken(uid.Uid(user.ID), u.IP, duration)
 	if err != nil {
-		return "", e.UserAuthFailedError
+		return consts.Empty, e.UserAuthFailedError
 	}
 
 	return token, nil
@@ -64,7 +64,7 @@ func (u *UserService) SignUp(user *model.User) error {
 		if err := model.InsertUser(tx, user); err != nil {
 			return err
 		}
-		return newLedger(tx, 1, "标准账本", "", user.ID)
+		return initLedger(tx, 1, "标准账本", "", user.ID)
 	})
 
 	if err != nil {
@@ -76,13 +76,13 @@ func (u *UserService) SignUp(user *model.User) error {
 }
 
 func (u *UserService) ExistUsername() (bool, error) {
-	user, err := model.GetUserByUsername(u.Username)
+	user, err := model.GetUser(u.Username)
 	if err != nil {
 		logrus.Errorf("exist username failed: %s", err)
 		return false, e.Error
 	}
 
-	if user.Username == "" {
+	if user == nil {
 		return false, nil
 	}
 
