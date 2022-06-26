@@ -3,18 +3,26 @@ package routers
 import (
 	"acc/internal/api"
 	"acc/internal/middleware"
+	"acc/internal/pkg/e"
+	"acc/internal/pkg/r"
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
 	gin.SetMode("release")
-	r := gin.New()
-
-	r.Use(middleware.Recovery())
+	engine := gin.New()
+	engine.Use(middleware.Recovery())
+	engine.NoRoute(func(c *gin.Context) {
+		r.RenderFail(c, e.NotFoundError)
+	})
 
 	//r.StaticFS("/web", http.Dir("./"))
 
-	root := r.Group("/api")
+	user := engine.Group("/api/user")
+	user.POST("/sign-in", api.SignIn)
+	user.POST("/sign-up", api.SignUp)
+
+	root := engine.Group("/api")
 	root.Use(middleware.Auth())
 
 	// 查询账本
@@ -30,9 +38,5 @@ func InitRouter() *gin.Engine {
 
 	root.POST("/transaction", api.CreateTransaction)
 
-	user := r.Group("/api/user")
-	user.GET("/username", api.ExistUsername)
-	user.POST("/sign-in", api.SignIn)
-	user.POST("/sign-up", api.SignUp)
-	return r
+	return engine
 }

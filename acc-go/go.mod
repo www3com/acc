@@ -7,7 +7,9 @@ require (
 	github.com/astaxie/beego v1.12.3
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-jwt/jwt/v4 v4.4.2
+	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.0
+	github.com/shopspring/decimal v1.2.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/speps/go-hashids/v2 v2.0.1
 	golang.org/x/text v0.3.7

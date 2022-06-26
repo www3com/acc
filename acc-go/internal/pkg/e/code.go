@@ -34,6 +34,8 @@ var UnauthorizedError = New(Unauthorized)
 
 var ForbiddenError = New(Forbidden)
 
+var NotFoundError = New(NotFound)
+
 var UserDisagreementError = New(UserDisagreement)
 
 var UserDuplicateUsernameError = New(UserDuplicateUsername)
