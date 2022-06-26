@@ -1,32 +1,25 @@
-import {defineConfig} from 'umi';
-
-export default defineConfig({
-  nodeModulesTransform: {
-    type: 'none',
-  },
-  routes: [
-    {path: '/sign-in', component: '@/pages/signIn/index'},
-    {path: '/sign-up', component: '@/pages/signUp/index'},
-    {path: '/sign-up/success', component: '@/pages/signUp/success'},
-    {
-      path: '/', component: '@/layouts/index',
-      wrappers: [
-        '@/wrappers/auth'
-      ],
-      routes: [
-        {path: '/account', component: '@/pages/account/index'}
-      ]
+export default {
+    npmClient: 'yarn',
+    plugins: ['@umijs/plugins/dist/antd'],
+    antd: {},
+    routes: [
+        {path: '/', redirect: '/login'},
+        {path: '/login', component: 'login'},
+        {path: '/register', component: 'register'},
+        {path: '/', component: 'layout',
+            routes: [
+                {path: '/account', component: 'account'}
+            ]
+        },
+    ],
+    "theme": {
+        "@primary-color": "#FA541C",
     },
-  ],
-  fastRefresh: {},
-  "theme": {
-    "primary-color": "#FA541C",
-  },
-  proxy: {
-    '/api/**/*': {
-      target: 'http://127.0.0.1:8989',
-      changeOrigin: true,
-      pathRewrite: {'^/': '/'},
-    },
-  }
-});
+    proxy: {
+        '/api': {
+            target: 'http://127.0.0.1:8989',
+            changeOrigin: true,
+            pathRewrite: {'^/': ''},
+        },
+    }
+};

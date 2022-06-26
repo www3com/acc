@@ -1,24 +1,11 @@
 import {ConfigProvider} from "antd";
 import style from './style.less'
-import Login from '@/pages/signIn'
-import Register from "@/pages/signUp";
-import Success from "@/pages/signUp/success";
 import zhCN from 'antd/lib/locale/zh_CN';
 import Footer from "@/components/Footer";
-import Header from "@/layouts/component/Header";
+import { Link, Outlet } from 'umi';
+import Header from "@/pages/layout/component/Header";
 
-export default (props: any) => {
-  switch (props.location.pathname) {
-    case '/':
-      return <Login/>
-    case '/sign-in':
-      return <Login/>
-    case '/user':
-      return <Register/>
-    case '/user/success':
-      return <Success/>
-  }
-
+export default () => {
   return (
     <ConfigProvider locale={zhCN}>
       <div>
@@ -27,7 +14,7 @@ export default (props: any) => {
         </div>
         <div className={style.main}>
           <div className={style.mainRow}>
-            {props.children}
+              <Outlet />
           </div>
           <div className={style.footer}>
             <Footer/>

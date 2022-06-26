@@ -1,22 +1,11 @@
-import React, {useEffect} from 'react';
-import {Card, Col, ConfigProvider, Divider, message, Row, Space, Statistic, Switch, Table, Tabs, Tooltip} from 'antd';
+import {ConfigProvider} from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
-import {useModel} from 'umi';
 
-
-import {
-  CloseCircleOutlined,
-  DollarCircleFilled,
-  DollarCircleOutlined,
-  DollarCircleTwoTone,
-  DollarOutlined, EditOutlined,
-  LikeOutlined, PayCircleOutlined, PlusCircleOutlined, PlusOutlined, RedEnvelopeOutlined, TransactionOutlined
-} from "@ant-design/icons";
 import {Provider} from "mobx-react";
-import {AccountStore} from "@/stores/accountStore";
+import {Account} from "@/stores/account";
 import Root from "@/pages/account/component/Root";
 
-const store = new AccountStore();
+const store = new Account();
 
 
 export default () => {

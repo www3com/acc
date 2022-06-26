@@ -8,8 +8,9 @@ import {
   SettingOutlined,
   LineChartOutlined, PoweroffOutlined, UserOutlined, PayCircleOutlined, PlusCircleOutlined, PlusOutlined
 } from "@ant-design/icons";
-import style from "@/layouts/style.less";
+import style from "../style.less";
 import {clearAll, getSelectLedger, Ledger, listLedgers, selectLedger} from "@/services/ledger";
+import {history} from "umi";
 
 const items = [
   {label: '概览', key: 'total', icon: <AppstoreOutlined/>},
@@ -55,7 +56,7 @@ export default () => {
 
   const onClickQuit = () => {
     clearAll()
-    location.href = '/sign-in'
+    history.push('/login')
   }
 
 

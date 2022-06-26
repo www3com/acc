@@ -9,10 +9,10 @@ import {
   TransactionOutlined
 } from "@ant-design/icons";
 import {inject, observer} from "mobx-react";
-import {AccountStore} from "@/stores/accountStore";
+import type {Account} from "@/stores/account";
 
 interface RootProps {
-  store?: AccountStore
+  store?: Account
 }
 
 const root = ({store}: RootProps) => {

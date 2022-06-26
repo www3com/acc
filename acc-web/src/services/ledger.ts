@@ -38,6 +38,7 @@ export async function listLedgers(): Promise<Ledger[]> {
   let sessionLedgers = getSessionLedgers()
   if (sessionLedgers.length == 0) {
     let r = await request.get('/api/ledger')
+
     sessionLedgers = r.data
     sessionStorage.setItem(SESSION_LEDGERS_KEY, JSON.stringify(sessionLedgers))
   }
