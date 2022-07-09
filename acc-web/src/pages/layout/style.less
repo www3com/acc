@@ -1,43 +1,54 @@
-@width: 1024px;
+@import '@/global.less';
+@import (reference) '~antd/es/style/themes/index';
 
-
-.menu {
-  line-height: 60px!important;
-  border: 0;
-  border-bottom: 1px solid #f0f0f0;
-  box-shadow: none;
-}
-
-.header {
+.layout {
   width: 100%;
-  //padding: 0px 10px 5px 10px;
-  border-bottom: 1px solid #f0f0f0;
-  background-color: white;
-  position: fixed;
-  top: 0px;
+  min-height: 600px;
 
-  .headerRow {
-    width: @width;
-    margin: auto;
-  }
-}
-
-.main {
-  width: 100%;
-  padding-top: 80px;
-  .mainRow {
-    min-height: 600px;
+  & > * {
     width: @width;
     margin: auto
   }
 }
 
+.header {
+  z-index: 1;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: white;
+  top: 0;
+}
 
+.content {
+  padding-top: 10px;
+}
 
 .footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 80px;
   border-top: 1px solid #f0f0f0;
+}
+
+// Ledger Dropdown
+.ledger {
+  max-height: 400px;
+  overflow: auto;
+
+  list-style-type: none;
+  background-clip: padding-box;
+  border-radius: 2px;
+  outline: none;
+  box-shadow: @shadow-2;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item {
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: @select-item-active-bg;
+    }
+  }
 }

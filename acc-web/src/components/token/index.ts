@@ -1,9 +1,13 @@
-const TOKEN_KEY = "ACC-TOKEN"
+const TOKEN_KEY = "ACC_TOKEN"
 
 export function getToken() {
-  return sessionStorage.getItem(TOKEN_KEY)
+    return sessionStorage.getItem(TOKEN_KEY)
 }
 
 export function setToken(accessToken: string) {
-  sessionStorage.setItem(TOKEN_KEY, accessToken)
+    sessionStorage.setItem(TOKEN_KEY, accessToken)
+}
+
+export function clear() {
+    sessionStorage.clear()
 }
