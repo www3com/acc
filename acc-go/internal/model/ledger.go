@@ -6,12 +6,12 @@ import (
 )
 
 type Ledger struct {
-	ID          int64  `json:"key" gorm:"primary_key"`
+	ID          int64  `json:"id" gorm:"primary_key"`
 	CreateTime  int64  `json:"-"`
 	UpdateTime  int64  `json:"-"`
 	OwnerId     int64  `json:"-"`
 	TplLedgerId int64  `json:"-"`
-	Name        string `json:"label"`
+	Name        string `json:"name"`
 	Icon        string `json:"icon"`
 	Remark      string `json:"remark"`
 	SortNumber  int    `json:"-"`
