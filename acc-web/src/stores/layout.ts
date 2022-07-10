@@ -13,13 +13,6 @@ export class LayoutStore {
         this.list()
     }
 
-    * list(): any {
-        let ledgers = yield listLedgers()
-        let ledger = localStorage.getItem(STORAGE_LEDGER_KEY)
-        this.setCurrentLedger(ledger == null ? ledgers[0] : JSON.parse(ledger))
-        this.ledgers = ledgers
-    }
-
     setVisible(visible: boolean) {
         this.visible = visible
     }
@@ -28,5 +21,12 @@ export class LayoutStore {
         this.setVisible(false)
         this.currentLedger = ledger
         localStorage.setItem(STORAGE_LEDGER_KEY, JSON.stringify(ledger))
+    }
+
+    * list(): any {
+        let ledgers = yield listLedgers()
+        let ledger = localStorage.getItem(STORAGE_LEDGER_KEY)
+        this.setCurrentLedger(ledger == null ? ledgers[0] : JSON.parse(ledger))
+        this.ledgers = ledgers
     }
 }

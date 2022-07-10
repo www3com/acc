@@ -8,7 +8,10 @@ export default {
         {path: '/register', component: 'register'},
         {path: '/', component: 'layout',
             routes: [
+                {path: '/total', component: 'account'},
+                {path: '/bill', component: 'account'},
                 {path: '/account', component: 'account'},
+                {path: '/report', component: 'account'},
                 {path: '/settings', component: 'settings'}
             ]
         },

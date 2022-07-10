@@ -7,9 +7,13 @@ import Top from "@/pages/layout/component/Top";
 import {LayoutStore} from "@/stores/layout";
 import {Provider} from "mobx-react";
 
+
+
 const {Header, Content, Footer} = Layout
 const store = new LayoutStore()
+
 export default () => {
+
     return (
         <Provider store={store}>
             <ConfigProvider locale={zhCN}>
