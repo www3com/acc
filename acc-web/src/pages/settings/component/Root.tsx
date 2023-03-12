@@ -18,7 +18,7 @@ interface RootProps {
 const root = ({store}: RootProps) => {
 
   useEffect(() => {
-    store.list(4)
+    store.list(13)
   }, [])
 
   const columns: any = [

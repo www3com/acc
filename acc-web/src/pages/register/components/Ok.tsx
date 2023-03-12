@@ -1,7 +1,7 @@
 import {Button, Result} from "antd";
 import {history} from "umi";
 
-import style from '../style.less'
+import styles from '../style.less'
 import Footer from "@/components/Footer"
 import Header from "@/pages/register/components/Header"
 import FullDialog from "@/components/FullDialog";
@@ -15,11 +15,11 @@ const ok = ({store}: any) => {
     }
     return (
         <FullDialog visible={store.okVisible}>
-            <div className={style.header}>
+            <div className={styles.header}>
                 <Header/>
             </div>
-            <div className={style.main}>
-                <div className={style.mainCenter}>
+            <div className={styles.content}>
+                <div className={styles.contentInner}>
                     <Result
                         status="success"
                         title="恭喜您，注册账户成功！"
@@ -29,7 +29,7 @@ const ok = ({store}: any) => {
                     />
                 </div>
             </div>
-            <div className={style.footer}>
+            <div className={styles.footer}>
                 <Footer/>
             </div>
         </FullDialog>

@@ -1,12 +1,22 @@
 package r
 
 import (
-	"acc/internal/pkg/e"
-	"acc/internal/pkg/i18n"
+	"acc/internal/consts"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/pelletier/go-toml/v2"
+	"github.com/upbos/go-base/e"
+	"golang.org/x/text/language"
 	"net/http"
+	"strconv"
 )
+
+var mapper = map[int]int{
+	e.ERROR:        http.StatusInternalServerError,
+	e.Unauthorized: http.StatusUnauthorized,
+	e.Forbidden:    http.StatusForbidden,
+	e.NotFound:     http.StatusNotFound,
+}
 
 type R struct {
 	Code    int         `json:"code"`
@@ -14,67 +24,68 @@ type R struct {
 	Data    interface{} `json:"data"`
 }
 
-var (
-	langKey           = "lang"
-	acceptLanguageKey = "Accept-Language"
-)
+var bundle *i18n.Bundle
 
-func Render(c *gin.Context, data interface{}, err error) {
-	if err == nil {
-		RenderOk(c, data)
-	} else {
-		RenderFail(c, err)
-	}
+func init() {
+	bundle = i18n.NewBundle(language.English)
+	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+	bundle.MustLoadMessageFile("./assets/acc.en.toml")
+	bundle.MustLoadMessageFile("./assets/acc.zh.toml")
 }
 
 func RenderOk(c *gin.Context, data interface{}) {
-	render(c, http.StatusOK, e.OK, data)
+	Render(c, data, nil)
 }
 
 func RenderFail(c *gin.Context, err error) {
-	v, ok := e.UnWrap(err)
-	if !ok {
-		logrus.Error(err)
-		render(c, http.StatusInternalServerError, e.OK, nil)
+	Render(c, nil, err)
+}
+
+func Render(c *gin.Context, data interface{}, err error) {
+	if err == nil {
+		render(c, http.StatusOK, e.OK, nil, data)
+		return
 	}
 
-	switch v.Code {
-	case e.ERROR:
-		render(c, http.StatusInternalServerError, v.Code, nil)
-	case e.InvalidParams:
-		render(c, http.StatusBadRequest, v.Code, nil)
-	case e.Unauthorized:
-		render(c, http.StatusUnauthorized, v.Code, nil)
-	case e.Forbidden:
-		render(c, http.StatusForbidden, v.Code, nil)
-	case e.NotFound:
-		render(c, http.StatusNotFound, v.Code, nil)
-	default:
-		render(c, http.StatusOK, v.Code, nil)
+	v, ok := e.UnWrap(err)
+	if !ok {
+		render(c, http.StatusInternalServerError, e.ERROR, nil, data)
+		return
+	}
+
+	if v.Code == e.InvalidParams {
+		render(c, http.StatusBadRequest, v.Code, map[string]interface{}{"err": v.Message}, nil)
+		return
+	}
+
+	if status := mapper[v.Code]; status == 0 {
+		render(c, http.StatusOK, v.Code, v.Data, data)
+	} else {
+		render(c, status, v.Code, v.Data, data)
 	}
 }
 
-func render(c *gin.Context, status int, code int, data interface{}) {
+func render(c *gin.Context, status int, code int, messageData interface{}, data interface{}) {
 	c.JSON(status, &R{
 		Code:    code,
-		Message: getMessage(c, code),
+		Message: getMessage(c, code, messageData),
 		Data:    data})
 }
 
-func getMessage(c *gin.Context, code int) string {
-	// 从header中获取指定语言
-	lang := c.GetHeader(langKey)
-	if lang == "" {
-		lang, _ = c.Cookie(langKey)
+func getMessage(c *gin.Context, code int, messageData interface{}) string {
+	if code == e.OK {
+		return ""
 	}
+	lang := c.GetHeader(consts.Locale)
+	accept := c.GetHeader(consts.AcceptLanguage)
+	localizer := i18n.NewLocalizer(bundle, lang, accept)
 
-	if lang == "" {
-		lang = c.GetHeader(acceptLanguageKey)
-	}
+	msg := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID: strconv.Itoa(code),
+		},
+		TemplateData: messageData,
+	})
 
-	if lang == "" {
-		lang = "zh"
-	}
-
-	return i18n.GetMessage(lang, code)
+	return msg
 }

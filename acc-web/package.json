@@ -1,25 +1,27 @@
 {
   "private": true,
+  "author": "扫地僧 <wjzchina2008@126.com>",
   "scripts": {
     "dev": "umi dev",
     "build": "umi build",
     "postinstall": "umi setup",
+    "setup": "umi setup",
     "start": "npm run dev"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.7.0",
-    "antd": "^4.21.3",
-    "axios": "^0.27.2",
+    "@ant-design/icons": "^5.0.1",
+    "@ant-design/pro-components": "^2.3.57",
+    "antd": "^5.2.1",
+    "axios": "^1.3.3",
+    "classnames": "^2.3.2",
     "js-sha256": "^0.9.0",
-    "mobx": "^6.6.1",
-    "mobx-react": "^7.5.2",
-    "umi": "^4.0.6",
-    "@umijs/plugins": "^4.0.6",
-    "classnames": "^2.3.1"
+    "mobx": "^6.8.0",
+    "mobx-react": "^7.6.0",
+    "umi": "^4.0.52"
   },
   "devDependencies": {
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "typescript": "^4.7.4"
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "typescript": "^4.9.5"
   }
 }

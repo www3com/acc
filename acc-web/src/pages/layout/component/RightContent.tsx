@@ -1,36 +1,63 @@
-import {Divider, Dropdown, Menu, Space} from "antd";
-import {history} from "umi";
-import {Link} from "@@/exports";
-import LedgerDropdown from "@/pages/layout/component/LedgerDropdown";
-import {inject, observer} from "mobx-react";
-import {clear} from "@/components/token";
-import {DownOutlined, SettingOutlined, UserOutlined, PayCircleOutlined, LogoutOutlined} from "@ant-design/icons";
+import { Button, Divider, Dropdown, Menu, MenuProps, Space } from 'antd';
+import { history } from 'umi';
+import { Link } from '@@/exports';
+import { inject, observer } from 'mobx-react';
+import { clear, getCurrentLedger } from '@/components/session';
+import {
+  DownOutlined,
+  SettingOutlined,
+  UserOutlined,
+  PayCircleOutlined,
+  LogoutOutlined,
+  AppstoreOutlined, BookOutlined,
+} from '@ant-design/icons';
+import styles from '../style.less';
 
-const rightContent = ({store}: any) => {
+const rightContent = ({ layoutStore }: any) => {
 
-    const onQuit = () => {
-        clear()
-        history.push('/login')
+  const renderItems = (): any => {
+    let items: any = [];
+    for (const ledger of layoutStore.ledgers) {
+      items.push({ key: ledger.id, label: ledger.name });
     }
+    return items;
+  };
 
-    const menu: any = [
-        {label: <Link to='/register'>个人中心</Link>, key: 'self', icon: <UserOutlined/>},
-        {label: <Link to='/register'>个人设置</Link>, key: 'setup', icon: <SettingOutlined/>},
-        {type: 'divider'},
-        {label: <a onClick={onQuit}>退出登录</a>, key: 'quit', icon: <LogoutOutlined/>}
-    ]
+  const onQuit = () => {
+    clear();
+    history.push('/login');
+  };
 
-    return (
-        <Space split={<Divider type="vertical"/>} size={0}>
-            <Dropdown visible={store.visible} overlay={<LedgerDropdown/>}
-                      onVisibleChange={visible => store.setVisible(visible)}>
-                <a style={{color: 'black'}}><PayCircleOutlined/> {store.currentLedger.name} <DownOutlined/></a>
-            </Dropdown>
-            <Dropdown overlay={<Menu style={{width: 150}} items={menu}/>}>
-                <a style={{color: 'black'}}><UserOutlined/> Jason</a>
-            </Dropdown>
-        </Space>
-    );
+  const items: any = [
+    { label: <Link to='/register'>个人中心</Link>, key: 'self', icon: <UserOutlined /> },
+    { label: <Link to='/register'>个人设置</Link>, key: 'setup', icon: <SettingOutlined /> },
+    { type: 'divider' },
+    { label: <a onClick={onQuit}>退出登录</a>, key: 'quit', icon: <LogoutOutlined /> },
+  ];
+
+  let ledger = getCurrentLedger();
+  return (
+    <Space split={<Divider type='vertical' />} size={0}>
+      <Dropdown
+        menu={{ items: renderItems(), selectable: true, defaultSelectedKeys: ledger.id.toString() }}
+        dropdownRender={(menu) => (
+          <div className={styles.dropdownContent} style={{ backgroundColor: 'white' }}>
+            {menu}
+            <Divider style={{ margin: 0 }} />
+            <Space style={{ padding: 8 }}>
+              <Button type='text' icon={<AppstoreOutlined />}>账本模版</Button>
+              <Button type='text' icon={<BookOutlined />}>账本管理</Button>
+            </Space>
+          </div>
+        )}
+      >
+        <a style={{ color: 'black' }}><PayCircleOutlined /> {ledger.name} <DownOutlined /></a>
+      </Dropdown>
+      <Dropdown menu={{ items }} overlayStyle={{ width: 150 }}>
+        <a style={{ color: 'black' }}><UserOutlined /> Jason</a>
+      </Dropdown>
+    </Space>
+  );
 };
 
-export default inject('store')(observer(rightContent))
+export default inject('layoutStore')(observer(rightContent));

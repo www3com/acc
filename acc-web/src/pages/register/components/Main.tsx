@@ -1,5 +1,5 @@
 import {Button, Checkbox, Form, Input, message, Space} from "antd"
-import style from '../style.less'
+import styles from '../style.less'
 import React from "react";
 import {OK} from "@/components/Request";
 import {inject, observer} from "mobx-react";
@@ -18,7 +18,7 @@ const main = ({store}: any) => {
         console.log('Failed:', errorInfo);
     };
 
-    return (<div className={style.mainCenter}>
+    return (<div className={styles.contentInner}>
         <div
             style={{
                 display: "flex",
@@ -75,7 +75,7 @@ const main = ({store}: any) => {
                 </Checkbox>
             </Form.Item>
             <Form.Item wrapperCol={{span: 16, offset: 8}}>
-                <Button type="primary" htmlType="submit" style={{width: '120px'}}>注册</Button>
+                <Button type="primary" htmlType="submit" style={{width: '200px'}}>注册</Button>
             </Form.Item>
         </Form>
     </div>)

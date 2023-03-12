@@ -1,22 +1,25 @@
 @width: 1024px;
 
+.layout {
+  height: 100%;
+  background-color: white;
+}
+
 .header {
-  width: 100%;
+  background-color: white!important;
   border-bottom: 1px solid #f0f0f0;
 
-  .headerRow {
+  .headerInner {
     width: @width;
     height: 70px;
     margin: auto;
   }
 }
 
-.main {
-  width: 100%;
-  padding-top: 60px;
-
-  .mainRow {
-    min-height: 520px;
+.content {
+  min-height: 500px!important;
+  padding-top: 100px;
+  .contentInner {
     width: @width;
     margin: auto;
   }

@@ -10,11 +10,10 @@ type TplAccount struct {
 	LedgerId   int64  `json:"-"`
 	Type       int    `json:"-"`
 	Name       string `json:"name"`
-	ParentId   int64  `json:"-"`
+	Code       string `json:"code"`
 	Icon       string `json:"icon"`
 	CurrencyId int    `json:"currencyId"`
-	InAsset    int    `json:"InAsset"`
-	SortNumber int    `json:"sortNumber"`
+	Leaf       int    `json:"leaf"`
 	Remark     string `json:"remark"`
 }
 
@@ -22,9 +21,16 @@ func (TplAccount) TableName() string {
 	return "tpl_account"
 }
 
-func ListTplAccounts(ledgerId int64) ([]*TplAccount, error) {
-	var accounts []*TplAccount
-	err := db.DB.Model(TplAccount{}).Where("ledger_id = ?", ledgerId).Find(&accounts).Error
+type TplAccountDao struct {
+	DB *gorm.DB
+}
+
+func NewTplAccountDao() *TplAccountDao {
+	return &TplAccountDao{DB: db.DB}
+}
+
+func (d *TplAccountDao) List(ledgeId int64) (accounts []*TplAccount, err error) {
+	err = d.DB.Model(TplAccount{}).Where("ledger_id = ?", ledgeId).Find(&accounts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}

@@ -1,6 +1,6 @@
 import axios from "axios";
 import {message} from "antd";
-import {getToken} from "@/components/token";
+import {getToken} from "@/components/session";
 
 const json = "application/json;charset=UTF-8"
 

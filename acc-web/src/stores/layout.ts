@@ -1,32 +1,41 @@
-import {makeAutoObservable} from "mobx";
-import {listLedgers} from "@/services/ledger";
+import { makeAutoObservable } from 'mobx';
+import { listLedgers } from '@/services/ledger';
+import { getCurrentLedger, setCurrentLedger } from '@/components/session';
 
-const STORAGE_LEDGER_KEY = 'ACC_CURRENT_LEDGER'
 
 export class LayoutStore {
-    visible = false
-    currentLedger = {id: 0, name: '未选择'}
-    ledgers: [] = []
+  visible = false;
+  ledgers: [] = [];
 
-    constructor() {
-        makeAutoObservable(this)
-        this.list()
+  constructor() {
+    makeAutoObservable(this);
+    this.list();
+  }
+
+  setVisible(visible: boolean) {
+    this.visible = visible;
+  }
+
+  * list(): any {
+    let ledgers = yield listLedgers();
+    if (ledgers == null || ledgers.length == 0) {
+      return;
+    }
+    this.ledgers = ledgers;
+
+    // 本地缓存中不存在账本
+    let ledger = getCurrentLedger();
+    if (ledger == null) {
+      setCurrentLedger(ledgers[0]);
     }
 
-    setVisible(visible: boolean) {
-        this.visible = visible
+    // 本地缓存中存在账本，但是属于其他人的账本
+    for (const l of ledgers) {
+      if (l.id == ledger.id) {
+        return;
+      }
     }
 
-    setCurrentLedger(ledger: any) {
-        this.setVisible(false)
-        this.currentLedger = ledger
-        localStorage.setItem(STORAGE_LEDGER_KEY, JSON.stringify(ledger))
-    }
-
-    * list(): any {
-        let ledgers = yield listLedgers()
-        let ledger = localStorage.getItem(STORAGE_LEDGER_KEY)
-        this.setCurrentLedger(ledger == null ? ledgers[0] : JSON.parse(ledger))
-        this.ledgers = ledgers
-    }
+    setCurrentLedger(ledger[0]);
+  }
 }

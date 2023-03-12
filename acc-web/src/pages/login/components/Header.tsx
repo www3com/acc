@@ -4,7 +4,7 @@ import {Link} from "umi";
 import React from "react";
 
 export default () => {
-    return (<Row className={style.headerRow}>
+    return (<Row className={style.headerInner}>
         <Col flex="100px" style={{margin: 'auto'}}>
             <img src={'./logo3.png'} width={170} height={45}/>
         </Col>

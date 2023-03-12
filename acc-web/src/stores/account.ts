@@ -1,16 +1,45 @@
-import { makeAutoObservable} from "mobx";
+import { makeAutoObservable } from 'mobx';
 
-import {listAccount} from "@/services/account";
+import { listAccount, saveAccount } from '@/services/account';
+import { getCurrentLedger } from '@/components/session';
+
+
+interface AccountDO {
+  id?: number,
+  name?: string,
+  remark?: string,
+  parentId: number
+}
 
 export class Account {
-    accounts: [] = []
+  accounts: [] = [];
 
-    constructor() {
-        makeAutoObservable(this)
-    }
+  dialogProps = {
+    item: {},
+    open: false,
+  };
 
-    * list(ledgerId: number): any {
-        const r = yield listAccount(ledgerId)
-        this.accounts = r.data
-    }
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  * list(): any {
+    let ledger = getCurrentLedger();
+    const r = yield listAccount(ledger.id);
+    this.accounts = r.data;
+  }
+
+  showDialog(account: AccountDO) {
+    this.dialogProps = { open: true, item: account };
+  }
+
+  closeDialog() {
+    this.dialogProps.open = false;
+  }
+
+  * saveAccount(account: AccountDO) {
+    yield saveAccount(account);
+    this.closeDialog();
+  }
+
 }

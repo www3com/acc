@@ -1,0 +1,11 @@
+200 = ""
+500 = "Internal server error"
+400 = "Request parameter error: {{.err}}"
+401 = "Access token has timed out"
+403 = "No access rights"
+404 = "The accessed resource does not exist"
+
+1000 = "Must agree to the agreement"
+1001 = "Duplicate username"
+1002 = "Account is frozen"
+1003 = "Wrong account name or password"

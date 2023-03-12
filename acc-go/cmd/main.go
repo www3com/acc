@@ -1,37 +1,33 @@
 package main
 
 import (
-	"acc/internal/pkg/db"
-	"acc/internal/pkg/logger"
-	"acc/internal/pkg/setting"
-	"acc/internal/router"
+	"acc/internal/pkg/conf"
+	routers "acc/internal/router"
 	"flag"
-	"fmt"
-	"github.com/sirupsen/logrus"
+	"github.com/upbos/go-base/db"
+	"github.com/upbos/go-base/log"
 	"net/http"
-	"time"
 )
 
 func main() {
-	var config string
-	flag.StringVar(&config, "config", "./configs/config.yml", "Configuration file")
+	var confPath string
+	flag.StringVar(&confPath, "conf", "./configs/config.yml", "Configuration file")
 	flag.Parse()
 
-	setting.Setup(config)
-	logger.Setup()
-	db.Setup()
+	conf.Init(confPath)
+	log.Init(conf.Info.Log)
+	db.Init(conf.Info.DataSource)
 
-	serverConf := setting.ConfigSetting.Server
-	addr := fmt.Sprintf(":%d", serverConf.Port)
+	serverConf := conf.Info.Server
 	server := &http.Server{
-		Addr:           addr,
+		Addr:           serverConf.Addr,
 		Handler:        routers.InitRouter(),
-		ReadTimeout:    serverConf.ReadTimeout * time.Second,
-		WriteTimeout:   serverConf.WriteTimeout * time.Second,
+		ReadTimeout:    serverConf.ReadTimeout,
+		WriteTimeout:   serverConf.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	logrus.Infof("Start http server listening %s", addr)
+	log.Infof("Start http server listening %s", serverConf.Addr)
 	err := server.ListenAndServe()
-	logrus.Errorf("Start http server error, detail: %v", err)
+	log.Errorf(err, "Start http server error, detail: %v")
 }

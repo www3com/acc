@@ -1,34 +1,51 @@
 package r
 
 import (
-	"acc/internal/pkg/e"
-	"github.com/astaxie/beego/validation"
+	"acc/internal/consts"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/locales/en"
+	"github.com/go-playground/locales/zh"
+	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
+	enTranslations "github.com/go-playground/validator/v10/translations/en"
+	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
+	"github.com/upbos/go-base/e"
+	"strings"
 )
 
-// BindAndValid binds and validates data
-func BindAndValid(c *gin.Context, form interface{}) error {
-	err := c.Bind(form)
-	if err != nil {
-		return e.InvalidParamsError
-	}
+var uni *ut.UniversalTranslator
 
-	valid := validation.Validation{}
-	check, err := valid.Valid(form)
-	if err != nil {
-		return e.InvalidParamsError
-	}
-	if !check {
-		markErrors(valid.Errors)
-		return e.InvalidParamsError
-	}
-
-	return nil
+func init() {
+	uni = ut.New(en.New(), zh.New())
 }
 
-func markErrors(errors []*validation.Error) {
-	for _, err := range errors {
-		logrus.Info(err.Message)
+func BindAndValid(c *gin.Context, p interface{}) error {
+	err := c.ShouldBind(p)
+	if err == nil {
+		return nil
 	}
+
+	locale := c.GetHeader(consts.Locale)
+	trans, _ := uni.GetTranslator(locale)
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		switch locale {
+		case "en":
+			_ = enTranslations.RegisterDefaultTranslations(v, trans)
+		default:
+			_ = zhTranslations.RegisterDefaultTranslations(v, trans)
+		}
+	}
+
+	errs, ok := err.(validator.ValidationErrors)
+	if !ok {
+		return err
+	}
+
+	var arr []string
+	for _, value := range errs.Translate(trans) {
+		arr = append(arr, value)
+	}
+
+	return e.WithMessage(e.InvalidParams, strings.Join(arr, ","))
 }

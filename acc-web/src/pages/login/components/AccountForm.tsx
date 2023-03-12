@@ -1,9 +1,8 @@
 import {Button, Divider, Form, Input, message, Space} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import {history, Link} from "umi";
-import React from "react";
 import {inject, observer} from 'mobx-react';
-import {setToken} from "@/components/token";
+import {setToken} from "@/components/session";
 import {OK} from "@/components/Request";
 import type {Login} from "@/stores/login";
 
