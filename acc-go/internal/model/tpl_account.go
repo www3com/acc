@@ -1,7 +1,7 @@
 package model
 
 import (
-	"acc/internal/pkg/db"
+	"github.com/upbos/go-saber/db"
 	"gorm.io/gorm"
 )
 
@@ -21,16 +21,14 @@ func (TplAccount) TableName() string {
 	return "tpl_account"
 }
 
-type TplAccountDao struct {
-	DB *gorm.DB
+type TplAccountModel struct {
+	db *gorm.DB
 }
 
-func NewTplAccountDao() *TplAccountDao {
-	return &TplAccountDao{DB: db.DB}
-}
+var TplAccountDao = TplAccountModel{db: db.DB}
 
-func (d *TplAccountDao) List(ledgeId int64) (accounts []*TplAccount, err error) {
-	err = d.DB.Model(TplAccount{}).Where("ledger_id = ?", ledgeId).Find(&accounts).Error
+func (d *TplAccountModel) List(ledgeId int64) (accounts []*TplAccount, err error) {
+	err = d.db.Model(TplAccount{}).Where("ledger_id = ?", ledgeId).Find(&accounts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}

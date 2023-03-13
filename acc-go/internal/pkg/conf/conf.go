@@ -2,10 +2,10 @@ package conf
 
 import (
 	"fmt"
-	"github.com/upbos/go-base/db"
-	"github.com/upbos/go-base/file"
-	"github.com/upbos/go-base/http"
-	"github.com/upbos/go-base/log"
+	"github.com/upbos/go-saber/db"
+	"github.com/upbos/go-saber/file"
+	"github.com/upbos/go-saber/http"
+	"github.com/upbos/go-saber/log"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
@@ -17,7 +17,7 @@ type Config struct {
 	Log        *log.Logger    `yaml:"logger"`
 }
 
-var Info = &Config{
+var conf = &Config{
 	Server: http.Server{
 		Addr:         ":8989",
 		ReadTimeout:  60_000_000_000, // 60s
@@ -45,7 +45,7 @@ var Info = &Config{
 
 const redBold = "\033[31;1m"
 
-func Init(configPath string) {
+func Parse(configPath string) *Config {
 	path := file.GetAbsPath(file.GetCwd(), configPath)
 	config, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -54,9 +54,10 @@ func Init(configPath string) {
 	}
 	// 替换环境变量
 	config = []byte(os.ExpandEnv(string(config)))
-	err = yaml.Unmarshal(config, Info)
+	err = yaml.Unmarshal(config, conf)
 	if err != nil {
 		fmt.Printf(redBold+"Parsing configuration error, detail: %s\n", err)
 		os.Exit(1)
 	}
+	return conf
 }

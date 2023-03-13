@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/pelletier/go-toml/v2"
-	"github.com/upbos/go-base/e"
+	"github.com/upbos/go-saber/e"
 	"golang.org/x/text/language"
 	"net/http"
 	"strconv"

@@ -4,24 +4,26 @@ import (
 	"acc/internal/api"
 	"acc/internal/pkg/r"
 	"github.com/gin-gonic/gin"
-	"github.com/upbos/go-base/e"
+	"github.com/upbos/go-saber/e"
 	"net/http"
 )
 
 func InitRouter() *gin.Engine {
 	gin.SetMode("release")
 	engine := gin.New()
-	//engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
 	engine.NoRoute(func(c *gin.Context) {
 		r.RenderFail(c, e.ErrNotFound)
 	})
 
+	// 静态资源
 	engine.StaticFS("/web", http.Dir("./web"))
 
-	userApi := api.NewUserApi()
+	//root := engine.Group("/api")
+	//root.Use(middleware.Auth())
+
 	user := engine.Group("/api/user")
-	user.GET("/sign-in", userApi.SignIn)
+	user.GET("/sign-in", api.SignIn)
 	//user.POST("/sign-up", userApi.SignUp)
 	//
 	//root := engine.Group("/api")

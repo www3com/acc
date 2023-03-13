@@ -4,8 +4,8 @@ import (
 	"acc/internal/pkg/conf"
 	routers "acc/internal/router"
 	"flag"
-	"github.com/upbos/go-base/db"
-	"github.com/upbos/go-base/log"
+	"github.com/upbos/go-saber/db"
+	"github.com/upbos/go-saber/log"
 	"net/http"
 )
 
@@ -14,11 +14,11 @@ func main() {
 	flag.StringVar(&confPath, "conf", "./configs/config.yml", "Configuration file")
 	flag.Parse()
 
-	conf.Init(confPath)
-	log.Init(conf.Info.Log)
-	db.Init(conf.Info.DataSource)
+	config := conf.Parse(confPath)
+	log.Init(config.Log)
+	db.Init(config.DataSource)
 
-	serverConf := conf.Info.Server
+	serverConf := config.Server
 	server := &http.Server{
 		Addr:           serverConf.Addr,
 		Handler:        routers.InitRouter(),

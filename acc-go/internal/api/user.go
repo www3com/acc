@@ -13,19 +13,16 @@ type user struct {
 	Agreement bool   `form:"agreement" binding:"required"`
 }
 
-type UserApi struct {
-}
-
-func NewUserApi() *UserApi {
-	return &UserApi{}
-}
-
 // SignIn 登录
-func (api *UserApi) SignIn(c *gin.Context) {
+func SignIn(c *gin.Context) {
 	var p user
 	if err := r.BindAndValid(c, &p); err != nil {
 		r.RenderFail(c, err)
 		return
 	}
 	fmt.Printf("%v\n", p)
+	//str, err := service.UserSrv.SignIn("", "", "")
+	//if err != nil {
+	//	return
+	//}
 }

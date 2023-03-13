@@ -10,7 +10,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	enTranslations "github.com/go-playground/validator/v10/translations/en"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
-	"github.com/upbos/go-base/e"
+	"github.com/upbos/go-saber/e"
 	"strings"
 )
 

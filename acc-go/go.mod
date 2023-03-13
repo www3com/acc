@@ -9,7 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.2
 	github.com/nicksnyder/go-i18n/v2 v2.2.1
 	github.com/pelletier/go-toml/v2 v2.0.6
-	github.com/upbos/go-base v0.5.4
+	github.com/upbos/go-saber v0.5.5
 	golang.org/x/text v0.7.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/gorm v1.24.5
@@ -36,6 +36,7 @@ require (
 	github.com/rs/zerolog v1.29.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.9 // indirect
+	github.com/upbos/go-base v0.5.4 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	golang.org/x/crypto v0.6.0 // indirect
 	golang.org/x/net v0.7.0 // indirect

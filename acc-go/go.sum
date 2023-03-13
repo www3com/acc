@@ -94,6 +94,8 @@ github.com/ugorji/go/codec v1.2.9 h1:rmenucSohSTiyL09Y+l2OCk+FrMxGMzho2+tjr5ticU
 github.com/ugorji/go/codec v1.2.9/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
 github.com/upbos/go-base v0.5.4 h1:EK4jciZ2QyD6QfjXzMNth1LMqSIf6VTw5KkIJyvSQZU=
 github.com/upbos/go-base v0.5.4/go.mod h1:z5JFW3c99XTOl0mO1n3lleWWjSWxOUhrjDiF4uzzvgY=
+github.com/upbos/go-saber v0.5.5 h1:Bkf6sc/g+lgkwQBIM2YOjIQwvK2CBGy2kVxGAxxE5wg=
+github.com/upbos/go-saber v0.5.5/go.mod h1:TrPLHeLfAR7m+DVieDtEpSkD5HdBpbXi+zfM0FkblOo=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 golang.org/x/arch v0.0.0-20210923205945-b76863e36670 h1:18EFjUmQOcUvxNYSkA6jO9VAiXCnxFY6NyDX0bHDmkU=
 golang.org/x/arch v0.0.0-20210923205945-b76863e36670/go.mod h1:5om86z9Hs0C8fWVUuoMHwpExlXzs5Tkyp9hOrfG7pp8=
