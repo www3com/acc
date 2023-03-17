@@ -20,7 +20,7 @@ func InitRouter() *gin.Engine {
 	engine.StaticFS("/web", http.Dir("./web"))
 
 	// 注册用户和登录
-	engine.GET("api/sign-up", api.SignUp)
+	engine.POST("api/sign-up", api.SignUp)
 
 	//root := engine.Group("/api")
 	//root.Use(middleware.Auth())

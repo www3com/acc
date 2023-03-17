@@ -6,7 +6,7 @@ var (
 	accountDao   = new(model.AccountDao)
 	ledgerDao    = new(model.LedgerDao)
 	memberDao    = new(model.MemberDao)
-	projectDao   = new(model.MemberDao)
+	projectDao   = new(model.ProjectDao)
 	supplierDao  = new(model.SupplierDao)
 	userDao      = new(model.UserDao)
 	tplLedgerDao = new(model.TplLedgerDao)
