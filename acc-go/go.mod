@@ -10,7 +10,7 @@ require (
 	github.com/nicksnyder/go-i18n/v2 v2.2.1
 	github.com/pelletier/go-toml/v2 v2.0.6
 	github.com/shopspring/decimal v1.3.1
-	github.com/upbos/go-saber v0.5.5
+	github.com/upbos/go-saber v0.5.7
 	golang.org/x/text v0.7.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/gorm v1.24.5

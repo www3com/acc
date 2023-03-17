@@ -4,21 +4,27 @@ import (
 	"fmt"
 	"github.com/upbos/go-saber/db"
 	"github.com/upbos/go-saber/file"
-	"github.com/upbos/go-saber/http"
 	"github.com/upbos/go-saber/log"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
+	"time"
 )
 
+type Server struct {
+	Addr         string
+	ReadTimeout  time.Duration
+	WriteTimeout time.Duration
+}
+
 type Config struct {
-	Server     http.Server    `yaml:"server"`
+	Server     Server         `yaml:"server"`
 	DataSource *db.DataSource `yaml:"data-source"`
 	Log        *log.Logger    `yaml:"logger"`
 }
 
 var conf = &Config{
-	Server: http.Server{
+	Server: Server{
 		Addr:         ":8989",
 		ReadTimeout:  60_000_000_000, // 60s
 		WriteTimeout: 60_000_000_000, // 60s

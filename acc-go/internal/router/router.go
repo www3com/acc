@@ -19,11 +19,14 @@ func InitRouter() *gin.Engine {
 	// 静态资源
 	engine.StaticFS("/web", http.Dir("./web"))
 
+	// 注册用户和登录
+	engine.GET("api/sign-up", api.SignUp)
+
 	//root := engine.Group("/api")
 	//root.Use(middleware.Auth())
 
-	user := engine.Group("/api/user")
-	user.GET("/sign-in", api.SignIn)
+	//user := engine.Group("/api/user")
+	//user.GET("/sign-in", api)
 	//user.POST("/sign-up", userApi.SignUp)
 	//
 	//root := engine.Group("/api")

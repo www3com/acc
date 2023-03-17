@@ -26,9 +26,20 @@ func (s *UserService) SignUp(user *model.User) error {
 	})
 
 	if err != nil {
-		log.Errorf(err, "insert user")
+		log.Error(err, "insert user")
 		return e.Err
 	}
 
 	return nil
+}
+
+func (s *UserService) Exist(username string) (bool, error) {
+	c, err := userDao.Count(username)
+	if err != nil {
+		return false, err
+	}
+	if c == 0 {
+		return false, nil
+	}
+	return true, nil
 }
