@@ -20,7 +20,7 @@ email:
 # Log configuration
 logger:
   level: debug
-  target: console    #console, file
+  console: true
   file:
     file-name: ./logs/acc.log
     max-size: 100
