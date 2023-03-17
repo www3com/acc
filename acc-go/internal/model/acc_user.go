@@ -27,8 +27,8 @@ func (d *UserDao) Insert(tx *gorm.DB, user *User) error {
 	return tx.Create(user).Error
 }
 
-func (d *UserDao) Count(username string) (int64, error) {
-	var count int64
-	err := db.DB.Model(&User{}).Where("username = ?", username).Count(&count).Error
-	return count, err
+func (d *UserDao) Get(username string) (*User, error) {
+	var user User
+	err := db.DB.Where("username = ?", username).First(&user).Error
+	return &user, err
 }

@@ -1,11 +1,13 @@
 package main
 
 import (
+	"acc/internal/consts"
 	"acc/internal/pkg/conf"
 	routers "acc/internal/router"
 	"flag"
 	"github.com/upbos/go-saber/db"
 	"github.com/upbos/go-saber/log"
+	"github.com/upbos/go-saber/uid"
 	"net/http"
 )
 
@@ -16,6 +18,7 @@ func main() {
 
 	config := conf.Parse(confPath)
 	log.Init(config.Log)
+	uid.Init(consts.Salt)
 	db.Init(config.DataSource)
 
 	serverConf := config.Server

@@ -3,16 +3,54 @@ package service
 import (
 	"acc/internal/consts"
 	"acc/internal/model"
+	"errors"
 	"github.com/upbos/go-saber/db"
 	"github.com/upbos/go-saber/e"
+	"github.com/upbos/go-saber/jwt"
 	"github.com/upbos/go-saber/log"
 	"github.com/upbos/go-saber/md5"
+	"github.com/upbos/go-saber/uid"
 	"gorm.io/gorm"
 	"time"
 )
 
 type UserService struct{}
 
+// SignIn 用户登录
+func (s *UserService) SignIn(username, password, ip string) (string, error) {
+	user, err := userDao.Get(username)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return consts.Empty, consts.ErrUserAuthFailed
+		}
+		log.Errorf(err, "get user by username failed")
+		return consts.Empty, e.Err
+	}
+
+	if consts.IsUserFreeze(user.State) {
+		return consts.Empty, consts.ErrUserFreeze
+	}
+
+	if consts.IsUserClose(user.State) {
+		return consts.Empty, consts.ErrUserAuthFailed
+	}
+
+	pwd := md5.Encrypt(password)
+	if user.Password != pwd {
+		return consts.Empty, consts.ErrUserAuthFailed
+	}
+
+	duration := 2 * time.Hour
+
+	token, err := jwt.GenerateToken(uid.Uid(user.ID), ip, duration)
+	if err != nil {
+		return consts.Empty, consts.ErrUserAuthFailed
+	}
+
+	return token, nil
+}
+
+// SignUp 用户注册
 func (s *UserService) SignUp(user *model.User) error {
 
 	user.CreateTime = time.Now().UnixMicro()
@@ -34,12 +72,12 @@ func (s *UserService) SignUp(user *model.User) error {
 }
 
 func (s *UserService) Exist(username string) (bool, error) {
-	c, err := userDao.Count(username)
+	_, err := userDao.Get(username)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		}
 		return false, err
-	}
-	if c == 0 {
-		return false, nil
 	}
 	return true, nil
 }

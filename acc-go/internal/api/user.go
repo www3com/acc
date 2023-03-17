@@ -14,6 +14,12 @@ type user struct {
 	Agreement bool   `form:"agreement" binding:"required"`
 }
 
+// SignIn 登录
+func SignIn(c *gin.Context) {
+	token, err := userService.SignIn(c.Query("username"), c.Query("password"), c.ClientIP())
+	r.Render(c, token, err)
+}
+
 // SignUp 注册
 func SignUp(c *gin.Context) {
 	var p user
