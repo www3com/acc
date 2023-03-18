@@ -4,15 +4,15 @@ import {history, Link} from "umi";
 import {inject, observer} from 'mobx-react';
 import {setToken} from "@/components/session";
 import {OK} from "@/components/Request";
-import type {Login} from "@/stores/login";
+import type {SignIn} from "@/stores/signIn";
 
 interface AccountProps {
-    store?: Login
+    store?: SignIn
 }
 
 const accountForm = ({store}: AccountProps) => {
     const onFinish = async (values: any) => {
-        let r = await store.login(values.username, values.password);
+        let r = await store?.signIn(values.username, values.password);
         if (r.code == OK) {
             setToken(r.data)
             history.push('/account')
@@ -34,7 +34,7 @@ const accountForm = ({store}: AccountProps) => {
         <Form.Item wrapperCol={{offset: 13}}>
             <Space split={<Divider type="vertical"/>} size={0}>
                 <a>忘记密码？</a>
-                <Link to='/register'>免费注册</Link>
+                <Link to='/sign-up'>免费注册</Link>
             </Space>
         </Form.Item>
     </Form>)

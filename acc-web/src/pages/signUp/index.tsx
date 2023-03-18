@@ -1,14 +1,14 @@
 import { ConfigProvider, Layout } from 'antd';
 import styles from './style.less';
 import Footer from '@/components/Footer';
-import Header from '@/pages/register/components/Header';
-import Success from '@/pages/register/components/Ok';
-import Main from '@/pages/register/components/Main';
+import Header from '@/pages/signUp/components/Header';
+import Success from '@/pages/signUp/components/Ok';
+import Main from '@/pages/signUp/components/Main';
 import { Provider } from 'mobx-react';
-import { Register } from '@/stores/register';
+import { SignUp } from '@/stores/signUp';
 import { theme } from '@/components/Theme';
 
-const store = new Register();
+const store = new SignUp();
 
 export default () => {
   return (

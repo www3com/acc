@@ -3,7 +3,7 @@ import {history} from "umi";
 
 import styles from '../style.less'
 import Footer from "@/components/Footer"
-import Header from "@/pages/register/components/Header"
+import Header from "@/pages/signUp/components/Header"
 import FullDialog from "@/components/FullDialog";
 import {inject, observer} from "mobx-react";
 
@@ -11,7 +11,7 @@ import {inject, observer} from "mobx-react";
 const ok = ({store}: any) => {
     const onClick = () => {
         store.showOk(false)
-        history.push("/login")
+        history.push("/sign-in")
     }
     return (
         <FullDialog visible={store.okVisible}>

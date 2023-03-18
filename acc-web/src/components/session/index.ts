@@ -15,7 +15,7 @@ export function clear() {
 
 export function getCurrentLedger() {
   let json = localStorage.getItem(STORAGE_LEDGER_KEY);
-  return JSON.parse(json);
+  return JSON.parse(typeof json === "string" ? json : "1");
 }
 
 export function setCurrentLedger(ledger: any) {

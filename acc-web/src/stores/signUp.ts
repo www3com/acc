@@ -1,8 +1,8 @@
 import {makeAutoObservable} from "mobx";
 import {sha256} from "js-sha256";
-import {signUp} from "@/services/register";
+import {signUp} from "@/services/signUp";
 
-export class Register {
+export class SignUp {
     okVisible = false;
 
     constructor() {
