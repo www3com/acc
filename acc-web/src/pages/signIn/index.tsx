@@ -6,10 +6,10 @@ import AccountForm from './components/AccountForm';
 import Header from './components/Header';
 import Footer from '@/components/Footer';
 import { Provider } from 'mobx-react';
-import { SignIn } from '@/stores/signIn';
+import { SignInStore } from '@/stores/signIn';
 import { theme } from '@/components/Theme';
 
-const store = new SignIn();
+const store = new SignInStore();
 export default () => {
 
   const items = [{ label: '账户登录', key: 'account', children: <AccountForm /> }];

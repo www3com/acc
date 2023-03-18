@@ -8,7 +8,7 @@ const main = ({store}: any) => {
     const onFinish = async (values: any) => {
         let r = await store.register(values)
         if (r.code == OK) {
-            store.showOk(true)
+            store.show(true)
         } else {
             message.info(r.message)
         }

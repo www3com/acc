@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 import {sha256} from "js-sha256";
 import {signIn} from "@/services/signIn";
 
-export class SignIn {
+export class SignInStore {
     constructor() {
         makeAutoObservable(this)
     }

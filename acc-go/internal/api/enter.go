@@ -3,5 +3,6 @@ package api
 import "acc/internal/service"
 
 var (
-	userService = new(service.UserService)
+	userService   = new(service.UserService)
+	ledgerService = new(service.LedgerService)
 )

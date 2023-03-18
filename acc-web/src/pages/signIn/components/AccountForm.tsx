@@ -4,10 +4,10 @@ import {history, Link} from "umi";
 import {inject, observer} from 'mobx-react';
 import {setToken} from "@/components/session";
 import {OK} from "@/components/Request";
-import type {SignIn} from "@/stores/signIn";
+import type {SignInStore} from "@/stores/signIn";
 
 interface AccountProps {
-    store?: SignIn
+    store?: SignInStore
 }
 
 const accountForm = ({store}: AccountProps) => {

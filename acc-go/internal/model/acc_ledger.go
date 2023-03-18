@@ -14,6 +14,7 @@ type Ledger struct {
 	Name       string `json:"name"`
 	Icon       string `json:"icon"`
 	Remark     string `json:"remark"`
+	Selected   int    `json:"selected"`
 }
 
 func (Ledger) TableName() string {
@@ -22,11 +23,18 @@ func (Ledger) TableName() string {
 
 type LedgerDao struct{}
 
-func (d *LedgerDao) Insert(tx *gorm.DB, ledger *Ledger) (int64, error) {
-	if err := tx.Create(ledger).Error; err != nil {
-		return 0, err
-	}
-	return ledger.ID, nil
+func (d *LedgerDao) SetDefault(ledgerId int64) error {
+	return db.DB.Model(&Ledger{}).Where("ledger_id = ?", ledgerId).Update("selected", 1).Error
+}
+
+func (d *LedgerDao) CancelDefault(ownerId int64) error {
+	return db.DB.Model(&Ledger{}).Where("owner_id = ?", ownerId).Update("selected", 0).Error
+}
+
+func (d *LedgerDao) Default(ownerId int64) (*Ledger, error) {
+	var ledger Ledger
+	err := db.DB.Where("owner_id = ? and selected = 1", ownerId).First(&ledger).Error
+	return &ledger, err
 }
 
 func (d *LedgerDao) List(ownerId int64) (ledgers *[]Ledger, err error) {
@@ -35,4 +43,11 @@ func (d *LedgerDao) List(ownerId int64) (ledgers *[]Ledger, err error) {
 		return nil, err
 	}
 	return ledgers, nil
+}
+
+func (d *LedgerDao) Insert(tx *gorm.DB, ledger *Ledger) (int64, error) {
+	if err := tx.Create(ledger).Error; err != nil {
+		return 0, err
+	}
+	return ledger.ID, nil
 }

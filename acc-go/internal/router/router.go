@@ -2,6 +2,7 @@ package routers
 
 import (
 	"acc/internal/api"
+	"acc/internal/middleware"
 	"acc/internal/pkg/r"
 	"github.com/gin-gonic/gin"
 	"github.com/upbos/go-saber/e"
@@ -22,20 +23,11 @@ func InitRouter() *gin.Engine {
 	engine.GET("api/sign-in", api.SignIn)  // 登录
 	engine.POST("api/sign-up", api.SignUp) // 注册
 
-	//root := engine.Group("/api")
-	//root.Use(middleware.Auth())
+	root := engine.Group("/api")
+	root.Use(middleware.Auth())
 
-	//user := engine.Group("/api/user")
-	//user.GET("/sign-in", api)
-	//user.POST("/sign-up", userApi.SignUp)
-	//
-	//root := engine.Group("/api")
-	//root.Use(middleware.Auth())
-	//
-	//ledgerApi := api.NewLedgerApi()
-	//// 查询账本
-	//root.GET("/ledger", ledgerApi.List)
-	//
+	root.GET("/ledger", api.ListLedger) // 查询账本
+
 	//accountApi := api.NewAccountApi()
 	//root.GET("/account", accountApi.List)
 	//root.POST("/account", accountApi.Create)

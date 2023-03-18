@@ -1,0 +1,69 @@
+@import '@/global';
+
+.layout {
+  width: 100%;
+  min-height: 600px;
+
+  & > * {
+    width: @width;
+    margin: auto
+  }
+}
+
+.header {
+  z-index: 1;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: white !important;
+}
+
+.main {
+  padding-top: 10px;
+}
+
+.footer {
+  height: 80px;
+  border-top: 1px solid #f0f0f0;
+}
+
+// Ledger Dropdown
+.ledger {
+  max-height: 400px;
+  overflow: auto;
+
+  list-style-type: none;
+  background-clip: padding-box;
+  border-radius: 2px;
+  outline: none;
+  //box-shadow: @shadow-2;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item {
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      //background-color: @select-item-active-bg;
+    }
+  }
+}
+
+
+.dropdownContent {
+  background: #fff;
+  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%),
+  0 9px 28px 8px rgb(0 0 0 / 5%);
+
+  :global {
+    .ant-dropdown-menu {
+      box-shadow: none;
+    }
+  }
+}
+
+.dropdownContent .ant-dropdown-menu {
+  box-shadow: none;
+}

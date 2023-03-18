@@ -327,6 +327,7 @@ create table acc_ledger
     icon        varchar(100) not null,
     owner_id    bigint       not null,
     remark      varchar(200),
+    selected    int          not null,
     create_time bigint       not null,
     update_time bigint       not null,
     CONSTRAINT pk_acc_ledger PRIMARY KEY (id)

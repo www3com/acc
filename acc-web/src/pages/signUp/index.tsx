@@ -5,10 +5,10 @@ import Header from '@/pages/signUp/components/Header';
 import Success from '@/pages/signUp/components/Ok';
 import Main from '@/pages/signUp/components/Main';
 import { Provider } from 'mobx-react';
-import { SignUp } from '@/stores/signUp';
+import { SignUpStore } from '@/stores/signUp';
 import { theme } from '@/components/Theme';
 
-const store = new SignUp();
+const store = new SignUpStore();
 
 export default () => {
   return (

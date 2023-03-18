@@ -5,6 +5,15 @@ export default defineConfig({
         {path: '/', redirect: '/sign-in'},
         {path: '/sign-in', component: 'signIn'},
         {path: '/sign-up', component: 'signUp'},
+        {path: '/', component: 'layout',
+            routes: [
+                // {path: '/total', component: 'account'},
+                {path: '/bill', component: 'bill'},
+                {path: '/account', component: 'account'},
+                // {path: '/report', component: 'account'},
+                // {path: '/settings', component: 'settings'}
+            ]
+        },
     ],
     npmClient: 'yarn',
     proxy: {

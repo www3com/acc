@@ -2,8 +2,8 @@ import {makeAutoObservable} from "mobx";
 import {sha256} from "js-sha256";
 import {signUp} from "@/services/signUp";
 
-export class SignUp {
-    okVisible = false;
+export class SignUpStore {
+    visible = false;
 
     constructor() {
         makeAutoObservable(this)
@@ -14,7 +14,7 @@ export class SignUp {
         return await signUp(user)
     }
 
-    showOk(visible: boolean) {
-        this.okVisible = visible;
+    show(visible: boolean) {
+        this.visible = visible;
     }
 }
