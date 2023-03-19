@@ -1,7 +1,7 @@
 import request from '@/components/Request';
 
-export async function listAccount() {
-    return await request.get('/api/account');
+export async function listAccounts() {
+    return await request.get('/api/accounts');
 }
 
 export async function saveAccount(account: any) {

@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ListLedger(c *gin.Context) {
-	userId, err := context.GetUserId(c)
+func ListAccounts(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
 	if err != nil {
 		r.RenderFail(c, err)
 		return
 	}
-	token, err := ledgerService.List(userId)
-	r.Render(c, token, err)
+	accounts, err := accountService.List(ledgerId)
+	r.Render(c, accounts, err)
 }

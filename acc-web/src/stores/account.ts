@@ -1,43 +1,48 @@
-import { makeAutoObservable } from 'mobx';
+import {makeAutoObservable} from 'mobx';
 
-import { listAccount, saveAccount } from '@/services/account';
+import {listAccounts, saveAccount} from '@/services/account';
 
 
 interface AccountDO {
-  id?: number,
-  name?: string,
-  remark?: string,
-  parentId: number
+    id?: number,
+    name?: string,
+    remark?: string,
+    parentId: number
 }
 
 export class Account {
-  accounts: [] = [];
+    accountDetails = {
+        total: 0.00,
+        debt: 0.00,
+        netAmount: 0.00,
+        details: []
+    };
 
-  dialogProps = {
-    item: {},
-    open: false,
-  };
+    dialogProps = {
+        item: {},
+        open: false,
+    };
 
-  constructor() {
-    makeAutoObservable(this);
-  }
+    constructor() {
+        makeAutoObservable(this);
+    }
 
-  * list(): any {
-    const r = yield listAccount();
-    this.accounts = r.data;
-  }
+    * list(): any {
+        const r = yield listAccounts();
+        this.accountDetails = r.data;
+    }
 
-  showDialog(account: AccountDO) {
-    this.dialogProps = { open: true, item: account };
-  }
+    showDialog(account: AccountDO) {
+        this.dialogProps = {open: true, item: account};
+    }
 
-  closeDialog() {
-    this.dialogProps.open = false;
-  }
+    closeDialog() {
+        this.dialogProps.open = false;
+    }
 
-  * saveAccount(account: AccountDO) {
-    yield saveAccount(account);
-    this.closeDialog();
-  }
+    * saveAccount(account: AccountDO) {
+        yield saveAccount(account);
+        this.closeDialog();
+    }
 
 }

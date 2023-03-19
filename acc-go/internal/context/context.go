@@ -1,6 +1,7 @@
 package context
 
 import (
+	"acc/internal/model"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -10,14 +11,22 @@ const (
 	ledgerId     = "ledgerId"
 )
 
-func GetUserId(c *gin.Context) int64 {
+var ledgerDao = new(model.LedgerDao)
+
+func GetUserId(c *gin.Context) (int64, error) {
 	userId := c.GetHeader(headerUserId)
-	id, _ := strconv.ParseInt(userId, 10, 64)
-	return id
+	id, err := strconv.ParseInt(userId, 10, 64)
+	return id, err
 }
 
-func GetLedgerId(c *gin.Context) int64 {
-	ledgerId := c.Query(ledgerId)
-	id, _ := strconv.ParseInt(ledgerId, 10, 64)
-	return id
+func GetLedgerId(c *gin.Context) (int64, error) {
+	userId, err := GetUserId(c)
+	if err != nil {
+		return 0, err
+	}
+	ledger, err := ledgerDao.Default(userId)
+	if err != nil {
+		return 0, err
+	}
+	return ledger.ID, nil
 }

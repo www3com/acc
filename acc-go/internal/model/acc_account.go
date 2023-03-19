@@ -13,6 +13,7 @@ type Account struct {
 	LedgerId   int64           `json:"-"`
 	Type       int             `json:"-"`
 	Name       string          `json:"name"`
+	Code       string          `json:"code"`
 	Debit      decimal.Decimal `json:"debit"`
 	Credit     decimal.Decimal `json:"credit"`
 	Balance    decimal.Decimal `json:"balance"`
