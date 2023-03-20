@@ -29,10 +29,7 @@ func InitRouter() *gin.Engine {
 	root.GET("/ledger", api.ListLedger) // 查询账本
 
 	root.GET("/accounts", api.ListAccounts) // 查询账户列表
-
-	//accountApi := api.NewAccountApi()
-	//root.GET("/account", accountApi.List)
-	//root.POST("/account", accountApi.Create)
+	root.POST("/account", api.SaveAccount)  // 创建账户或者更新账户
 
 	// ------------------------------------------------------
 

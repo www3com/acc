@@ -12,12 +12,24 @@ import Dialog from '@/pages/account/component/Dialog';
 const root = ({store}: any) => {
 
     useEffect(() => {
-        store.list(4);
+        store.list();
     }, []);
 
+    const operatorClick = (type: string, record: any) => {
+        // debugger
+        if (type == '1') {
+            store.showDialog(record)
+        } else if (type == '2') {
+            store.showDialog(record)
+        } else if (type == '3') {
+            store.showDialog(record)
+        }
+    }
+
     const items = [
-        {key: '1', label: '删除账户'},
-        {key: '2', label: '调整余额'},
+        {key: '1', label: '编辑账户'},
+        {key: '2', label: '删除账户'},
+        {key: '3', label: '调整余额'},
     ];
 
     const columns: any = [
@@ -30,8 +42,8 @@ const root = ({store}: any) => {
             render: (_: any, record: any) =>
                 <Space>
                     <a onClick={() => store.showDialog({parentId: record.id})}>新建</a>
-                    <Dropdown menu={{items}}>
-                        <a>编辑 <DownOutlined/></a>
+                    <Dropdown menu={{items, onClick: e => operatorClick(e.key, record)}}>
+                        <a onClick={() => store.showDialog(record)}>更多<DownOutlined/></a>
                     </Dropdown>
                 </Space>,
         }];

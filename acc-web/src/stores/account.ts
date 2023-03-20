@@ -21,6 +21,7 @@ export class Account {
     dialogProps = {
         item: {},
         open: false,
+        loading: false,
     };
 
     constructor() {
@@ -33,7 +34,8 @@ export class Account {
     }
 
     showDialog(account: AccountDO) {
-        this.dialogProps = {open: true, item: account};
+        this.dialogProps = {...this.dialogProps, open: true, item: account};
+        console.log(account)
     }
 
     closeDialog() {
@@ -41,8 +43,14 @@ export class Account {
     }
 
     * saveAccount(account: AccountDO) {
-        yield saveAccount(account);
-        this.closeDialog();
+        try {
+            this.dialogProps.loading = true
+            yield saveAccount(account);
+            this.closeDialog();
+            this.list()
+        } finally {
+            this.dialogProps.loading = false
+        }
     }
 
 }

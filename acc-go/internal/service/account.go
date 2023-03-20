@@ -6,15 +6,74 @@ import (
 	"acc/internal/pkg/code"
 	"github.com/shopspring/decimal"
 	"github.com/upbos/go-saber/e"
+	"github.com/upbos/go-saber/log"
+	"time"
 )
 
-type AccountService struct{}
+type Account struct {
+	Id       int64  `json:"id"`
+	Name     string `json:"name" binding:"required"`
+	Remark   string `json:"remark"`
+	ParentId int64  `json:"parentId"`
+}
 
 type AccountDetails struct {
 	Total     decimal.Decimal  `json:"total"`
 	Debt      decimal.Decimal  `json:"debt"`
 	NetAmount decimal.Decimal  `json:"netAmount"`
 	Details   []*model.Account `json:"details"`
+}
+
+type AccountService struct{}
+
+func (s *AccountService) Create(ledgerId int64, account *Account) error {
+	parent, err := accountDao.Get(ledgerId, account.ParentId)
+	if err != nil {
+		log.Error(err, "get parent account")
+		return err
+	}
+
+	maxCode, err := accountDao.MaxCode(ledgerId, parent.Code, code.Level(parent.Code)+1)
+	if err != nil {
+		log.Error(err, "get account child max code")
+		return err
+	}
+
+	now := time.Now().UnixMicro()
+	nextCode, err := code.Next(maxCode)
+	if nextCode == "" {
+		nextCode = code.FirstChild(parent.Code)
+	}
+	if err != nil {
+		return err
+	}
+	dbAccount := model.Account{
+		CreateTime: now,
+		UpdateTime: now,
+		LedgerId:   ledgerId,
+		Type:       parent.Type,
+		Name:       account.Name,
+		Code:       nextCode,
+		Level:      code.Level(nextCode),
+		Icon:       parent.Icon,
+		CurrencyId: parent.CurrencyId,
+		Remark:     account.Remark,
+	}
+
+	return accountDao.Insert(&dbAccount)
+}
+
+func (s *AccountService) Update(ledgerId int64, account *Account) error {
+	now := time.Now().UnixMicro()
+	dbAccount := model.Account{
+		UpdateTime: now,
+		LedgerId:   ledgerId,
+		ID:         account.Id,
+		Name:       account.Name,
+		Remark:     account.Remark,
+	}
+
+	return accountDao.Update(&dbAccount)
 }
 
 func (s *AccountService) List(ledgerId int64) (*AccountDetails, error) {

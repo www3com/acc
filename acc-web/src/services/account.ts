@@ -5,8 +5,5 @@ export async function listAccounts() {
 }
 
 export async function saveAccount(account: any) {
-    // return await request.post('/api/account', {
-    //   ...account,
-    //   ledgerId: getCurrentLedger().id,
-    // });
+    return await request.post('/api/account', account);
 }
