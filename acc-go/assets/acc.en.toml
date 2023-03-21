@@ -11,3 +11,5 @@
 1003 = "Wrong account name or password"
 
 2001 = "No ledger template found"
+2002 = "Please delete sub accounts first."
+2003 = "Top level accounts cannot be deleted."

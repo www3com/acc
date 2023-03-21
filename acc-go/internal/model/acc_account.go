@@ -34,6 +34,14 @@ type max struct {
 
 type AccountDao struct{}
 
+// BatchInsert 批量插入账户
+func (d *AccountDao) BatchInsert(tx *gorm.DB, ledgerId, tLedgerId int64, now int64) (err error) {
+	sql := `insert into acc_account (ledger_id, type, name, code, level, debit, credit, balance, icon, currency_id, remark, create_time, update_time)
+			select  ?, type, name, code, level, 0, 0, 0, icon, currency_id, remark, ?, ? from tpl_account where ledger_id = ?`
+	return tx.Exec(sql, ledgerId, now, now, tLedgerId).Error
+}
+
+// Insert 插入账户
 func (d *AccountDao) Insert(account *Account) error {
 	return db.DB.Create(account).Error
 }
@@ -43,16 +51,20 @@ func (d *AccountDao) Update(account *Account) error {
 	return db.DB.Exec(sql, account.Name, account.Remark, account.UpdateTime, account.ID, account.LedgerId).Error
 }
 
-func (d *AccountDao) BatchInsert(tx *gorm.DB, ledgerId, tLedgerId int64, now int64) (err error) {
-	sql := `insert into acc_account (ledger_id, type, name, code, level, debit, credit, balance, icon, currency_id, remark, create_time, update_time)
-			select  ?, type, name, code, level, 0, 0, 0, icon, currency_id, remark, ?, ? from tpl_account where ledger_id = ?`
-	return tx.Exec(sql, ledgerId, now, now, tLedgerId).Error
+func (d *AccountDao) Delete(ledgerId int64, code string) error {
+	return db.DB.Where("ledger_id = ? and code like ? ", ledgerId, code).Delete(&Account{}).Error
 }
 
 func (d *AccountDao) Get(ledgerId, accountId int64) (*Account, error) {
 	var account Account
 	err := db.DB.Where("ledger_id = ? and id = ?", ledgerId, accountId).First(&account).Error
 	return &account, err
+}
+
+func (d *AccountDao) ChildCount(ledgerId int64, code string, level int) (int64, error) {
+	var count int64
+	err := db.DB.Model(&Account{}).Where("ledger_id = ? and code like ? and level = ?", ledgerId, code+"%", level).Count(&count).Error
+	return count, err
 }
 
 func (d *AccountDao) List(ledgerId int64) (accounts []*Account, err error) {

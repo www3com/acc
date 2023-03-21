@@ -2,21 +2,13 @@ package consts
 
 import "github.com/upbos/go-saber/e"
 
-const (
-	UserDisagreement      = 1000
-	UserDuplicateUsername = 1001
-	UserFreeze            = 1002
-	UserAuthFailed        = 1003
-
-	AccountNotRecord = 1010
-
-	ErrTemplateNotFound = 2001
+var (
+	ErrUserDisagreement      = e.New(1000)
+	ErrUserDuplicateUsername = e.New(1001)
+	ErrUserFreeze            = e.New(1002)
+	ErrUserAuthFailed        = e.New(1003)
+	ErrAccountNotRecord      = e.New(1010)
+	ErrTemplateNotFound      = e.New(2001)
+	ErrExistSubAccount       = e.New(2002)
+	ErrDeleteTopAccount      = e.New(2003)
 )
-
-var ErrUserDisagreement = e.New(UserDisagreement)
-
-var ErrUserDuplicateUsername = e.New(UserDuplicateUsername)
-
-var ErrUserFreeze = e.New(UserFreeze)
-
-var ErrUserAuthFailed = e.New(UserAuthFailed)

@@ -39,3 +39,21 @@ func SaveAccount(c *gin.Context) {
 	err = accountService.Create(ledgerId, &account)
 	r.Render(c, nil, err)
 }
+
+func DeleteAccount(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	var account service.DeleteAccount
+	if err := r.BindAndValid(c, &account); err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	account.LedgerId = ledgerId
+	err = accountService.Delete(&account)
+	r.Render(c, nil, err)
+}

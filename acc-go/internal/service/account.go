@@ -1,6 +1,7 @@
 package service
 
 import (
+	"acc/internal/consts"
 	acc "acc/internal/consts/account"
 	"acc/internal/model"
 	"acc/internal/pkg/code"
@@ -24,8 +25,14 @@ type AccountDetails struct {
 	Details   []*model.Account `json:"details"`
 }
 
+type DeleteAccount struct {
+	LedgerId int64
+	Code     string `form:"code"`
+}
+
 type AccountService struct{}
 
+// Create 创建账户
 func (s *AccountService) Create(ledgerId int64, account *Account) error {
 	parent, err := accountDao.Get(ledgerId, account.ParentId)
 	if err != nil {
@@ -63,6 +70,7 @@ func (s *AccountService) Create(ledgerId int64, account *Account) error {
 	return accountDao.Insert(&dbAccount)
 }
 
+// Update 更新账户
 func (s *AccountService) Update(ledgerId int64, account *Account) error {
 	now := time.Now().UnixMicro()
 	dbAccount := model.Account{
@@ -74,6 +82,22 @@ func (s *AccountService) Update(ledgerId int64, account *Account) error {
 	}
 
 	return accountDao.Update(&dbAccount)
+}
+
+func (s *AccountService) Delete(account *DeleteAccount) error {
+	level := code.Level(account.Code)
+	if level == 1 {
+		return consts.ErrDeleteTopAccount
+	}
+	count, err := accountDao.ChildCount(account.LedgerId, account.Code, level+1)
+	if err != nil {
+		return err
+	}
+	if count > 0 {
+		return consts.ErrExistSubAccount
+	}
+
+	return accountDao.Delete(account.LedgerId, account.Code)
 }
 
 func (s *AccountService) List(ledgerId int64) (*AccountDetails, error) {

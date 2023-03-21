@@ -1,6 +1,8 @@
 import {makeAutoObservable} from 'mobx';
 
-import {listAccounts, saveAccount} from '@/services/account';
+import {deleteAccount, listAccounts, saveAccount} from '@/services/account';
+import request, {OK} from "@/components/Request";
+import {notification} from "antd";
 
 
 interface AccountDO {
@@ -53,4 +55,14 @@ export class Account {
         }
     }
 
+    * deleteAccount(code: string): any {
+        let r = yield deleteAccount(code);
+        if (r.code == OK) {
+            this.list()
+            return
+        }
+        notification.warning({
+            message: r.message,
+        })
+    }
 }

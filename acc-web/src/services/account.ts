@@ -7,3 +7,7 @@ export async function listAccounts() {
 export async function saveAccount(account: any) {
     return await request.post('/api/account', account);
 }
+
+export async function deleteAccount(code: string) {
+    return await request.delete('/api/account', {code: code});
+}

@@ -1,14 +1,15 @@
 import React, {useEffect} from 'react';
-import {Card, Divider, Dropdown, message, Space, Statistic, Table} from 'antd';
+import {Card, Divider, Dropdown, message, Space, Statistic, Table, Modal} from 'antd';
 
 import {
-    DownOutlined,
+    DownOutlined, ExclamationCircleOutlined,
     PayCircleOutlined, RedEnvelopeOutlined,
     TransactionOutlined,
 } from '@ant-design/icons';
 import {inject, observer} from 'mobx-react';
 import Dialog from '@/pages/account/component/Dialog';
 
+const {confirm} = Modal;
 const root = ({store}: any) => {
 
     useEffect(() => {
@@ -20,7 +21,14 @@ const root = ({store}: any) => {
         if (type == '1') {
             store.showDialog(record)
         } else if (type == '2') {
-            store.showDialog(record)
+            confirm({
+                title: "确认删除",
+                icon: <ExclamationCircleOutlined/>,
+                content: '确认删除账户[' + record.name + ']吗？',
+                onOk: () => {
+                    store.deleteAccount(record.code)
+                }
+            })
         } else if (type == '3') {
             store.showDialog(record)
         }

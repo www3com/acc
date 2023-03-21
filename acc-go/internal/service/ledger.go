@@ -4,7 +4,6 @@ import (
 	"acc/internal/consts"
 	"acc/internal/model"
 	"errors"
-	"github.com/upbos/go-saber/e"
 	"github.com/upbos/go-saber/log"
 	"gorm.io/gorm"
 	"time"
@@ -21,7 +20,7 @@ type LedgerService struct{}
 func (s *LedgerService) New(tx *gorm.DB, tLedgerId int64, ownerId int64) error {
 	tLedger, err := tplLedgerDao.Get(tLedgerId)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return e.New(consts.ErrTemplateNotFound)
+		return consts.ErrTemplateNotFound
 	}
 	now := time.Now().UnixMilli()
 	ledger := model.Ledger{
