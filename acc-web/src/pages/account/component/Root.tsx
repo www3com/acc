@@ -1,69 +1,86 @@
 import React, {useEffect} from 'react';
-import {Card, Divider, Dropdown, message, Space, Statistic, Table, Modal} from 'antd';
+import {Card, Divider, Dropdown, message, Space, Statistic, Table, Modal, Tooltip} from 'antd';
 
 import {
-    DownOutlined, ExclamationCircleOutlined,
-    PayCircleOutlined, RedEnvelopeOutlined,
+    CloseOutlined, DeleteOutlined,
+    DownOutlined, ExclamationCircleOutlined, MinusOutlined,
+    PayCircleOutlined, PlusOutlined, RedEnvelopeOutlined,
     TransactionOutlined,
 } from '@ant-design/icons';
 import {inject, observer} from 'mobx-react';
 import Dialog from '@/pages/account/component/Dialog';
+import NamePopover from "@/pages/account/component/NamePopover";
+import BalancePopover from "@/pages/account/component/BalancePopover";
+import RemarkPopover from "@/pages/account/component/RemarkPopover";
 
 const {confirm} = Modal;
 const root = ({store}: any) => {
-
     useEffect(() => {
         store.list();
     }, []);
 
-    const operatorClick = (type: string, record: any) => {
-        // debugger
-        if (type == '1') {
-            store.showDialog(record)
-        } else if (type == '2') {
-            confirm({
-                title: "确认删除",
-                icon: <ExclamationCircleOutlined/>,
-                content: '确认删除账户[' + record.name + ']吗？',
-                onOk: () => {
-                    store.deleteAccount(record.code)
-                }
-            })
-        } else if (type == '3') {
-            store.showDialog(record)
-        }
+    const onDelete = (name: string, code: string) => {
+        confirm({
+            title: "确认删除",
+            icon: <ExclamationCircleOutlined/>,
+            content: '确认删除账户[' + name + ']吗？',
+            onOk: () => {
+                store.deleteAccount(code)
+            }
+        })
     }
 
-    const items = [
-        {key: '1', label: '编辑账户'},
-        {key: '2', label: '删除账户'},
-        {key: '3', label: '调整余额'},
-    ];
+    const renderDelete = (record: any) => {
+        if (record.level == 1) {
+            return <></>
+        }
+        return <a onClick={() => onDelete(record.name, record.code)}>
+            <Tooltip title='删除账户' placement='bottom'>
+                <DeleteOutlined />
+            </Tooltip>
+        </a>
+    }
 
     const columns: any = [
-        {title: '账户', dataIndex: 'name', key: 'name'},
-        {title: '流入', dataIndex: 'debit', key: 'debit', align: 'right', width: '20%'},
-        {title: '流出', dataIndex: 'credit', width: '20%', key: 'credit', align: 'right'},
-        {title: '余额', dataIndex: 'balance', width: '20%', key: 'balance', align: 'right'},
         {
-            title: '操作', dataIndex: 'operator', width: '250px', align: 'center',
+            title: '账户',
+            dataIndex: 'name',
+            width: '20%',
+            key: 'name',
+            render: (_: any, record: any) => {
+                return <NamePopover record={record}/>
+            }
+        }, {
+            title: '描述',
+            dataIndex: 'remark',
+            key: 'remark',
+            render: (_: any, record: any) => {
+                return <RemarkPopover record={record}/>
+            }
+        }, {
+            title: '余额',
+            dataIndex: 'balance',
+            width: '20%',
+            key: 'balance',
+            render: (_: any, record: any) => {
+                return <BalancePopover record={record}/>
+            }
+        },
+        {
+            title: '操作',
+            dataIndex: 'operator',
+            width: '100px',
+            align: 'center',
             render: (_: any, record: any) =>
-                <Space>
-                    <a onClick={() => store.showDialog({parentId: record.id})}>新建</a>
-                    <Dropdown menu={{items, onClick: e => operatorClick(e.key, record)}}>
-                        <a onClick={() => store.showDialog(record)}>更多<DownOutlined/></a>
-                    </Dropdown>
+                <Space style={{width: 20}}>
+                    <a onClick={() => store.showDialog({parentId: record.id})}>
+                        <Tooltip title='新建账户' placement='bottom'>
+                            <PlusOutlined/>
+                        </Tooltip>
+                    </a>
+                    {renderDelete(record)}
                 </Space>,
         }];
-
-    const addAccount = () => {
-        message.info('添加账户');
-    };
-
-    const deleteAccount = () => {
-        message.info('删除账户');
-    };
-
 
     return (
         <div style={{backgroundColor: 'white'}}>

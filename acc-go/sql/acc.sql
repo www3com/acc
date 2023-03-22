@@ -79,8 +79,6 @@ VALUES (1, 2, '负债账户', '1007', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 2, '应付款项', '1007.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '余额调整', '1008', 1, NULL, 1, NULL);
-INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 3, '职业收入', '1009', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 3, '工资', '1009.01', 2, NULL, 1, NULL);
@@ -110,8 +108,6 @@ INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, curren
 VALUES (1, 3, '中奖', '1010.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 3, '退税', '1010.06', 2, NULL, 1, NULL);
-INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '余额调整', '1011', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 4, '餐饮', '1012', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
@@ -252,7 +248,10 @@ INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, curren
 VALUES (1, 4, '宠物', '1021.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 4, '坏账', '1021.06', 2, NULL, 1, NULL);
-
+INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
+VALUES (1, 3, '余额调整', '9998', 1, NULL, 1, NULL);
+INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
+VALUES (1, 4, '余额调整', '9999', 1, NULL, 1, NULL);
 
 -- 项目
 create table tpl_project

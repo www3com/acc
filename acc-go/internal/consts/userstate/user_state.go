@@ -1,4 +1,4 @@
-package consts
+package userstate
 
 const (
 	UserStateNormal = 1
@@ -8,14 +8,14 @@ const (
 	UserStateClose = 3
 )
 
-func IsUserNormal(state int) bool {
+func IsNormal(state int) bool {
 	return UserStateNormal == state
 }
 
-func IsUserFreeze(state int) bool {
+func IsFreeze(state int) bool {
 	return UserStateFreeze == state
 }
 
-func IsUserClose(state int) bool {
+func IsClose(state int) bool {
 	return UserStateClose == state
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"acc/internal/consts"
+	"acc/internal/consts/userstate"
 	"acc/internal/model"
 	"errors"
 	"github.com/upbos/go-saber/db"
@@ -23,15 +24,15 @@ func (s *UserService) SignIn(username, password, ip string) (string, error) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return consts.Empty, consts.ErrUserAuthFailed
 		}
-		log.Errorf(err, "get user by username failed")
+		log.Errorf(err, "get userstate by username failed")
 		return consts.Empty, e.Err
 	}
 
-	if consts.IsUserFreeze(user.State) {
+	if userstate.IsFreeze(user.State) {
 		return consts.Empty, consts.ErrUserFreeze
 	}
 
-	if consts.IsUserClose(user.State) {
+	if userstate.IsClose(user.State) {
 		return consts.Empty, consts.ErrUserAuthFailed
 	}
 
@@ -64,7 +65,7 @@ func (s *UserService) SignUp(user *model.User) error {
 	})
 
 	if err != nil {
-		log.Error(err, "insert user")
+		log.Error(err, "insert userstate")
 		return e.Err
 	}
 

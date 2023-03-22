@@ -1,6 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 
-import {deleteAccount, listAccounts, saveAccount} from '@/services/account';
+import {deleteAccount, listAccounts, saveAccount, updateBalance, updateName, updateRemark} from '@/services/account';
 import request, {OK} from "@/components/Request";
 import {notification} from "antd";
 
@@ -63,6 +63,30 @@ export class Account {
         }
         notification.warning({
             message: r.message,
+        })
+    }
+
+    * updateName(id: number, name: string): any {
+        yield updateName(id, name);
+        yield this.list()
+        notification.warning({
+            message: '修改账户名称成功',
+        })
+    }
+
+    * updateRemark(id: number, remark: string): any {
+        yield updateRemark(id, remark);
+        yield this.list()
+        notification.warning({
+            message: '修改账户描述成功',
+        })
+    }
+
+    * updateBalance(id: number, amount: number): any {
+        yield updateBalance(id, amount);
+        yield this.list()
+        notification.warning({
+            message: '调整余额成功',
         })
     }
 }

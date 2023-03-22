@@ -30,6 +30,21 @@ type DeleteAccount struct {
 	Code     string `form:"code"`
 }
 
+type UpdateName struct {
+	Id   int64  `form:"id" binding:"required"`
+	Name string `form:"name" binding:"required"`
+}
+
+type UpdateRemark struct {
+	Id     int64  `form:"id" binding:"required"`
+	Remark string `form:"remark"`
+}
+
+type UpdateBalance struct {
+	Id     int64           `form:"id" binding:"required"`
+	Amount decimal.Decimal `form:"amount" binding:"required"`
+}
+
 type AccountService struct{}
 
 // Create 创建账户
@@ -98,6 +113,20 @@ func (s *AccountService) Delete(account *DeleteAccount) error {
 	}
 
 	return accountDao.Delete(account.LedgerId, account.Code)
+}
+
+func (s *AccountService) UpdateName(ledgerId int64, account *UpdateName) error {
+	now := time.Now().UnixMicro()
+	return accountDao.UpdateName(ledgerId, account.Id, account.Name, now)
+}
+
+func (s *AccountService) UpdateRemark(ledgerId int64, account *UpdateRemark) error {
+	now := time.Now().UnixMicro()
+	return accountDao.UpdateRemark(ledgerId, account.Id, account.Remark, now)
+}
+
+func (s *AccountService) UpdateBalance(ledgerId int64, account *UpdateBalance) error {
+	return nil
 }
 
 func (s *AccountService) List(ledgerId int64) (*AccountDetails, error) {

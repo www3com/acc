@@ -18,35 +18,84 @@ const main = ({store}: any) => {
 
     const dataSource = [
         {
-            key: '1',
-            name: '胡彦斌',
-            age: 32,
-            address: '西湖区湖底公园1号',
+            date: '2023-01-20',
+            type: '支出',
+            debitAccount: '吃饭',
+            creditAccount: "微信",
+            amount: '100.05',
         },
         {
-            key: '2',
-            name: '胡彦祖',
-            age: 42,
-            address: '西湖区湖底公园1号',
-        },
+            date: '2023-01-21',
+            type: '收入',
+            debitAccount: '工资',
+            creditAccount: "招行",
+            amount: '2104',
+        },{
+            date: '2023-01-25',
+            type: '转账',
+            debitAccount: '微信',
+            creditAccount: "招行",
+            amount: '150',
+        },{
+            date: '2023-02-25',
+            type: '借入',
+            debitAccount: '王冠军',
+            creditAccount: "招行",
+            amount: '200',
+        },{
+            date: '2023-02-28',
+            type: '借出',
+            debitAccount: '刘振涛',
+            creditAccount: "招行",
+            amount: '100',
+        },{
+            date: '2023-03-10',
+            type: '收债',
+            debitAccount: '许振涛',
+            creditAccount: "支付宝",
+            amount: '200',
+            remark: '因买车借钱'
+        },{
+            date: '2023-03-20',
+            type: '还债',
+            debitAccount: '小欧',
+            creditAccount: "招行",
+            amount: '400',
+        }
     ];
 
     const columns = [
         {
-            title: '姓名',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: '年龄',
-            dataIndex: 'age',
-            key: 'age',
-        },
-        {
-            title: '住址',
-            dataIndex: 'address',
-            key: 'address',
-        },
+            title: '日期',
+            dataIndex: 'date',
+            key: 'date',
+            width: '120px',
+        },{
+            title: '业务类型',
+            dataIndex: 'type',
+            key: 'type',
+            width: '80px',
+        }, {
+            title: '分类/账户',
+            dataIndex: 'debitAccount',
+            key: 'debitAccount',
+        }, {
+            title: '金额',
+            dataIndex: 'amount',
+            key: 'amount',
+        }, {
+            title: '账户',
+            dataIndex: 'creditAccount',
+            key: 'creditAccount',
+        }, {
+            title: '项目',
+            dataIndex: 'project',
+            key: 'project',
+        }, {
+            title: '备注',
+            dataIndex: 'remark',
+            key: 'remark',
+        }
     ];
 
     const treeData = [

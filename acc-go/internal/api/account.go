@@ -57,3 +57,54 @@ func DeleteAccount(c *gin.Context) {
 	err = accountService.Delete(&account)
 	r.Render(c, nil, err)
 }
+
+func UpdateName(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	var account service.UpdateName
+	if err := r.BindAndValid(c, &account); err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	err = accountService.UpdateName(ledgerId, &account)
+	r.Render(c, nil, err)
+}
+
+func UpdateRemark(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	var account service.UpdateRemark
+	if err := r.BindAndValid(c, &account); err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	err = accountService.UpdateRemark(ledgerId, &account)
+	r.Render(c, nil, err)
+}
+
+func UpdateBalance(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	var account service.UpdateBalance
+	if err := r.BindAndValid(c, &account); err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	err = accountService.UpdateBalance(ledgerId, &account)
+	r.Render(c, nil, err)
+}

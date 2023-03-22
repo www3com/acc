@@ -61,6 +61,16 @@ func (d *AccountDao) Get(ledgerId, accountId int64) (*Account, error) {
 	return &account, err
 }
 
+func (d *AccountDao) UpdateName(ledgerId int64, id int64, name string, updateTime int64) error {
+	sql := "update acc_account set name = ?,  update_time = ? where id = ? and ledger_id = ?"
+	return db.DB.Exec(sql, name, updateTime, id, ledgerId).Error
+}
+
+func (d *AccountDao) UpdateRemark(ledgerId int64, id int64, remark string, updateTime int64) error {
+	sql := "update acc_account set remark = ?,  update_time = ? where id = ? and ledger_id = ?"
+	return db.DB.Exec(sql, remark, updateTime, id, ledgerId).Error
+}
+
 func (d *AccountDao) ChildCount(ledgerId int64, code string, level int) (int64, error) {
 	var count int64
 	err := db.DB.Model(&Account{}).Where("ledger_id = ? and code like ? and level = ?", ledgerId, code+"%", level).Count(&count).Error

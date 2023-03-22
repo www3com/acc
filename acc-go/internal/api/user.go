@@ -2,6 +2,7 @@ package api
 
 import (
 	"acc/internal/consts"
+	user2 "acc/internal/consts/userstate"
 	"acc/internal/model"
 	"acc/internal/pkg/r"
 	"github.com/gin-gonic/gin"
@@ -47,7 +48,7 @@ func SignUp(c *gin.Context) {
 		Nickname:  p.Nickname,
 		Username:  p.Username,
 		Password:  p.Password,
-		State:     consts.UserStateNormal,
+		State:     user2.UserStateNormal,
 		Agreement: 1,
 	}
 

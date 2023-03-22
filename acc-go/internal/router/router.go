@@ -20,32 +20,24 @@ func InitRouter() *gin.Engine {
 	// 静态资源
 	engine.StaticFS("/web", http.Dir("./web"))
 
+	// 注册和登录
 	engine.GET("api/sign-in", api.SignIn)  // 登录
 	engine.POST("api/sign-up", api.SignUp) // 注册
 
+	// 权限校验
 	root := engine.Group("/api")
 	root.Use(middleware.Auth())
 
+	// 账本
 	root.GET("/ledger", api.ListLedger) // 查询账本
 
-	root.GET("/accounts", api.ListAccounts)    // 查询账户列表
-	root.POST("/account", api.SaveAccount)     // 创建账户或者更新账户
-	root.DELETE("/account", api.DeleteAccount) // 删除账户
-
-	// ------------------------------------------------------
-
-	//root.GET("/account/expenses", accountApi.ListExpenses)
-	//
-	//// 查询账本
-	//root.GET("/ledger", api.ListLedger)
-	//// 创建账本
-	//root.POST("/ledger", api.CreateLedger)
-	//// 更新账本
-	//root.PUT("/ledger", api.UpdateLedger)
-	//// 删除账本
-	//root.DELETE("/ledger", api.DeleteLedger)
-	//
-	//root.POST("/transaction", api.CreateTransaction)
+	// 账户
+	root.GET("/accounts", api.ListAccounts)         // 查询账户列表
+	root.POST("/account", api.SaveAccount)          // 创建账户或者更新账户
+	root.DELETE("/account", api.DeleteAccount)      // 删除账户
+	root.PUT("/account/name", api.UpdateName)       // 调整账户名称
+	root.PUT("/account/remark", api.UpdateRemark)   // 调整账户描述
+	root.PUT("/account/balance", api.UpdateBalance) // 调整账户余额
 
 	return engine
 }
