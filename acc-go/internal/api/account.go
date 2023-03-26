@@ -17,6 +17,26 @@ func ListAccounts(c *gin.Context) {
 	r.Render(c, accounts, err)
 }
 
+func ListIncomes(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+	accounts, err := accountService.ListIncomes(ledgerId)
+	r.Render(c, accounts, err)
+}
+
+func ListExpenses(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+	accounts, err := accountService.ListExpenses(ledgerId)
+	r.Render(c, accounts, err)
+}
+
 func SaveAccount(c *gin.Context) {
 	var account service.Account
 	if err := r.BindAndValid(c, &account); err != nil {

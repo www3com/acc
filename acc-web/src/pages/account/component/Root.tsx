@@ -4,7 +4,7 @@ import {Card, Divider, Dropdown, message, Space, Statistic, Table, Modal, Toolti
 import {
     CloseOutlined, DeleteOutlined,
     DownOutlined, ExclamationCircleOutlined, MinusOutlined,
-    PayCircleOutlined, PlusOutlined, RedEnvelopeOutlined,
+    PayCircleOutlined, PlusCircleOutlined, PlusOutlined, RedEnvelopeOutlined,
     TransactionOutlined,
 } from '@ant-design/icons';
 import {inject, observer} from 'mobx-react';
@@ -36,7 +36,7 @@ const root = ({store}: any) => {
         }
         return <a onClick={() => onDelete(record.name, record.code)}>
             <Tooltip title='删除账户' placement='bottom'>
-                <DeleteOutlined />
+                <DeleteOutlined/>
             </Tooltip>
         </a>
     }
@@ -75,7 +75,7 @@ const root = ({store}: any) => {
                 <Space style={{width: 20}}>
                     <a onClick={() => store.showDialog({parentId: record.id})}>
                         <Tooltip title='新建账户' placement='bottom'>
-                            <PlusOutlined/>
+                            <PlusCircleOutlined/>
                         </Tooltip>
                     </a>
                     {renderDelete(record)}

@@ -33,11 +33,22 @@ func InitRouter() *gin.Engine {
 
 	// 账户
 	root.GET("/accounts", api.ListAccounts)         // 查询账户列表
+	root.GET("/account/incomes", api.ListIncomes)   //  查询收入科目
+	root.GET("/account/expenses", api.ListExpenses) // 查询支出科目
 	root.POST("/account", api.SaveAccount)          // 创建账户或者更新账户
 	root.DELETE("/account", api.DeleteAccount)      // 删除账户
 	root.PUT("/account/name", api.UpdateName)       // 调整账户名称
 	root.PUT("/account/remark", api.UpdateRemark)   // 调整账户描述
 	root.PUT("/account/balance", api.UpdateBalance) // 调整账户余额
+
+	// 成员
+	root.GET("/members", api.ListMembers) // 查询成员列表
+
+	// 项目
+	root.GET("/projects", api.ListProjects) // 查询项目列表
+
+	// 供应商
+	root.GET("/suppliers", api.ListSupplier) // 查询供应商列表
 
 	return engine
 }

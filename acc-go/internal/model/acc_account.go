@@ -34,6 +34,11 @@ type max struct {
 
 type AccountDao struct{}
 
+// Insert 插入账户
+func (d *AccountDao) Insert(account *Account) error {
+	return db.DB.Create(account).Error
+}
+
 // BatchInsert 批量插入账户
 func (d *AccountDao) BatchInsert(tx *gorm.DB, ledgerId, tLedgerId int64, now int64) (err error) {
 	sql := `insert into acc_account (ledger_id, type, name, code, level, debit, credit, balance, icon, currency_id, remark, create_time, update_time)
@@ -41,24 +46,9 @@ func (d *AccountDao) BatchInsert(tx *gorm.DB, ledgerId, tLedgerId int64, now int
 	return tx.Exec(sql, ledgerId, now, now, tLedgerId).Error
 }
 
-// Insert 插入账户
-func (d *AccountDao) Insert(account *Account) error {
-	return db.DB.Create(account).Error
-}
-
 func (d *AccountDao) Update(account *Account) error {
 	sql := "update acc_account set name = ?, remark = ?, update_time = ? where id = ? and ledger_id = ?"
 	return db.DB.Exec(sql, account.Name, account.Remark, account.UpdateTime, account.ID, account.LedgerId).Error
-}
-
-func (d *AccountDao) Delete(ledgerId int64, code string) error {
-	return db.DB.Where("ledger_id = ? and code like ? ", ledgerId, code).Delete(&Account{}).Error
-}
-
-func (d *AccountDao) Get(ledgerId, accountId int64) (*Account, error) {
-	var account Account
-	err := db.DB.Where("ledger_id = ? and id = ?", ledgerId, accountId).First(&account).Error
-	return &account, err
 }
 
 func (d *AccountDao) UpdateName(ledgerId int64, id int64, name string, updateTime int64) error {
@@ -71,18 +61,32 @@ func (d *AccountDao) UpdateRemark(ledgerId int64, id int64, remark string, updat
 	return db.DB.Exec(sql, remark, updateTime, id, ledgerId).Error
 }
 
+func (d *AccountDao) Delete(ledgerId int64, code string) error {
+	return db.DB.Where("ledger_id = ? and code like ? ", ledgerId, code).Delete(&Account{}).Error
+}
+
+func (d *AccountDao) Get(ledgerId, accountId int64) (*Account, error) {
+	var account Account
+	err := db.DB.Where("ledger_id = ? and id = ?", ledgerId, accountId).First(&account).Error
+	return &account, err
+}
+
 func (d *AccountDao) ChildCount(ledgerId int64, code string, level int) (int64, error) {
 	var count int64
 	err := db.DB.Model(&Account{}).Where("ledger_id = ? and code like ? and level = ?", ledgerId, code+"%", level).Count(&count).Error
 	return count, err
 }
 
-func (d *AccountDao) List(ledgerId int64) (accounts []*Account, err error) {
-	err = db.DB.Model(Account{}).Where("ledger_id = ? and type in (1,2)", ledgerId).Order("id asc").Find(&accounts).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, err
-	}
-	return accounts, nil
+func (d *AccountDao) List(ledgerId int64) ([]*Account, error) {
+	var accounts []*Account
+	err := db.DB.Where("ledger_id = ?", ledgerId).Find(&accounts).Error
+	return accounts, err
+}
+
+func (d *AccountDao) ListByTypes(ledgerId int64, types ...int) ([]*Account, error) {
+	var accounts []*Account
+	err := db.DB.Where("ledger_id = ? and type in ?", ledgerId, types).Order("id asc").Find(&accounts).Error
+	return accounts, err
 }
 
 func (d *AccountDao) MaxCode(ledgerId int64, code string, childLevel int) (string, error) {

@@ -131,7 +131,7 @@ func (s *AccountService) UpdateBalance(ledgerId int64, account *UpdateBalance) e
 
 func (s *AccountService) List(ledgerId int64) (*AccountDetails, error) {
 
-	accounts, err := accountDao.List(ledgerId)
+	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeAsset, acc.TypeReceivables, acc.TypeDebt)
 	if err != nil {
 		return nil, e.Wrap("Query account error", err)
 	}
@@ -169,6 +169,16 @@ func (s *AccountService) List(ledgerId int64) (*AccountDetails, error) {
 	}
 	accountDetails.NetAmount = accountDetails.Total.Sub(accountDetails.Debt)
 	return accountDetails, nil
+}
+
+// ListIncomes 查询收入账户
+func (s *AccountService) ListIncomes(ledgerId int64) ([]*model.Account, error) {
+	return accountDao.ListByTypes(ledgerId, acc.TypeIncome)
+}
+
+// ListExpenses 查询支出账户
+func (s *AccountService) ListExpenses(ledgerId int64) ([]*model.Account, error) {
+	return accountDao.ListByTypes(ledgerId, acc.TypeExpenses)
 }
 
 func calc(accountDetails *AccountDetails, account *model.Account) {

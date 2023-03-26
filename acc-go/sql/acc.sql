@@ -63,195 +63,195 @@ VALUES (1, 1, '公交卡', '1003.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 1, '饭卡', '1003.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 1, '债权账户', '1004', 1, NULL, 1, NULL);
+VALUES (1, 2, '债权账户', '1004', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 1, '应收款项', '1004.01', 2, NULL, 1, NULL);
+VALUES (1, 2, '应收款项', '1004.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 1, '公司报销', '1004.02', 2, NULL, 1, NULL);
+VALUES (1, 2, '公司报销', '1004.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 1, '投资账户', '1005', 1, NULL, 1, NULL);
+VALUES (1, 2, '投资账户', '1005', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 2, '信用账户', '1006', 1, NULL, 1, NULL);
+VALUES (1, 3, '信用账户', '1006', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 2, '信用卡', '1006.01', 2, NULL, 1, NULL);
+VALUES (1, 3, '信用卡', '1006.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 2, '负债账户', '1007', 1, NULL, 1, NULL);
+VALUES (1, 3, '负债账户', '1007', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 2, '应付款项', '1007.01', 2, NULL, 1, NULL);
+VALUES (1, 3, '应付款项', '1007.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '职业收入', '1009', 1, NULL, 1, NULL);
+VALUES (1, 5, '职业收入', '1009', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '工资', '1009.01', 2, NULL, 1, NULL);
+VALUES (1, 5, '工资', '1009.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '经营', '1009.02', 2, NULL, 1, NULL);
+VALUES (1, 5, '经营', '1009.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '利息', '1009.03', 2, NULL, 1, NULL);
+VALUES (1, 5, '利息', '1009.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '兼职', '1009.04', 2, NULL, 1, NULL);
+VALUES (1, 5, '兼职', '1009.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '投资', '1009.05', 2, NULL, 1, NULL);
+VALUES (1, 5, '投资', '1009.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '奖金', '1009.06', 2, NULL, 1, NULL);
+VALUES (1, 5, '奖金', '1009.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '加班', '1009.07', 2, NULL, 1, NULL);
+VALUES (1, 5, '加班', '1009.07', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '其他收入', '1010', 1, NULL, 1, NULL);
+VALUES (1, 5, '其他收入', '1010', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '礼金', '1010.01', 2, NULL, 1, NULL);
+VALUES (1, 5, '礼金', '1010.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '抢红包', '1010.02', 2, NULL, 1, NULL);
+VALUES (1, 5, '抢红包', '1010.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '意外来钱', '1010.03', 2, NULL, 1, NULL);
+VALUES (1, 5, '意外来钱', '1010.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '家里给钱', '1010.04', 2, NULL, 1, NULL);
+VALUES (1, 5, '家里给钱', '1010.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '中奖', '1010.05', 2, NULL, 1, NULL);
+VALUES (1, 5, '中奖', '1010.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '退税', '1010.06', 2, NULL, 1, NULL);
+VALUES (1, 5, '退税', '1010.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '餐饮', '1012', 1, NULL, 1, NULL);
+VALUES (1, 6, '餐饮', '1012', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '三餐', '1012.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '三餐', '1012.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '早餐', '1012.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '早餐', '1012.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '中餐', '1012.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '中餐', '1012.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '晚餐', '1012.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '晚餐', '1012.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '买菜', '1012.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '买菜', '1012.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '水果', '1012.06', 2, NULL, 1, NULL);
+VALUES (1, 6, '水果', '1012.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '零食', '1012.07', 2, NULL, 1, NULL);
+VALUES (1, 6, '零食', '1012.07', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '加餐', '1012.08', 2, NULL, 1, NULL);
+VALUES (1, 6, '加餐', '1012.08', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '下午茶', '1012.09', 2, NULL, 1, NULL);
+VALUES (1, 6, '下午茶', '1012.09', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '烟酒饮品', '1012.10', 2, NULL, 1, NULL);
+VALUES (1, 6, '烟酒饮品', '1012.10', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '粮油调料', '1012.11', 2, NULL, 1, NULL);
+VALUES (1, 6, '粮油调料', '1012.11', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '交通', '1013', 1, NULL, 1, NULL);
+VALUES (1, 6, '交通', '1013', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '公交地铁', '1013.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '公交地铁', '1013.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '打车', '1013.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '打车', '1013.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '私家车', '1013.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '私家车', '1013.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '飞机火车', '1013.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '飞机火车', '1013.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '共享单车', '1013.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '共享单车', '1013.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '购物', '1014', 1, NULL, 1, NULL);
+VALUES (1, 6, '购物', '1014', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '日用品', '1014.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '日用品', '1014.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '衣帽鞋包', '1014.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '衣帽鞋包', '1014.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '护肤美妆', '1014.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '护肤美妆', '1014.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '饰品', '1014.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '饰品', '1014.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '数码', '1014.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '数码', '1014.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '电器', '1014.06', 2, NULL, 1, NULL);
+VALUES (1, 6, '电器', '1014.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '家装', '1014.07', 2, NULL, 1, NULL);
+VALUES (1, 6, '家装', '1014.07', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '居家', '1015', 1, NULL, 1, NULL);
+VALUES (1, 6, '居家', '1015', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '水电煤', '1015.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '水电煤', '1015.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '话费', '1015.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '话费', '1015.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '网费', '1015.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '网费', '1015.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '房租', '1015.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '房租', '1015.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '物业', '1015.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '物业', '1015.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '维修', '1015.06', 2, NULL, 1, NULL);
+VALUES (1, 6, '维修', '1015.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '人情', '1016', 1, NULL, 1, NULL);
+VALUES (1, 6, '人情', '1016', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '送礼', '1016.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '送礼', '1016.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '请客', '1016.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '请客', '1016.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '孝心', '1016.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '孝心', '1016.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '亲密付', '1016.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '亲密付', '1016.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '发红包', '1016.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '发红包', '1016.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '借出', '1016.06', 2, NULL, 1, NULL);
+VALUES (1, 6, '借出', '1016.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '还钱', '1016.07', 2, NULL, 1, NULL);
+VALUES (1, 6, '还钱', '1016.07', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '医疗', '1017', 1, NULL, 1, NULL);
+VALUES (1, 6, '医疗', '1017', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '药品', '1017.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '药品', '1017.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '保健', '1017.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '保健', '1017.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '治疗', '1017.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '治疗', '1017.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '美容', '1017.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '美容', '1017.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '娱乐', '1018', 1, NULL, 1, NULL);
+VALUES (1, 6, '娱乐', '1018', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '休闲', '1018.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '休闲', '1018.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '约会', '1018.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '约会', '1018.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '聚会', '1018.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '聚会', '1018.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '游戏', '1018.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '游戏', '1018.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '健身', '1018.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '健身', '1018.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '学习', '1019', 1, NULL, 1, NULL);
+VALUES (1, 6, '学习', '1019', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '书籍', '1019.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '书籍', '1019.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '培训', '1019.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '培训', '1019.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '网课', '1019.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '网课', '1019.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '金融', '1020', 1, NULL, 1, NULL);
+VALUES (1, 6, '金融', '1020', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '房贷', '1020.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '房贷', '1020.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '车贷', '1020.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '车贷', '1020.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '购物分期', '1020.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '购物分期', '1020.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '手续费', '1020.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '手续费', '1020.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '保险', '1020.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '保险', '1020.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '养卡', '1020.06', 2, NULL, 1, NULL);
+VALUES (1, 6, '养卡', '1020.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '其他', '1021', 1, NULL, 1, NULL);
+VALUES (1, 6, '其他', '1021', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '旅游', '1021.01', 2, NULL, 1, NULL);
+VALUES (1, 6, '旅游', '1021.01', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '装修', '1021.02', 2, NULL, 1, NULL);
+VALUES (1, 6, '装修', '1021.02', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '宝宝', '1021.03', 2, NULL, 1, NULL);
+VALUES (1, 6, '宝宝', '1021.03', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '生意', '1021.04', 2, NULL, 1, NULL);
+VALUES (1, 6, '生意', '1021.04', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '宠物', '1021.05', 2, NULL, 1, NULL);
+VALUES (1, 6, '宠物', '1021.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '坏账', '1021.06', 2, NULL, 1, NULL);
+VALUES (1, 6, '坏账', '1021.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 3, '余额调整', '9998', 1, NULL, 1, NULL);
+VALUES (1, 4, '余额调整', '9998', 1, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '余额调整', '9999', 1, NULL, 1, NULL);
+VALUES (1, 6, '余额调整', '9999', 1, NULL, 1, NULL);
 
 -- 项目
 create table tpl_project
@@ -263,6 +263,8 @@ create table tpl_project
     create_time bigint      not null,
     CONSTRAINT pk_tpl_project PRIMARY KEY (id)
 );
+alter table tpl_project
+    owner to acc;
 
 INSERT INTO public.tpl_project (id, ledger_id, name, remark, create_time)
 VALUES (1, 1, '过年', '', 1650986269537);
@@ -284,6 +286,8 @@ create table tpl_member
     create_time bigint      not null,
     CONSTRAINT pk_tpl_member PRIMARY KEY (id)
 );
+alter table tpl_member
+    owner to acc;
 
 INSERT INTO public.tpl_member (id, ledger_id, name, remark, create_time)
 VALUES (1, 1, '本人', '', 1650986269537);
@@ -307,6 +311,9 @@ create table tpl_supplier
     create_time bigint      not null,
     CONSTRAINT pk_tpl_supplier PRIMARY KEY (id)
 );
+
+alter table tpl_supplier
+    owner to acc;
 
 INSERT INTO public.tpl_supplier (id, ledger_id, name, remark, create_time)
 VALUES (1, 1, '餐厅', '', 1650986269537);
@@ -422,21 +429,22 @@ create index idx_acc_supplier_ledger_id on acc_supplier (ledger_id);
 alter table acc_supplier
     owner to acc;
 
-
 -- 交易
 create table acc_transaction
 (
-    id                bigserial      not null,
-    ledger_id         bigint         not null,
-    type              smallint       not null,
-    debit_account_id  bigint         not null,
-    credit_account_id bigint         not null,
-    amount            decimal(18, 2) not null,
-    remark            varchar(200),
-    project_id        bigint         not null,
-    is_show           smallint       not null,
-    create_time       bigint         not null,
-    update_time       bigint         not null,
+    id            bigserial      not null,
+    trading_time  bigint         not null,
+    ledger_id     bigint         not null,
+    type          smallint       not null,
+    account_id    bigint         not null,
+    cp_account_id bigint         not null,
+    amount        decimal(18, 2) not null,
+    remark        varchar(200),
+    project_id    bigint         not null,
+    member_id     bigint         not null,
+    supplier_id   bigint         not null,
+    user_id       bigint         not null,
+    create_time   bigint         not null,
     CONSTRAINT pk_acc_transaction PRIMARY KEY (id)
 );
 

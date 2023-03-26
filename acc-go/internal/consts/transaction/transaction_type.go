@@ -1,31 +1,34 @@
-package account
+package transaction
 
 const (
-
-	// TypeInit 初始账户
-	TypeInit = 1
-
-	// TypeBalance 余额调整
-	TypeBalance = 2
+	// TypeExpenses 支出
+	TypeExpenses = 1
 
 	// TypeIncome 收入
-	TypeIncome = 3
-
-	// TypeExpenses 支出
-	TypeExpenses = 4
+	TypeIncome = 2
 
 	// TypeLend 借出
-	TypeLend = 5
+	TypeLend = 3
 
 	// TypeBorrow 借入
-	TypeBorrow = 6
+	TypeBorrow = 4
 
 	// TypeDebtIn 收债
-	TypeDebtIn = 7
+	TypeDebtIn = 5
 
 	// TypeDebtOut 还债
-	TypeDebtOut = 8
+	TypeDebtOut = 6
 
 	// TypeTransfer 转账
-	TypeTransfer = 9
+	TypeTransfer = 7
 )
+
+var Mapper = map[int]string{
+	TypeExpenses: "支出",
+	TypeIncome:   "收入",
+	TypeLend:     "借出",
+	TypeBorrow:   "借入",
+	TypeDebtIn:   "收债",
+	TypeDebtOut:  "还债",
+	TypeTransfer: "转账",
+}
