@@ -1,159 +1,189 @@
-import {Button, Dropdown, Space, Tabs, TreeSelect} from 'antd';
+import {
+    Calendar,
+    Col,
+    Row,
+    Space,
+    Tree,
+} from 'antd';
 
-import Expenses from "@/pages/bill/component/Expenses";
-import React from "react";
-import {LightFilter, ProFormFieldSet, ProFormSelect, ProFormText, ProFormTreeSelect} from "@ant-design/pro-components";
-import {FilterOutlined} from "@ant-design/icons";
+import React, {Key, useState} from "react";
+import {
+    ArrowRightOutlined,
+    ClearOutlined,
+} from "@ant-design/icons";
+import SearchDisplay from "@/pages/bill/component/SearchDisplay";
+import SearchItem from "@/pages/bill/component/SearchItem";
+import {inject, observer} from "mobx-react";
+import dayjs, {Dayjs} from "dayjs";
 
-export default () => {
-    const treeData = [
-        {
-            title: 'Node1',
-            value: '0-0',
-            key: '0-0',
-            children: [
-                {
-                    title: 'Child Node1',
-                    value: '0-0-0',
-                    key: '0-0-0',
-                },
-            ],
-        },
-        {
-            title: 'Node2',
-            value: '0-1',
-            key: '0-1',
-            children: [
-                {
-                    title: 'Child Node3',
-                    value: '0-1-0',
-                    key: '0-1-0',
-                },
-                {
-                    title: 'Child Node4',
-                    value: '0-1-1',
-                    key: '0-1-1',
-                },
-                {
-                    title: 'Child Node5',
-                    value: '0-1-2',
-                    key: '0-1-2',
-                },
-                {
-                    title: 'Child Node6',
-                    value: '0-1-3',
-                    key: '0-1-3',
-                },
-                {
-                    title: 'Child Node7',
-                    value: '0-1-4',
-                    key: '0-1-4',
-                },
-                {
-                    title: 'Child Node8',
-                    value: '0-1-5',
-                    key: '0-1-5',
-                },
-                {
-                    title: 'Child Node9',
-                    value: '0-1-6',
-                    key: '0-1-6',
-                },
-                {
-                    title: 'Child Node10',
-                    value: '0-1-7',
-                    key: '0-1-7',
-                },
-                {
-                    title: 'Child Node11',
-                    value: '0-1-8',
-                    key: '0-1-8',
-                },
-                {
-                    title: 'Child Node12',
-                    value: '0-1-9',
-                    key: '0-1-9',
-                },
-                {
-                    title: 'Child Node13',
-                    value: '0-1-10',
-                    key: '0-1-10',
-                },
-            ],
-        },
-    ];
+const search = ({store}: any) => {
 
-    return <Space>
-        <LightFilter size={"middle"}  collapseLabel={<FilterOutlined/>}>
-            <ProFormTreeSelect
-                name="category"
-                label="分类"
-                request={async () => treeData}
-                fieldProps={{
-                    fieldNames: {
-                        label: 'title',
-                    },
-                    treeCheckable: true,
-                    showCheckedStrategy: TreeSelect.SHOW_PARENT,
-                    placeholder: 'Please select',
-                }}
-            />
-            <ProFormTreeSelect
-                name="account"
-                label="账户"
-                request={async () => treeData}
-                fieldProps={{
-                    fieldNames: {
-                        label: 'title',
-                    },
-                    treeCheckable: true,
-                    showCheckedStrategy: TreeSelect.SHOW_PARENT,
-                    placeholder: 'Please select',
-                }}
-            />
-            <ProFormSelect
-                name="project"
-                label='项目'
-                valueEnum={{
-                    man: '男',
-                    woman: '女',
-                }}
-                placeholder="性别"
-            />
-            <ProFormSelect
-                name="member"
-                label='成员'
-                valueEnum={{
-                    man: '男',
-                    woman: '女',
-                }}
-                placeholder="性别"
-            />
-            <ProFormSelect
-                name="supplier"
-                label='商家'
-                valueEnum={{
-                    man: '男',
-                    woman: '女',
-                }}
-                placeholder="性别"
-            />
+    // const [startDate, setStartDate] = useState<Dayjs>(dayjs())
+    // const [endDate, setEndDate] = useState<Dayjs>(dayjs())
+    const [dateName, setDateName] = useState<string>('')
+
+    // const [accounts, setAccounts] = useState<any[]>([])
+    const [accountNames, setAccountNames] = useState<string[]>([])
+
+    // const [cpAccounts, setCpAccounts] = useState<any[]>([])
+    const [cpAccountNames, setCpAccountNames] = useState<string[]>([])
+
+    // const [projects, setProjects] = useState<any[]>([])
+    const [projectNames, setProjectNames] = useState<string[]>([])
+
+    // const [members, setMembers] = useState<any[]>([])
+    const [memberNames, setMemberNames] = useState<string[]>([])
+
+    // const [suppliers, setSuppliers] = useState<any[]>([])
+    const [supplierNames, setSupplierNames] = useState<string[]>([])
 
 
-            <ProFormFieldSet name='aaaa' label='日期'>
-                {/*<RangePicker*/}
-                {/*    format='YYYY-MM-DD'*/}
-                {/*    ranges={{*/}
-                {/*        '本周': [moment().startOf('week'), moment()],*/}
-                {/*        '本月': [moment().startOf('month'), moment()],*/}
-                {/*        '本季': [moment().startOf('quarter'), moment()],*/}
-                {/*        '本年': [moment().startOf('year'), moment()],*/}
-                {/*    }}*/}
-                {/*/>*/}
-            </ProFormFieldSet>
-            <ProFormText name='remark' label='备注'/>
-        </LightFilter>
-        <Button>重置</Button>
-    </Space>;
+    const translate = (nodes: any[]) => {
+        let keys: string[] = [];
+        for (const node of nodes) {
+            if (node.name != "") {
+                keys.push(node.name)
+            }
+        }
+        return keys;
+    }
+
+    const onSelectDate = () => {
+        if (store.params.startDate == null) {
+            store.params.startDate = dayjs()
+        }
+        if (store.params.endDate == null) {
+            store.params.endDate = dayjs()
+        }
+        return setDateName(store.params.startDate.format('YYYY-MM-DD') + " 至 " + store.params.endDate.format('YYYY-MM-DD'))
+    }
+
+    const onSelect = (label: string, nodes: any[]) => {
+        switch (label) {
+            case 'account':
+                store.params.accounts = nodes;
+                break;
+            case 'cpAccount':
+                store.params.cpAccounts = nodes;
+                // setCpAccounts(nodes);
+                break;
+            case 'project':
+                store.params.projects = nodes;
+                // setProjects(nodes);
+                break;
+            case 'member':
+                store.params.members = nodes;
+                // setMembers(nodes);
+                break;
+            case 'supplier':
+                store.params.suppliers = nodes;
+            // setSuppliers(nodes);
+        }
+
+    }
+
+    const onClose = (label: string) => {
+        switch (label) {
+            case 'date':
+                store.params.startDate = dayjs();
+                store.params.endDate = dayjs();
+                // setStartDate(dayjs())
+                // setEndDate(dayjs())
+                setDateName('')
+                return;
+            case 'account':
+                // setAccounts([]);
+                setAccountNames([]);
+                store.params.accounts = [];
+                return;
+            case 'cpAccount':
+                // setCpAccounts([]);
+                store.params.cpAccounts = [];
+                setCpAccountNames([]);
+                return;
+            case 'project':
+                // setProjects([]);
+                store.params.projects = []
+                setProjectNames([]);
+                return;
+            case 'member':
+                // setMembers([]);
+                store.params.members = [];
+                setMemberNames([]);
+                return;
+            case 'supplier':
+                // setSuppliers([]);
+                store.params.suppliers = [];
+                setSupplierNames([]);
+        }
+    }
+
+    const onCloseAll = () => {
+        onClose('date')
+        onClose('account')
+        onClose('cpAccount')
+        onClose('project')
+        onClose('member')
+        onClose('supplier')
+    }
+
+    return <div>
+        <Row wrap={false} align='middle'>
+            <Col flex="auto">
+                <Space>
+                    <SearchItem title='选择时间' onOk={() => onSelectDate()}>
+                        <Space>
+                            <Calendar fullscreen={false} value={store.params.startDate}
+                                      onSelect={(date: Dayjs) => store.params.startDate = date}/>
+                            <ArrowRightOutlined/>
+                            <Calendar fullscreen={false} value={store.params.endDate}
+                                      onSelect={(date: Dayjs) => store.params.endDate = date}/>
+                        </Space>
+                    </SearchItem>
+
+                    <SearchItem title='全部分类' onOk={() => setAccountNames(translate(store.params.accounts))}>
+                        <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.accounts}
+                              checkedKeys={store.params.accounts.map((value:any) => value.id)}
+                              onCheck={(selectedKey: any, e) => onSelect('account', e.checkedNodes)}/>
+                    </SearchItem>
+                    <SearchItem title='全部账户' onOk={() => setCpAccountNames(translate(store.params.cpAccounts))}>
+                        <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.cpAccounts}
+                              checkedKeys={store.params.cpAccounts.map((value:any) => value.id)}
+                              onCheck={(selectedKey: any, e) => onSelect('cpAccount', e.checkedNodes)}/>
+                    </SearchItem>
+                    <SearchItem title='全部项目' onOk={() => setProjectNames(translate(store.params.projects))}>
+                        <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.projects}
+                              checkedKeys={store.params.projects.map((value:any) => value.id)}
+                              onCheck={(selectedKey: any, e) => onSelect('project', e.checkedNodes)}/>
+                    </SearchItem>
+                    <SearchItem title='全部成员' onOk={() => setMemberNames(translate(store.params.members))}>
+                        <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.members}
+                              checkedKeys={store.params.members.map((value:any) => value.id)}
+                              onCheck={(selectedKey: any, e) => onSelect('member', e.checkedNodes)}/>
+                    </SearchItem>
+                    <SearchItem title='全部商家' onOk={() => setSupplierNames(translate(store.params.suppliers))}>
+                        <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.suppliers}
+                              checkedKeys={store.params.suppliers.map((value:any) => value.id)}
+                              onCheck={(selectedKey: any, e) => onSelect('supplier', e.checkedNodes)}/>
+                    </SearchItem>
+                </Space>
+            </Col>
+            <Col flex="34px">
+                <a onClick={() => onCloseAll()}><ClearOutlined/></a>
+            </Col>
+        </Row>
+
+        <div style={{marginLeft: 15}}>
+            <SearchDisplay title='选择时间' data={dateName && dateName != '' ? [dateName] : []}
+                           onClose={() => onClose('date')}></SearchDisplay>
+            <SearchDisplay title='所有分类' data={accountNames} onClose={() => onClose('account')}></SearchDisplay>
+            <SearchDisplay title='所有账户' data={cpAccountNames} onClose={() => onClose('cpAccount')}></SearchDisplay>
+            <SearchDisplay title='全部项目' data={projectNames} onClose={() => onClose('project')}></SearchDisplay>
+            <SearchDisplay title='全部成员' data={memberNames} onClose={() => onClose('member')}></SearchDisplay>
+            <SearchDisplay title='全部商家' data={supplierNames} onClose={() => onClose('supplier')}></SearchDisplay>
+        </div>
+
+    </div>;
 };
 
+export default inject('store')(observer(search))

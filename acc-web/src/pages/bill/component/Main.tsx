@@ -1,19 +1,7 @@
 import {inject, observer} from "mobx-react";
-import {Button, Card, Col, DatePicker, Divider, Row, Space, Table, TreeSelect} from "antd";
-import {
-    LightFilter,
-    ProFormSelect,
-    ProFormTreeSelect,
-    ProFormDateRangePicker,
-    ProFormText,
-    ProFormFieldSet,
-    ProFormRadio
-} from "@ant-design/pro-components";
-import {FilterOutlined} from "@ant-design/icons";
-import Search from "@/pages/bill/component/Search";
-// import moment from "moment";
+import { Card, Col,  Divider, Row, Space, Table} from "antd";
 
-const {RangePicker} = DatePicker;
+import Search from "@/pages/bill/component/Search";
 
 const main = ({store}: any) => {
 
@@ -125,7 +113,7 @@ const main = ({store}: any) => {
 
     return (
         <Card title='账目清单' size={'small'} bordered={false} extra={extra}>
-            <Row gutter={[0, 10]}>
+            <Row gutter={[0, 8]}>
                 <Col span={24}>
                     <Search/>
                 </Col>

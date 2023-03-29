@@ -10,11 +10,11 @@ import {inject, observer} from "mobx-react";
 
 const ok = ({store}: any) => {
     const onClick = () => {
-        store.showOk(false)
+        store.show(false)
         history.push("/sign-in")
     }
     return (
-        <FullDialog visible={store.okVisible}>
+        <FullDialog visible={store.visible}>
             <div className={styles.header}>
                 <Header/>
             </div>

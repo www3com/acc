@@ -92,7 +92,7 @@ func (s *TransactionService) InsertBalance(tx *gorm.DB, ledgerId int64, userId i
 	return nil
 }
 
-func (s *TransactionService) Insert(tx *gorm.DB, ledgerId int64, userId int64, transBO *Transaction) error {
+func (s *TransactionService) Insert(tx *gorm.DB, ledgerId int64, userId int64, transBO *model.Transaction) error {
 	now := time.Now().UnixMicro()
 	transDO := model.Transaction{
 		CreateTime:  now,
@@ -115,8 +115,9 @@ func (s *TransactionService) Insert(tx *gorm.DB, ledgerId int64, userId int64, t
 	return nil
 }
 
-func (s *TransactionService) List(ledgerId int64, trans *TransactionBO) ([]*TransactionVO, error) {
-	dos, err := transactionDao.List(ledgerId, trans)
+func (s *TransactionService) List(ledgerId int64, tran *TransactionBO) ([]*TransactionVO, error) {
+	dos, err := transactionDao.List(ledgerId, tran.Accounts, tran.CpAccounts,
+		tran.ProjectId, tran.MemberId, tran.SupplierId, tran.StartTime, tran.EndTime)
 	if err != nil {
 		return nil, err
 	}

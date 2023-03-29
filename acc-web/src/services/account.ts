@@ -1,7 +1,23 @@
 import request from '@/components/Request';
 
+export async function getOverview() {
+    return await request.get('/api/account/overview');
+}
+
 export async function listAccounts() {
     return await request.get('/api/accounts');
+}
+
+export async function listIncomes() {
+    return await request.get('/api/account/incomes');
+}
+
+export async function ListExpenses() {
+    return await request.get('/api/account/expenses');
+}
+
+export async function ListIncomeExpenses() {
+    return await request.get('/api/account/income-expenses');
 }
 
 export async function saveAccount(account: any) {

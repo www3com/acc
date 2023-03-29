@@ -9,7 +9,7 @@ export class SignUpStore {
         makeAutoObservable(this)
     }
 
-    async register(user: any) {
+    async signUp(user: any) {
         user.password = sha256.hex(user.password)
         return await signUp(user)
     }

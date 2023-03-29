@@ -129,7 +129,7 @@ func (s *AccountService) UpdateBalance(ledgerId int64, account *UpdateBalance) e
 	return nil
 }
 
-func (s *AccountService) List(ledgerId int64) (*AccountDetails, error) {
+func (s *AccountService) Overview(ledgerId int64) (*AccountDetails, error) {
 
 	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeAsset, acc.TypeReceivables, acc.TypeDebt)
 	if err != nil {
@@ -171,14 +171,57 @@ func (s *AccountService) List(ledgerId int64) (*AccountDetails, error) {
 	return accountDetails, nil
 }
 
+func (s *AccountService) ListAccounts(ledgerId int64) ([]*model.Account, error) {
+	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeAsset, acc.TypeReceivables, acc.TypeDebt)
+	if err != nil {
+		return nil, e.Wrap("Query account error", err)
+	}
+
+	return buildTree(accounts), nil
+}
+
 // ListIncomes 查询收入账户
 func (s *AccountService) ListIncomes(ledgerId int64) ([]*model.Account, error) {
-	return accountDao.ListByTypes(ledgerId, acc.TypeIncome)
+	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeIncome)
+	if err != nil {
+		return nil, e.Wrap("Query account error", err)
+	}
+
+	return buildTree(accounts), nil
 }
 
 // ListExpenses 查询支出账户
 func (s *AccountService) ListExpenses(ledgerId int64) ([]*model.Account, error) {
-	return accountDao.ListByTypes(ledgerId, acc.TypeExpenses)
+	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeExpenses)
+	if err != nil {
+		return nil, e.Wrap("Query account error", err)
+	}
+
+	return buildTree(accounts), nil
+}
+
+func (s *AccountService) ListIncomeExpenses(ledgerId int64) ([]*model.Account, error) {
+
+	incomes, err := accountDao.ListByTypes(ledgerId, acc.TypeIncome)
+	if err != nil {
+		return nil, e.Wrap("Query account error", err)
+	}
+	income := model.Account{
+		ID:       -1,
+		Name:     "收入",
+		Children: buildTree(incomes),
+	}
+
+	expenses, err := accountDao.ListByTypes(ledgerId, acc.TypeExpenses)
+	if err != nil {
+		return nil, e.Wrap("Query account error", err)
+	}
+	expense := model.Account{
+		ID:       -2,
+		Name:     "支出",
+		Children: buildTree(expenses),
+	}
+	return []*model.Account{&income, &expense}, nil
 }
 
 func calc(accountDetails *AccountDetails, account *model.Account) {
@@ -194,5 +237,24 @@ func calc(accountDetails *AccountDetails, account *model.Account) {
 		account.Credit = account.Credit.Add(child.Credit)
 		account.Balance = account.Balance.Add(child.Balance)
 	}
+}
 
+func buildTree(accounts []*model.Account) []*model.Account {
+	var accountMap = make(map[string]*model.Account, len(accounts))
+	for _, account := range accounts {
+		accountMap[account.Code] = account
+	}
+
+	// 构造树
+	var calcAccounts []*model.Account
+	for _, account := range accounts {
+		if code.Level(account.Code) == 1 {
+			calcAccounts = append(calcAccounts, account)
+			continue
+		}
+		parent := accountMap[code.Parent(account.Code)]
+		parent.Children = append(parent.Children, account)
+	}
+
+	return calcAccounts
 }

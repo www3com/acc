@@ -1,7 +1,6 @@
 package model
 
 import (
-	"acc/internal/service"
 	"github.com/shopspring/decimal"
 	"github.com/upbos/go-saber/db"
 	"gorm.io/gorm"
@@ -33,30 +32,36 @@ func (d *TransactionDao) Insert(tx *gorm.DB, transaction *Transaction) error {
 	return tx.Create(transaction).Error
 }
 
-func (d *TransactionDao) List(ledgerId int64, tran *service.TransactionBO) ([]*Transaction, error) {
+func (d *TransactionDao) List(ledgerId int64,
+	accounts []int64,
+	cpAccounts []int64,
+	projectId int64,
+	memberId int64,
+	supplierId int64,
+	startTime int64,
+	endTime int64) ([]*Transaction, error) {
 
 	where := "where ledger_id = @ledgerId"
-	if tran.ProjectId != 0 {
-		where += "and project_id = @projectId"
-	}
-	if tran.MemberId != 0 {
-		where += "and member_id = @memberId"
-	}
-	if tran.SupplierId != 0 {
-		where += "and supplier_id = @supplierId"
-	}
-	if tran.StartTime != 0 {
-		where += "and trading_time >= @startTime"
-	}
-	if tran.EndTime != 0 {
-		where += "and trading_time <= @endTime"
-	}
-
-	if len(tran.Accounts) > 0 {
+	if len(accounts) > 0 {
 		where += "and account_id in @accounts"
 	}
-	if len(tran.CpAccounts) > 0 {
+	if len(cpAccounts) > 0 {
 		where += "and (account_id in @cpAccounts or cp_account_id in @cpAccounts)"
+	}
+	if projectId != 0 {
+		where += "and project_id = @projectId"
+	}
+	if memberId != 0 {
+		where += "and member_id = @memberId"
+	}
+	if supplierId != 0 {
+		where += "and supplier_id = @supplierId"
+	}
+	if startTime != 0 {
+		where += "and trading_time >= @startTime"
+	}
+	if endTime != 0 {
+		where += "and trading_time <= @endTime"
 	}
 
 	if len(where) > 0 {
@@ -67,13 +72,13 @@ func (d *TransactionDao) List(ledgerId int64, tran *service.TransactionBO) ([]*T
 
 	p := map[string]interface{}{
 		"ledgerId":   ledgerId,
-		"projectId":  tran.ProjectId,
-		"memberId":   tran.MemberId,
-		"supplierId": tran.SupplierId,
-		"startTime":  tran.StartTime,
-		"endTime":    tran.EndTime,
-		"accounts":   tran.Accounts,
-		"cpAccounts": tran.CpAccounts,
+		"projectId":  projectId,
+		"memberId":   memberId,
+		"supplierId": supplierId,
+		"startTime":  startTime,
+		"endTime":    endTime,
+		"accounts":   accounts,
+		"cpAccounts": cpAccounts,
 	}
 	var transactions []*Transaction
 	err := db.DB.Where(sql, p).Find(&transactions).Error

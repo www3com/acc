@@ -6,7 +6,7 @@ import {inject, observer} from "mobx-react";
 
 const main = ({store}: any) => {
     const onFinish = async (values: any) => {
-        let r = await store.register(values)
+        let r = await store.signUp(values)
         if (r.code == OK) {
             store.show(true)
         } else {

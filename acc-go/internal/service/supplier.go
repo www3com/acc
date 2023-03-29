@@ -7,5 +7,5 @@ import (
 type SupplierService struct{}
 
 func (s *SupplierService) List(ledgerId int64) ([]*model.Supplier, error) {
-	return supplierDao.List(ledgerId, false)
+	return supplierDao.List(ledgerId)
 }

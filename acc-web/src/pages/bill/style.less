@@ -4,3 +4,50 @@
   background-color: white;
   padding: @page-padding;
 }
+
+
+.searchItem {
+  position: relative;
+  padding: 5px 15px;
+  cursor: pointer;
+
+  .innerItem {
+    display: none;
+    background-color: white;
+    position: absolute;
+    min-width: 200px;
+    max-height: 400px;
+    overflow: auto;
+    top: 32px;
+    z-index: 1000;
+    left: 0px;
+    border: 1px solid #eee;
+    padding: 10px 0px;
+  }
+  .active {
+    display: inline;
+  }
+}
+
+.searchItem:hover {
+  background-color: #F1F1F1;
+}
+
+.searchDisplay {
+  min-height: 31px;
+  border-bottom: 1px dashed #eaeaec;
+
+  .title {
+    margin: auto;
+    color: #00000073;
+  }
+
+  .operator {
+    margin: auto;
+    text-align: center;
+  }
+}
+
+.searchDisplay:hover {
+  background-color: #FAFAFC;
+}

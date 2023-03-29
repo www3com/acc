@@ -6,13 +6,12 @@ import (
 )
 
 type Supplier struct {
-	ID         int64 `gorm:"primary_key"`
-	CreateTime int64
-	UpdateTime int64
-	LedgerId   int64
-	Name       string
-	Remark     string
-	IsShow     bool
+	ID         int64  `gorm:"primary_key" json:"id"`
+	CreateTime int64  `json:"-"`
+	UpdateTime int64  `json:"-"`
+	LedgerId   int64  `json:"-"`
+	Name       string `json:"name"`
+	Remark     string `json:"remark"`
 }
 
 func (Supplier) TableName() string {
@@ -29,12 +28,12 @@ func (d *SupplierDao) BatchInsert(tx *gorm.DB, ledgerId, tLedgerId int64, now in
 
 func (d *SupplierDao) ListAll(ledgerId int64) ([]*Supplier, error) {
 	var suppliers []*Supplier
-	err := db.DB.Where("ledgerId = ?", ledgerId).Find(&suppliers).Error
+	err := db.DB.Where("ledger_id = ?", ledgerId).Find(&suppliers).Error
 	return suppliers, err
 }
 
 func (d *SupplierDao) List(ledgerId int64) ([]*Supplier, error) {
 	var suppliers []*Supplier
-	err := db.DB.Where("ledgerId = ? and is_show = 1", ledgerId).Order("id asc").Find(&suppliers).Error
+	err := db.DB.Where("ledger_id = ? and is_show = 1", ledgerId).Order("id asc").Find(&suppliers).Error
 	return suppliers, err
 }

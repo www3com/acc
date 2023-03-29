@@ -1,6 +1,14 @@
 import {makeAutoObservable} from 'mobx';
 
-import {deleteAccount, listAccounts, saveAccount, updateBalance, updateName, updateRemark} from '@/services/account';
+import {
+    deleteAccount,
+    getOverview,
+    listAccounts,
+    saveAccount,
+    updateBalance,
+    updateName,
+    updateRemark
+} from '@/services/account';
 import request, {OK} from "@/components/Request";
 import {notification} from "antd";
 
@@ -31,7 +39,7 @@ export class Account {
     }
 
     * list(): any {
-        const r = yield listAccounts();
+        const r = yield getOverview();
         this.accountDetails = r.data;
     }
 
