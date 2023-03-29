@@ -35,52 +35,48 @@ func (d *TransactionDao) Insert(tx *gorm.DB, transaction *Transaction) error {
 func (d *TransactionDao) List(ledgerId int64,
 	accounts []int64,
 	cpAccounts []int64,
-	projectId int64,
-	memberId int64,
-	supplierId int64,
-	startTime int64,
-	endTime int64) ([]*Transaction, error) {
+	projects []int64,
+	members []int64,
+	suppliers []int64,
+	startDate int64,
+	endDate int64) ([]*Transaction, error) {
 
-	where := "where ledger_id = @ledgerId"
+	where := "ledger_id = @ledgerId"
 	if len(accounts) > 0 {
 		where += "and account_id in @accounts"
 	}
 	if len(cpAccounts) > 0 {
 		where += "and (account_id in @cpAccounts or cp_account_id in @cpAccounts)"
 	}
-	if projectId != 0 {
-		where += "and project_id = @projectId"
+	if len(projects) > 0 {
+		where += "and project_id in @projects"
 	}
-	if memberId != 0 {
-		where += "and member_id = @memberId"
+	if len(members) > 0 {
+		where += "and member_id = @members"
 	}
-	if supplierId != 0 {
-		where += "and supplier_id = @supplierId"
+	if len(suppliers) > 0 {
+		where += "and supplier_id = @suppliers"
 	}
-	if startTime != 0 {
-		where += "and trading_time >= @startTime"
+	if startDate != 0 {
+		where += "and trading_time >= @startDate"
 	}
-	if endTime != 0 {
-		where += "and trading_time <= @endTime"
-	}
-
-	if len(where) > 0 {
-		where = "where " + where[4:]
+	if endDate != 0 {
+		where += "and trading_time <= @endDate"
 	}
 
-	sql := `select * from acc_transaction ` + where + ` order by trading_time desc `
+	//sql := `select * from acc_transaction ` + where + ` order by trading_time desc `
 
 	p := map[string]interface{}{
 		"ledgerId":   ledgerId,
-		"projectId":  projectId,
-		"memberId":   memberId,
-		"supplierId": supplierId,
-		"startTime":  startTime,
-		"endTime":    endTime,
+		"projects":   projects,
+		"members":    members,
+		"suppliers":  suppliers,
+		"startTime":  startDate,
+		"endTime":    endDate,
 		"accounts":   accounts,
 		"cpAccounts": cpAccounts,
 	}
 	var transactions []*Transaction
-	err := db.DB.Where(sql, p).Find(&transactions).Error
+	err := db.DB.Where(where, p).Order("trading_time desc").Find(&transactions).Error
 	return transactions, err
 }

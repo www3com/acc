@@ -4,10 +4,10 @@ server:
 
 # Database configuration
 data-source:
-  host: upbos.cn
+  host: localhost
   port: 5432
-  user: ${ACC_DB_USER}
-  password: ${ACC_DB_PASSWORD}
+  user: postgres
+  password: postgres
   database: acc
 
 # Send email configuration

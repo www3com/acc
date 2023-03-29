@@ -21,8 +21,8 @@ export default ({title, titleWith, data, onClose}: ItemProps) => {
             {title}
         </Col>
         <Col flex="auto">
-            {data.map((item) => {
-                return <span style={{marginRight: 20, color:'#000000A6'}}>{item}</span>
+            {data.map((item, index) => {
+                return <span key={index} style={{marginRight: 20, color: '#000000A6'}}>{item}</span>
             })}
         </Col>
         <Col flex="50px" className={styles.operator}>

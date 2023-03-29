@@ -12,11 +12,11 @@ export async function listIncomes() {
     return await request.get('/api/account/incomes');
 }
 
-export async function ListExpenses() {
+export async function listExpenses() {
     return await request.get('/api/account/expenses');
 }
 
-export async function ListIncomeExpenses() {
+export async function listIncomeExpenses() {
     return await request.get('/api/account/income-expenses');
 }
 

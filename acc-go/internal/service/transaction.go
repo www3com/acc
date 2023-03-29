@@ -26,15 +26,15 @@ type Transaction struct {
 type TransactionBO struct {
 	Accounts   []int64 `form:"accounts"`
 	CpAccounts []int64 `form:"cpAccounts"`
-	ProjectId  int64   `form:"project"`
-	MemberId   int64   `form:"memberId"`
-	SupplierId int64   `form:"supplierId"`
-	StartTime  int64   `form:"startTime"`
-	EndTime    int64   `form:"endTime"`
-	Remark     string  `form:"remark"`
+	Projects   []int64 `form:"projects"`
+	Members    []int64 `form:"members"`
+	Suppliers  []int64 `form:"suppliers"`
+	StartTime  int64   `form:"startDate"`
+	EndTime    int64   `form:"startDate"`
 }
 
 type TransactionVO struct {
+	Id          int64           `json:"id"`
 	TradingTime int64           `json:"tradingTime"`
 	Type        string          `json:"type"`
 	Account     string          `json:"account"`
@@ -43,7 +43,7 @@ type TransactionVO struct {
 	Member      string          `json:"member"`
 	Supplier    string          `json:"supplier"`
 	Amount      decimal.Decimal `json:"amount"`
-	Remark      string          `form:"remark"`
+	Remark      string          `json:"remark"`
 }
 
 type TransactionService struct{}
@@ -117,7 +117,7 @@ func (s *TransactionService) Insert(tx *gorm.DB, ledgerId int64, userId int64, t
 
 func (s *TransactionService) List(ledgerId int64, tran *TransactionBO) ([]*TransactionVO, error) {
 	dos, err := transactionDao.List(ledgerId, tran.Accounts, tran.CpAccounts,
-		tran.ProjectId, tran.MemberId, tran.SupplierId, tran.StartTime, tran.EndTime)
+		tran.Projects, tran.Members, tran.Suppliers, tran.StartTime, tran.EndTime)
 	if err != nil {
 		return nil, err
 	}
@@ -140,6 +140,7 @@ func (s *TransactionService) List(ledgerId int64, tran *TransactionBO) ([]*Trans
 	var vos []*TransactionVO
 	for _, do := range dos {
 		tran := TransactionVO{
+			Id:          do.ID,
 			TradingTime: do.TradingTime,
 			Type:        translateType(do.Type),
 			Account:     translateAccount(do.AccountId, accounts),

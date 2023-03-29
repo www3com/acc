@@ -85,36 +85,28 @@ const search = ({store}: any) => {
     const onClose = (label: string) => {
         switch (label) {
             case 'date':
-                store.params.startDate = dayjs();
-                store.params.endDate = dayjs();
-                // setStartDate(dayjs())
-                // setEndDate(dayjs())
                 setDateName('')
+                store.setParams({startDate: dayjs(), endDate: dayjs()})
                 return;
             case 'account':
-                // setAccounts([]);
                 setAccountNames([]);
-                store.params.accounts = [];
+                store.setParams({accounts: []})
                 return;
             case 'cpAccount':
-                // setCpAccounts([]);
-                store.params.cpAccounts = [];
                 setCpAccountNames([]);
+                store.setParams({cpAccounts: []})
                 return;
             case 'project':
-                // setProjects([]);
-                store.params.projects = []
                 setProjectNames([]);
+                store.setParams({projects: []})
                 return;
             case 'member':
-                // setMembers([]);
-                store.params.members = [];
                 setMemberNames([]);
+                store.setParams({members: []})
                 return;
             case 'supplier':
-                // setSuppliers([]);
-                store.params.suppliers = [];
                 setSupplierNames([]);
+                store.setParams({suppliers: []})
         }
     }
 
@@ -131,39 +123,39 @@ const search = ({store}: any) => {
         <Row wrap={false} align='middle'>
             <Col flex="auto">
                 <Space>
-                    <SearchItem title='选择时间' onOk={() => onSelectDate()}>
+                    <SearchItem title='选择时间' onOk={() => onSelectDate()} bodyStyle={{width: '600px'}}>
                         <Space>
                             <Calendar fullscreen={false} value={store.params.startDate}
-                                      onSelect={(date: Dayjs) => store.params.startDate = date}/>
+                                      onSelect={(date: Dayjs) => store.setParams({startDate: date})}/>
                             <ArrowRightOutlined/>
                             <Calendar fullscreen={false} value={store.params.endDate}
-                                      onSelect={(date: Dayjs) => store.params.endDate = date}/>
+                                      onSelect={(date: Dayjs) => store.setParams({endDate: date})}/>
                         </Space>
                     </SearchItem>
 
                     <SearchItem title='全部分类' onOk={() => setAccountNames(translate(store.params.accounts))}>
                         <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.accounts}
-                              checkedKeys={store.params.accounts.map((value:any) => value.id)}
+                              checkedKeys={store.params.accounts.map((value: any) => value.id)}
                               onCheck={(selectedKey: any, e) => onSelect('account', e.checkedNodes)}/>
                     </SearchItem>
                     <SearchItem title='全部账户' onOk={() => setCpAccountNames(translate(store.params.cpAccounts))}>
                         <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.cpAccounts}
-                              checkedKeys={store.params.cpAccounts.map((value:any) => value.id)}
+                              checkedKeys={store.params.cpAccounts.map((value: any) => value.id)}
                               onCheck={(selectedKey: any, e) => onSelect('cpAccount', e.checkedNodes)}/>
                     </SearchItem>
                     <SearchItem title='全部项目' onOk={() => setProjectNames(translate(store.params.projects))}>
                         <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.projects}
-                              checkedKeys={store.params.projects.map((value:any) => value.id)}
+                              checkedKeys={store.params.projects.map((value: any) => value.id)}
                               onCheck={(selectedKey: any, e) => onSelect('project', e.checkedNodes)}/>
                     </SearchItem>
                     <SearchItem title='全部成员' onOk={() => setMemberNames(translate(store.params.members))}>
                         <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.members}
-                              checkedKeys={store.params.members.map((value:any) => value.id)}
+                              checkedKeys={store.params.members.map((value: any) => value.id)}
                               onCheck={(selectedKey: any, e) => onSelect('member', e.checkedNodes)}/>
                     </SearchItem>
                     <SearchItem title='全部商家' onOk={() => setSupplierNames(translate(store.params.suppliers))}>
                         <Tree checkable fieldNames={{title: 'name', key: 'id'}} treeData={store.suppliers}
-                              checkedKeys={store.params.suppliers.map((value:any) => value.id)}
+                              checkedKeys={store.params.suppliers.map((value: any) => value.id)}
                               onCheck={(selectedKey: any, e) => onSelect('supplier', e.checkedNodes)}/>
                     </SearchItem>
                 </Space>

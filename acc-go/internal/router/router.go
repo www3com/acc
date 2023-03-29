@@ -43,6 +43,9 @@ func InitRouter() *gin.Engine {
 	root.PUT("/account/remark", api.UpdateRemark)                // 调整账户描述
 	root.PUT("/account/balance", api.UpdateBalance)              // 调整账户余额
 
+	// 交易
+	root.GET("/transactions", api.ListTransaction) // 查询交易
+
 	// 成员
 	root.GET("/members", api.ListMembers) // 查询成员列表
 

@@ -3,7 +3,7 @@ import {inject, observer} from "mobx-react";
 
 const expenses = ({store}: any) => {
     return (
-        <Form name='expenses' autoComplete="off" colon={false}>
+        <Form name='incomes' autoComplete="off" colon={false}>
             <Row gutter={36}>
                 <Col span={6}>
                     <Form.Item label="分类" name="account">
@@ -14,7 +14,7 @@ const expenses = ({store}: any) => {
                             placeholder="选择分类"
                             fieldNames={{label: 'name', value: 'id'}}
                             allowClear
-                            treeData={store.expenses}
+                            treeData={store.incomes}
                         />
                     </Form.Item>
                 </Col>

@@ -1,8 +1,9 @@
 import {makeAutoObservable} from "mobx";
-import {listAccounts, ListIncomeExpenses} from "@/services/account";
+import {listAccounts, listExpenses, listIncomeExpenses, listIncomes} from "@/services/account";
 import {listProjects} from "@/services/project";
 import {listMembers} from "@/services/member";
 import {listSuppliers} from "@/services/supplier";
+import {listTransactions} from "@/services/bill";
 
 export class BillStore {
 
@@ -11,6 +12,8 @@ export class BillStore {
     projects = [];
     members = [];
     suppliers = [];
+    incomes = [];
+    expenses = [];
 
     params = {
         startDate: null,
@@ -20,19 +23,38 @@ export class BillStore {
         projects: [],
         members: [],
         suppliers: []
-    }
+    };
+
+    transactions = [];
 
     constructor() {
         makeAutoObservable(this);
-        this.ListIncomeExpenses();
+        this.listTransactions();
+        this.listIncomes();
+        this.listExpenses();
+        this.listIncomeExpenses();
         this.listCpAccounts();
         this.listProjects();
         this.listMembers();
         this.listSuppliers();
     }
 
-    * ListIncomeExpenses(): any {
-        const r = yield ListIncomeExpenses();
+    setParams(params: any) {
+        this.params = {...this.params, ...params}
+    }
+
+    * listIncomes(): any {
+        const r = yield listIncomes();
+        this.incomes = r.data;
+    }
+
+    * listExpenses(): any {
+        const r = yield listExpenses();
+        this.expenses = r.data;
+    }
+
+    * listIncomeExpenses(): any {
+        const r = yield listIncomeExpenses();
         this.accounts = r.data;
     }
 
@@ -56,9 +78,10 @@ export class BillStore {
         this.suppliers = r.data;
     }
 
-    selectAccounts(items: any) {
-        console.log(items)
-        // this.selectedAccounts = items;
+    * listTransactions(): any {
+        const p = {}
+        const r = yield listTransactions(p)
+        this.transactions = r.data;
     }
 
 }

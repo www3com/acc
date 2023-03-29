@@ -7,10 +7,11 @@ import classnames from 'classnames';
 interface ItemProps {
     title: string,
     children?: any,
-    onOk?: Function
+    onOk?: Function,
+    bodyStyle?: any
 }
 
-export default ({title, children, onOk}: ItemProps) => {
+export default ({title, children, onOk, bodyStyle}: ItemProps) => {
     const ref = useRef<HTMLDivElement | null>(null);
     const [visible, setVisible] = useState(false)
     const handleClick = (e: any) => {
@@ -35,7 +36,7 @@ export default ({title, children, onOk}: ItemProps) => {
 
     return <div ref={ref} className={styles.searchItem}>
         <Space size={5} onClick={event => setVisible(true)}>{title}<DownOutlined/></Space>
-        <div className={visible ? classnames(styles.active, styles.innerItem) : styles.innerItem}>
+        <div className={visible ? classnames(styles.active, styles.innerItem) : styles.innerItem} style={bodyStyle}>
             {children}
             <Divider style={{margin: '8px 0px 8px 0px'}}/>
             <Space style={{width: '100%', direction: 'rtl', paddingRight: 10}}>
