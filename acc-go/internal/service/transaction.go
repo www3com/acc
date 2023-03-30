@@ -4,47 +4,13 @@ import (
 	"acc/internal/consts"
 	acc "acc/internal/consts/account"
 	t "acc/internal/consts/transaction"
+	"acc/internal/dao"
 	"acc/internal/model"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 	"time"
 )
-
-type Transaction struct {
-	TradingTime int64           `form:"tradingTime" binding:"required"`
-	Type        int             `form:"type" binding:"required"`
-	AccountId   int64           `form:"accountId" binding:"required"`
-	CpAccountId int64           `form:"cpAccountId" binding:"required"`
-	Amount      decimal.Decimal `form:"amount" binding:"required"`
-	Remark      string          `form:"remark"`
-	ProjectId   int64           `form:"projectId"`
-	MemberId    int64           `form:"memberId"`
-	SupplierId  int64           `form:"supplierId"`
-}
-
-type TransactionBO struct {
-	Accounts   []int64 `form:"accounts"`
-	CpAccounts []int64 `form:"cpAccounts"`
-	Projects   []int64 `form:"projects"`
-	Members    []int64 `form:"members"`
-	Suppliers  []int64 `form:"suppliers"`
-	StartTime  int64   `form:"startDate"`
-	EndTime    int64   `form:"startDate"`
-}
-
-type TransactionVO struct {
-	Id          int64           `json:"id"`
-	TradingTime int64           `json:"tradingTime"`
-	Type        string          `json:"type"`
-	Account     string          `json:"account"`
-	CpAccount   string          `json:"cpAccount"`
-	Project     string          `json:"project"`
-	Member      string          `json:"member"`
-	Supplier    string          `json:"supplier"`
-	Amount      decimal.Decimal `json:"amount"`
-	Remark      string          `json:"remark"`
-}
 
 type TransactionService struct{}
 
@@ -55,7 +21,7 @@ func (s *TransactionService) InsertBalance(tx *gorm.DB, ledgerId int64, userId i
 	}
 
 	now := time.Now().UnixMicro()
-	transDO := model.Transaction{
+	transDO := dao.Transaction{
 		CreateTime: now,
 		LedgerId:   ledgerId,
 		Amount:     amount.Abs(),
@@ -92,21 +58,21 @@ func (s *TransactionService) InsertBalance(tx *gorm.DB, ledgerId int64, userId i
 	return nil
 }
 
-func (s *TransactionService) Insert(tx *gorm.DB, ledgerId int64, userId int64, transBO *model.Transaction) error {
+func (s *TransactionService) Insert(tx *gorm.DB, tran *model.TransactionBO) error {
 	now := time.Now().UnixMicro()
-	transDO := model.Transaction{
+	transDO := dao.Transaction{
 		CreateTime:  now,
-		TradingTime: transBO.TradingTime,
-		LedgerId:    ledgerId,
-		Type:        transBO.Type,
-		AccountId:   transBO.AccountId,
-		CpAccountId: transBO.CpAccountId,
-		Amount:      transBO.Amount,
-		Remark:      transBO.Remark,
-		ProjectId:   transBO.ProjectId,
-		MemberId:    transBO.MemberId,
-		SupplierId:  transBO.SupplierId,
-		UserId:      userId,
+		TradingTime: tran.TradingTime,
+		LedgerId:    tran.LedgerId,
+		Type:        tran.Type,
+		AccountId:   tran.AccountId,
+		CpAccountId: tran.CpAccountId,
+		Amount:      tran.Amount,
+		Remark:      tran.Remark,
+		ProjectId:   tran.ProjectId,
+		MemberId:    tran.MemberId,
+		SupplierId:  tran.SupplierId,
+		UserId:      tran.UserId,
 	}
 
 	if err := transactionDao.Insert(tx, &transDO); err != nil {
@@ -115,40 +81,61 @@ func (s *TransactionService) Insert(tx *gorm.DB, ledgerId int64, userId int64, t
 	return nil
 }
 
-func (s *TransactionService) List(ledgerId int64, tran *TransactionBO) ([]*TransactionVO, error) {
-	dos, err := transactionDao.List(ledgerId, tran.Accounts, tran.CpAccounts,
-		tran.Projects, tran.Members, tran.Suppliers, tran.StartTime, tran.EndTime)
+func (s *TransactionService) ListTotal(tran *model.TransactionQuery) (*model.TransactionTotalVO, error) {
+	totals, err := transactionDao.ListTotal(tran)
 	if err != nil {
 		return nil, err
 	}
-	accounts, err := accountDao.List(ledgerId)
+
+	var vo model.TransactionTotalVO
+	for _, total := range totals {
+		if total.Type == t.TypeExpenses {
+			vo.Expense = total.Amount
+		}
+		if total.Type == t.TypeIncome {
+			vo.Income = total.Amount
+		}
+	}
+
+	vo.Balance = vo.Income.Sub(vo.Expense)
+	vo.Expense = vo.Expense.Neg()
+	return &vo, nil
+}
+
+func (s *TransactionService) List(tran *model.TransactionQuery) ([]*model.TransactionVO, error) {
+	dos, err := transactionDao.List(tran)
 	if err != nil {
 		return nil, err
 	}
-	projects, err := projectDao.ListAll(ledgerId)
+	accounts, err := accountDao.List(tran.LedgerId)
 	if err != nil {
 		return nil, err
 	}
-	members, err := memberDao.ListAll(ledgerId)
+	projects, err := projectDao.ListAll(tran.LedgerId)
 	if err != nil {
 		return nil, err
 	}
-	suppliers, err := supplierDao.ListAll(ledgerId)
+	members, err := memberDao.ListAll(tran.LedgerId)
 	if err != nil {
 		return nil, err
 	}
-	var vos []*TransactionVO
+	suppliers, err := supplierDao.ListAll(tran.LedgerId)
+	if err != nil {
+		return nil, err
+	}
+	var vos []*model.TransactionVO
 	for _, do := range dos {
-		tran := TransactionVO{
+		tm := time.UnixMilli(do.TradingTime)
+		tran := model.TransactionVO{
 			Id:          do.ID,
-			TradingTime: do.TradingTime,
+			TradingTime: tm.Format("2006-01-02"),
 			Type:        translateType(do.Type),
 			Account:     translateAccount(do.AccountId, accounts),
 			CpAccount:   translateAccount(do.CpAccountId, accounts),
 			Project:     translateProject(do.ProjectId, projects),
 			Member:      translateMember(do.MemberId, members),
 			Supplier:    translateSupplier(do.SupplierId, suppliers),
-			Amount:      do.Amount,
+			Amount:      getAmount(do.Type, do.Amount),
 			Remark:      do.Remark,
 		}
 		vos = append(vos, &tran)
@@ -161,7 +148,7 @@ func translateType(typeId int) string {
 	return t.Mapper[typeId]
 }
 
-func translateAccount(accountId int64, accounts []*model.Account) string {
+func translateAccount(accountId int64, accounts []*dao.Account) string {
 	for i := 0; i < len(accounts); i++ {
 		if accountId == accounts[i].ID {
 			return accounts[i].Name
@@ -170,7 +157,7 @@ func translateAccount(accountId int64, accounts []*model.Account) string {
 	return ""
 }
 
-func translateProject(projectId int64, projects []*model.Project) string {
+func translateProject(projectId int64, projects []*dao.Project) string {
 	for i := 0; i < len(projects); i++ {
 		if projectId == projects[i].ID {
 			return projects[i].Name
@@ -179,7 +166,7 @@ func translateProject(projectId int64, projects []*model.Project) string {
 	return ""
 }
 
-func translateMember(memberId int64, members []*model.Member) string {
+func translateMember(memberId int64, members []*dao.Member) string {
 	for i := 0; i < len(members); i++ {
 		if memberId == members[i].ID {
 			return members[i].Name
@@ -188,11 +175,20 @@ func translateMember(memberId int64, members []*model.Member) string {
 	return ""
 }
 
-func translateSupplier(supplierId int64, suppliers []*model.Supplier) string {
+func translateSupplier(supplierId int64, suppliers []*dao.Supplier) string {
 	for i := 0; i < len(suppliers); i++ {
 		if supplierId == suppliers[i].ID {
 			return suppliers[i].Name
 		}
 	}
 	return ""
+}
+
+func getAmount(transactionType int, amount decimal.Decimal) decimal.Decimal {
+	switch transactionType {
+	case t.TypeExpenses, t.TypeLend, t.TypeDebtOut, t.TypeTransfer:
+		return amount.Neg()
+	default:
+		return amount
+	}
 }

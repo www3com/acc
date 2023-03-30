@@ -1,7 +1,7 @@
 package context
 
 import (
-	"acc/internal/model"
+	"acc/internal/dao"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -11,7 +11,7 @@ const (
 	ledgerId     = "ledgerId"
 )
 
-var ledgerDao = new(model.LedgerDao)
+var ledgerDao = new(dao.LedgerDao)
 
 func GetUserId(c *gin.Context) (int64, error) {
 	userId := c.GetHeader(headerUserId)

@@ -76,13 +76,19 @@ const del = async (url: string, params?: object) => {
 
 const fail = (err: any) => {
     switch (err.response.status) {
-        case INVALID_PARAMS:
         case UNAUTHORIZED:
             message.error(err.response.data.message)
             location.href = "/sign-in"
-            return
+            break
+        case INVALID_PARAMS:
+            message.error(err.response.data.message)
+            break
         case FORBIDDEN:
+            message.error(err.response.data.message)
+            break
         case NOT_FOUND:
+            message.error(err.response.data.message)
+            break
         case ERROR:
             message.error(err.response.data.message)
             return

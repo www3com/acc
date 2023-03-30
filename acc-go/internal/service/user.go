@@ -3,7 +3,7 @@ package service
 import (
 	"acc/internal/consts"
 	"acc/internal/consts/userstate"
-	"acc/internal/model"
+	"acc/internal/dao"
 	"errors"
 	"github.com/upbos/go-saber/db"
 	"github.com/upbos/go-saber/e"
@@ -52,7 +52,7 @@ func (s *UserService) SignIn(username, password, ip string) (string, error) {
 }
 
 // SignUp 用户注册
-func (s *UserService) SignUp(user *model.User) error {
+func (s *UserService) SignUp(user *dao.User) error {
 
 	user.CreateTime = time.Now().UnixMicro()
 	user.UpdateTime = user.CreateTime

@@ -44,7 +44,9 @@ func InitRouter() *gin.Engine {
 	root.PUT("/account/balance", api.UpdateBalance)              // 调整账户余额
 
 	// 交易
-	root.GET("/transactions", api.ListTransaction) // 查询交易
+	root.GET("/transactions", api.ListTransaction)           // 查询交易
+	root.GET("/transaction/total", api.ListTotalTransaction) // 查询总额、结余
+	root.POST("/transaction", api.SaveTransaction)           // 保存交易
 
 	// 成员
 	root.GET("/members", api.ListMembers) // 查询成员列表

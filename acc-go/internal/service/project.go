@@ -1,11 +1,11 @@
 package service
 
 import (
-	"acc/internal/model"
+	"acc/internal/dao"
 )
 
 type ProjectService struct{}
 
-func (s *ProjectService) List(ledgerId int64) ([]*model.Project, error) {
+func (s *ProjectService) List(ledgerId int64) ([]*dao.Project, error) {
 	return projectDao.List(ledgerId)
 }

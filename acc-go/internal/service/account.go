@@ -3,7 +3,7 @@ package service
 import (
 	"acc/internal/consts"
 	acc "acc/internal/consts/account"
-	"acc/internal/model"
+	"acc/internal/dao"
 	"acc/internal/pkg/code"
 	"github.com/shopspring/decimal"
 	"github.com/upbos/go-saber/e"
@@ -19,10 +19,10 @@ type Account struct {
 }
 
 type AccountDetails struct {
-	Total     decimal.Decimal  `json:"total"`
-	Debt      decimal.Decimal  `json:"debt"`
-	NetAmount decimal.Decimal  `json:"netAmount"`
-	Details   []*model.Account `json:"details"`
+	Total     decimal.Decimal `json:"total"`
+	Debt      decimal.Decimal `json:"debt"`
+	NetAmount decimal.Decimal `json:"netAmount"`
+	Details   []*dao.Account  `json:"details"`
 }
 
 type DeleteAccount struct {
@@ -69,7 +69,7 @@ func (s *AccountService) Create(ledgerId int64, account *Account) error {
 	if err != nil {
 		return err
 	}
-	dbAccount := model.Account{
+	dbAccount := dao.Account{
 		CreateTime: now,
 		UpdateTime: now,
 		LedgerId:   ledgerId,
@@ -88,7 +88,7 @@ func (s *AccountService) Create(ledgerId int64, account *Account) error {
 // Update 更新账户
 func (s *AccountService) Update(ledgerId int64, account *Account) error {
 	now := time.Now().UnixMicro()
-	dbAccount := model.Account{
+	dbAccount := dao.Account{
 		UpdateTime: now,
 		LedgerId:   ledgerId,
 		ID:         account.Id,
@@ -136,13 +136,13 @@ func (s *AccountService) Overview(ledgerId int64) (*AccountDetails, error) {
 		return nil, e.Wrap("Query account error", err)
 	}
 
-	var accountMap = make(map[string]*model.Account, len(accounts))
+	var accountMap = make(map[string]*dao.Account, len(accounts))
 	for _, account := range accounts {
 		accountMap[account.Code] = account
 	}
 
 	// 构造树
-	var calcAccounts []*model.Account
+	var calcAccounts []*dao.Account
 	for _, account := range accounts {
 		if code.Level(account.Code) == 1 {
 			calcAccounts = append(calcAccounts, account)
@@ -171,7 +171,7 @@ func (s *AccountService) Overview(ledgerId int64) (*AccountDetails, error) {
 	return accountDetails, nil
 }
 
-func (s *AccountService) ListAccounts(ledgerId int64) ([]*model.Account, error) {
+func (s *AccountService) ListAccounts(ledgerId int64) ([]*dao.Account, error) {
 	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeAsset, acc.TypeReceivables, acc.TypeDebt)
 	if err != nil {
 		return nil, e.Wrap("Query account error", err)
@@ -181,7 +181,7 @@ func (s *AccountService) ListAccounts(ledgerId int64) ([]*model.Account, error) 
 }
 
 // ListIncomes 查询收入账户
-func (s *AccountService) ListIncomes(ledgerId int64) ([]*model.Account, error) {
+func (s *AccountService) ListIncomes(ledgerId int64) ([]*dao.Account, error) {
 	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeIncome)
 	if err != nil {
 		return nil, e.Wrap("Query account error", err)
@@ -191,7 +191,7 @@ func (s *AccountService) ListIncomes(ledgerId int64) ([]*model.Account, error) {
 }
 
 // ListExpenses 查询支出账户
-func (s *AccountService) ListExpenses(ledgerId int64) ([]*model.Account, error) {
+func (s *AccountService) ListExpenses(ledgerId int64) ([]*dao.Account, error) {
 	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeExpenses)
 	if err != nil {
 		return nil, e.Wrap("Query account error", err)
@@ -200,13 +200,13 @@ func (s *AccountService) ListExpenses(ledgerId int64) ([]*model.Account, error) 
 	return buildTree(accounts), nil
 }
 
-func (s *AccountService) ListIncomeExpenses(ledgerId int64) ([]*model.Account, error) {
+func (s *AccountService) ListIncomeExpenses(ledgerId int64) ([]*dao.Account, error) {
 
 	incomes, err := accountDao.ListByTypes(ledgerId, acc.TypeIncome)
 	if err != nil {
 		return nil, e.Wrap("Query account error", err)
 	}
-	income := model.Account{
+	income := dao.Account{
 		ID:       -1,
 		Name:     "收入",
 		Children: buildTree(incomes),
@@ -216,15 +216,15 @@ func (s *AccountService) ListIncomeExpenses(ledgerId int64) ([]*model.Account, e
 	if err != nil {
 		return nil, e.Wrap("Query account error", err)
 	}
-	expense := model.Account{
+	expense := dao.Account{
 		ID:       -2,
 		Name:     "支出",
 		Children: buildTree(expenses),
 	}
-	return []*model.Account{&income, &expense}, nil
+	return []*dao.Account{&income, &expense}, nil
 }
 
-func calc(accountDetails *AccountDetails, account *model.Account) {
+func calc(accountDetails *AccountDetails, account *dao.Account) {
 	if account.Children == nil {
 		return
 	}
@@ -239,14 +239,14 @@ func calc(accountDetails *AccountDetails, account *model.Account) {
 	}
 }
 
-func buildTree(accounts []*model.Account) []*model.Account {
-	var accountMap = make(map[string]*model.Account, len(accounts))
+func buildTree(accounts []*dao.Account) []*dao.Account {
+	var accountMap = make(map[string]*dao.Account, len(accounts))
 	for _, account := range accounts {
 		accountMap[account.Code] = account
 	}
 
 	// 构造树
-	var calcAccounts []*model.Account
+	var calcAccounts []*dao.Account
 	for _, account := range accounts {
 		if code.Level(account.Code) == 1 {
 			calcAccounts = append(calcAccounts, account)

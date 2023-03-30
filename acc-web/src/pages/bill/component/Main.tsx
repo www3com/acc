@@ -3,6 +3,7 @@ import {Card, Col, Divider, Row, Space, Table} from "antd";
 
 import Search from "@/pages/bill/component/Search";
 import type {ColumnsType} from 'antd/es/table';
+import TransactionDetail from "@/pages/bill/component/TransactionDetail";
 
 const main = ({store}: any) => {
     const columns: ColumnsType<any> = [
@@ -16,9 +17,9 @@ const main = ({store}: any) => {
 
     const extra = (
         <Space split={<Divider type="vertical"/>}>
-            <span>总支出 <span style={{color: '#14ba89'}}>-11,300.00</span></span>
-            <span>总收入 <span style={{color: '#f1523a'}}>+29,100.00</span></span>
-            <span>结余 17，800.00 <span style={{color: '#aaa'}}>（单位：元）</span></span>
+            <span>总支出 <span style={{color: '#14ba89'}}>{store.totalTransaction.expense}</span></span>
+            <span>总收入 <span style={{color: '#f1523a'}}>{store.totalTransaction.income}</span></span>
+            <span>结余 {store.totalTransaction.balance} <span style={{color: '#aaa'}}>（单位：元）</span></span>
         </Space>
     )
 
@@ -29,7 +30,11 @@ const main = ({store}: any) => {
                     <Search/>
                 </Col>
                 <Col span={24}>
-                    <Table size={"small"} rowKey={'id'} dataSource={store.transactions} bordered columns={columns}/>
+                    <Table size={"small"} rowKey={'id'} bordered columns={columns}
+                           dataSource={store.transactions}
+                           expandable={{
+                               expandedRowRender: record => <TransactionDetail data={record}/>
+                           }}/>
                 </Col>
             </Row>
         </Card>

@@ -1,4 +1,4 @@
-package model
+package dao
 
 import (
 	"github.com/upbos/go-saber/db"

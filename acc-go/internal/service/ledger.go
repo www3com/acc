@@ -2,7 +2,7 @@ package service
 
 import (
 	"acc/internal/consts"
-	"acc/internal/model"
+	"acc/internal/dao"
 	"errors"
 	"github.com/upbos/go-saber/log"
 	"gorm.io/gorm"
@@ -23,7 +23,7 @@ func (s *LedgerService) New(tx *gorm.DB, tLedgerId int64, ownerId int64) error {
 		return consts.ErrTemplateNotFound
 	}
 	now := time.Now().UnixMilli()
-	ledger := model.Ledger{
+	ledger := dao.Ledger{
 		OwnerId:    ownerId,
 		TLedgerId:  tLedger.ID,
 		Name:       tLedger.Name,
@@ -55,7 +55,7 @@ func (s *LedgerService) New(tx *gorm.DB, tLedgerId int64, ownerId int64) error {
 	return nil
 }
 
-func (s *LedgerService) List(ownerId int64) (*[]model.Ledger, error) {
+func (s *LedgerService) List(ownerId int64) (*[]dao.Ledger, error) {
 	ledgers, err := ledgerDao.List(ownerId)
 	if err != nil {
 		log.Error(err, "list ledger")

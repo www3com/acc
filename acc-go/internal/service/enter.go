@@ -1,16 +1,16 @@
 package service
 
-import "acc/internal/model"
+import "acc/internal/dao"
 
 var (
-	accountDao     = new(model.AccountDao)
-	ledgerDao      = new(model.LedgerDao)
-	memberDao      = new(model.MemberDao)
-	projectDao     = new(model.ProjectDao)
-	supplierDao    = new(model.SupplierDao)
-	userDao        = new(model.UserDao)
-	tplLedgerDao   = new(model.TplLedgerDao)
-	transactionDao = new(model.TransactionDao)
+	accountDao     = new(dao.AccountDao)
+	ledgerDao      = new(dao.LedgerDao)
+	memberDao      = new(dao.MemberDao)
+	projectDao     = new(dao.ProjectDao)
+	supplierDao    = new(dao.SupplierDao)
+	userDao        = new(dao.UserDao)
+	tplLedgerDao   = new(dao.TplLedgerDao)
+	transactionDao = new(dao.TransactionDao)
 
 	ledgerService = new(LedgerService)
 )

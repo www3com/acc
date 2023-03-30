@@ -3,7 +3,7 @@ package api
 import (
 	"acc/internal/consts"
 	user2 "acc/internal/consts/userstate"
-	"acc/internal/model"
+	"acc/internal/dao"
 	"acc/internal/pkg/r"
 	"github.com/gin-gonic/gin"
 )
@@ -44,7 +44,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	user := model.User{
+	user := dao.User{
 		Nickname:  p.Nickname,
 		Username:  p.Username,
 		Password:  p.Password,

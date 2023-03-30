@@ -1,11 +1,11 @@
 package service
 
 import (
-	"acc/internal/model"
+	"acc/internal/dao"
 )
 
 type MemberService struct{}
 
-func (s *MemberService) List(ledgerId int64) ([]*model.Member, error) {
+func (s *MemberService) List(ledgerId int64) ([]*dao.Member, error) {
 	return memberDao.List(ledgerId)
 }

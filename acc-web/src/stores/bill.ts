@@ -1,9 +1,20 @@
 import {makeAutoObservable} from "mobx";
-import {listAccounts, listExpenses, listIncomeExpenses, listIncomes} from "@/services/account";
+import {listAccounts, listExpenses, listIncomeExpenses, listIncomes, saveAccount} from "@/services/account";
 import {listProjects} from "@/services/project";
 import {listMembers} from "@/services/member";
 import {listSuppliers} from "@/services/supplier";
-import {listTransactions} from "@/services/bill";
+import {listTotalTransaction, listTransactions, saveTransaction} from "@/services/bill";
+import {Dayjs} from "dayjs";
+
+interface TransactionParams {
+    startDate: Dayjs | null,
+    endDate: Dayjs | null,
+    accounts: number[],
+    cpAccounts: number[],
+    projects: number[],
+    members: number[],
+    suppliers: number[]
+}
 
 export class BillStore {
 
@@ -15,7 +26,7 @@ export class BillStore {
     incomes = [];
     expenses = [];
 
-    params = {
+    params: TransactionParams = {
         startDate: null,
         endDate: null,
         accounts: [],
@@ -26,10 +37,18 @@ export class BillStore {
     };
 
     transactions = [];
+    totalTransaction = {
+        income: '0.00',
+        expense: '0.00',
+        balance: '0.00'
+    }
+
+    loading = false;
 
     constructor() {
         makeAutoObservable(this);
         this.listTransactions();
+        this.listTotalTransaction();
         this.listIncomes();
         this.listExpenses();
         this.listIncomeExpenses();
@@ -79,9 +98,35 @@ export class BillStore {
     }
 
     * listTransactions(): any {
-        const p = {}
+        const p = {
+            ...this.params,
+            startDate: this.params.startDate?.valueOf(),
+            endDate: this.params.endDate?.valueOf(),
+        }
         const r = yield listTransactions(p)
         this.transactions = r.data;
     }
 
+    * listTotalTransaction(): any {
+        const p = {
+            ...this.params,
+            startDate: this.params.startDate?.valueOf(),
+            endDate: this.params.endDate?.valueOf(),
+        }
+        const r = yield listTotalTransaction(p)
+        this.totalTransaction = r.data;
+    }
+
+    * saveTransaction(transaction: any): any {
+        try {
+            this.loading = true
+            yield saveTransaction(transaction);
+            this.listTransactions()
+            this.listTotalTransaction()
+        } catch (e) {
+            throw e;
+        } finally {
+            this.loading = false
+        }
+    }
 }
