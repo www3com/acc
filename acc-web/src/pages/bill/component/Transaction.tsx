@@ -1,41 +1,54 @@
-import {Button, Col, DatePicker, Form, Input, notification, Row, Select, Tabs, TreeSelect} from 'antd';
-import {inject, observer} from "mobx-react";
+import {Button, Col, DatePicker, Form, Input, Row, Select, TreeSelect} from 'antd';
 import dayjs from "dayjs";
 
-const expenses = ({store}: any) => {
-    const onFinish = async (values: any) => {
-        await store.saveTransaction({...values, type: 1, tradingTime: values.tradingTime.valueOf()});
-        notification.success({
-            message: '保存支出明细成功',
-        })
+interface Item {
+    label: string,
+    options: [],
+    visible?: boolean
+}
+
+interface Transaction {
+    type: number,
+    account: Item,
+    cpAccount: Item,
+    project?: Item,
+    member?: Item,
+    supplier?: Item
+    onFinish?: Function
+}
+
+export default ({type, account, cpAccount, project, member, supplier, onFinish}: Transaction) => {
+    const finishHandler = async (values: any) => {
+        if (onFinish) {
+            onFinish({...values, type: type, tradingTime: values.tradingTime.valueOf()})
+        }
     };
 
     return (
-        <Form name='expenses' autoComplete="off" colon={false} onFinish={onFinish} initialValues={{tradingTime: dayjs()}}>
+        <Form name='transfer' autoComplete="off" colon={false} onFinish={finishHandler}
+              initialValues={{tradingTime: dayjs()}}>
             <Row gutter={36}>
                 <Col span={6}>
-                    <Form.Item label="分类" name="accountId" rules={[{required: true, message: '请选择分类'}]}>
+                    <Form.Item label={account.label} name="accountId"
+                               rules={[{required: true, message: '请选择' + account.label}]}>
                         <TreeSelect
                             style={{width: '100%'}}
                             dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                            placeholder="选择分类"
                             fieldNames={{label: 'name', value: 'id'}}
                             allowClear
-                            treeData={store.expenses}
+                            treeData={account.options}
                         />
                     </Form.Item>
                 </Col>
                 <Col span={6}>
-                    <Form.Item label="账户" name="cpAccountId" rules={[{required: true, message: '请选择账户'}]}>
-                        <TreeSelect
-
-                            style={{width: '100%'}}
-                            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                            placeholder="选择账户"
-                            fieldNames={{label: 'name', value: 'id'}}
-                            allowClear
-                            treeData={store.cpAccounts}
-                        />
+                    <Form.Item label={cpAccount.label} name="cpAccountId"
+                               rules={[{required: true, message: '请选择' + cpAccount.label}]}>
+                        <TreeSelect style={{width: '100%'}}
+                                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                                    placeholder="选择账户"
+                                    fieldNames={{label: 'name', value: 'id'}}
+                                    allowClear
+                                    treeData={cpAccount.options}/>
                     </Form.Item>
                 </Col>
                 <Col span={6}>
@@ -50,17 +63,17 @@ const expenses = ({store}: any) => {
                 </Col>
                 <Col span={6}>
                     <Form.Item label="项目" name="projectId">
-                        <Select fieldNames={{label: 'name', value: 'id'}} options={store.projects}/>
+                        <Select fieldNames={{label: 'name', value: 'id'}} options={project?.options}/>
                     </Form.Item>
                 </Col>
                 <Col span={6}>
                     <Form.Item label="成员" name="memberId">
-                        <Select fieldNames={{label: 'name', value: 'id'}} options={store.members}/>
+                        <Select fieldNames={{label: 'name', value: 'id'}} options={member?.options}/>
                     </Form.Item>
                 </Col>
                 <Col span={6}>
                     <Form.Item label="商家" name="supplierId">
-                        <Select fieldNames={{label: 'name', value: 'id'}} options={store.suppliers}/>
+                        <Select fieldNames={{label: 'name', value: 'id'}} options={supplier?.options}/>
                     </Form.Item>
                 </Col>
             </Row>
@@ -78,4 +91,3 @@ const expenses = ({store}: any) => {
     );
 };
 
-export default inject('store')(observer(expenses))

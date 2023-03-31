@@ -8,11 +8,15 @@ import (
 	"acc/internal/model"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 	"gorm.io/gorm"
 	"time"
 )
 
 type TransactionService struct{}
+
+var p = message.NewPrinter(language.English)
 
 func (s *TransactionService) InsertBalance(tx *gorm.DB, ledgerId int64, userId int64, accountId int64, amount decimal.Decimal) error {
 	current, err := accountDao.Get(ledgerId, accountId)
@@ -87,18 +91,25 @@ func (s *TransactionService) ListTotal(tran *model.TransactionQuery) (*model.Tra
 		return nil, err
 	}
 
-	var vo model.TransactionTotalVO
+	var (
+		expense decimal.Decimal
+		income  decimal.Decimal
+	)
 	for _, total := range totals {
 		if total.Type == t.TypeExpenses {
-			vo.Expense = total.Amount
+			expense = total.Amount
 		}
 		if total.Type == t.TypeIncome {
-			vo.Income = total.Amount
+			income = total.Amount
 		}
 	}
 
-	vo.Balance = vo.Income.Sub(vo.Expense)
-	vo.Expense = vo.Expense.Neg()
+	vo := model.TransactionTotalVO{
+		Income:  "+" + p.Sprintf("%.2f", income.Round(2).InexactFloat64()),
+		Expense: p.Sprintf("%.2f", expense.Round(2).Neg().InexactFloat64()),
+		Balance: p.Sprintf("%.2f", income.Sub(expense).Round(2).InexactFloat64()),
+	}
+
 	return &vo, nil
 }
 
@@ -184,11 +195,11 @@ func translateSupplier(supplierId int64, suppliers []*dao.Supplier) string {
 	return ""
 }
 
-func getAmount(transactionType int, amount decimal.Decimal) decimal.Decimal {
+func getAmount(transactionType int, amount decimal.Decimal) string {
 	switch transactionType {
 	case t.TypeExpenses, t.TypeLend, t.TypeDebtOut, t.TypeTransfer:
-		return amount.Neg()
+		return p.Sprintf("%.2f", amount.Neg().Round(2).InexactFloat64())
 	default:
-		return amount
+		return p.Sprintf("%.2f", amount.Round(2).InexactFloat64())
 	}
 }

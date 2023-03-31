@@ -42,7 +42,7 @@ func ListTotalTransaction(c *gin.Context) {
 	r.Render(c, trans, err)
 }
 
-func SaveTransaction(c *gin.Context) {
+func CreateTransaction(c *gin.Context) {
 	var tran model.TransactionBO
 	if err := r.BindAndValid(c, &tran); err != nil {
 		r.RenderFail(c, err)

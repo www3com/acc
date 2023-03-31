@@ -4,6 +4,7 @@ import (
 	"acc/internal/consts"
 	acc "acc/internal/consts/account"
 	"acc/internal/dao"
+	"acc/internal/model"
 	"acc/internal/pkg/code"
 	"github.com/shopspring/decimal"
 	"github.com/upbos/go-saber/e"
@@ -11,44 +12,16 @@ import (
 	"time"
 )
 
-type Account struct {
-	Id       int64  `json:"id"`
-	Name     string `json:"name" binding:"required"`
-	Remark   string `json:"remark"`
-	ParentId int64  `json:"parentId"`
-}
-
-type AccountDetails struct {
+type AccountOverview struct {
 	Total     decimal.Decimal `json:"total"`
 	Debt      decimal.Decimal `json:"debt"`
 	NetAmount decimal.Decimal `json:"netAmount"`
 	Details   []*dao.Account  `json:"details"`
 }
-
-type DeleteAccount struct {
-	LedgerId int64
-	Code     string `form:"code"`
-}
-
-type UpdateName struct {
-	Id   int64  `form:"id" binding:"required"`
-	Name string `form:"name" binding:"required"`
-}
-
-type UpdateRemark struct {
-	Id     int64  `form:"id" binding:"required"`
-	Remark string `form:"remark"`
-}
-
-type UpdateBalance struct {
-	Id     int64           `form:"id" binding:"required"`
-	Amount decimal.Decimal `form:"amount" binding:"required"`
-}
-
 type AccountService struct{}
 
 // Create 创建账户
-func (s *AccountService) Create(ledgerId int64, account *Account) error {
+func (s *AccountService) Create(ledgerId int64, account *model.AccountBO) error {
 	parent, err := accountDao.Get(ledgerId, account.ParentId)
 	if err != nil {
 		log.Error(err, "get parent account")
@@ -86,20 +59,21 @@ func (s *AccountService) Create(ledgerId int64, account *Account) error {
 }
 
 // Update 更新账户
-func (s *AccountService) Update(ledgerId int64, account *Account) error {
+func (s *AccountService) Update(ledgerId int64, account *model.UpdateAccountBO) error {
 	now := time.Now().UnixMicro()
-	dbAccount := dao.Account{
-		UpdateTime: now,
-		LedgerId:   ledgerId,
-		ID:         account.Id,
-		Name:       account.Name,
-		Remark:     account.Remark,
+	cols := make(map[string]interface{})
+	cols["update_time"] = now
+	switch account.Type {
+	case 1:
+		cols["name"] = account.Name
+	case 2:
+		cols["remark"] = account.Remark
+	case 3:
 	}
-
-	return accountDao.Update(&dbAccount)
+	return accountDao.Update(ledgerId, account.Id, cols)
 }
 
-func (s *AccountService) Delete(account *DeleteAccount) error {
+func (s *AccountService) Delete(account *model.DeleteAccountBO) error {
 	level := code.Level(account.Code)
 	if level == 1 {
 		return consts.ErrDeleteTopAccount
@@ -115,21 +89,7 @@ func (s *AccountService) Delete(account *DeleteAccount) error {
 	return accountDao.Delete(account.LedgerId, account.Code)
 }
 
-func (s *AccountService) UpdateName(ledgerId int64, account *UpdateName) error {
-	now := time.Now().UnixMicro()
-	return accountDao.UpdateName(ledgerId, account.Id, account.Name, now)
-}
-
-func (s *AccountService) UpdateRemark(ledgerId int64, account *UpdateRemark) error {
-	now := time.Now().UnixMicro()
-	return accountDao.UpdateRemark(ledgerId, account.Id, account.Remark, now)
-}
-
-func (s *AccountService) UpdateBalance(ledgerId int64, account *UpdateBalance) error {
-	return nil
-}
-
-func (s *AccountService) Overview(ledgerId int64) (*AccountDetails, error) {
+func (s *AccountService) Overview(ledgerId int64) (*AccountOverview, error) {
 
 	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeAsset, acc.TypeReceivables, acc.TypeDebt)
 	if err != nil {
@@ -152,7 +112,7 @@ func (s *AccountService) Overview(ledgerId int64) (*AccountDetails, error) {
 		parent.Children = append(parent.Children, account)
 	}
 
-	var accountDetails = &AccountDetails{}
+	var accountDetails = &AccountOverview{}
 	// 计算金额
 	for _, account := range calcAccounts {
 		calc(accountDetails, account)
@@ -171,60 +131,25 @@ func (s *AccountService) Overview(ledgerId int64) (*AccountDetails, error) {
 	return accountDetails, nil
 }
 
-func (s *AccountService) ListAccounts(ledgerId int64) ([]*dao.Account, error) {
+func (s *AccountService) List(ledgerId int64) ([]*dao.Account, error) {
 	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeAsset, acc.TypeReceivables, acc.TypeDebt)
 	if err != nil {
-		return nil, e.Wrap("Query account error", err)
+		return nil, e.Wrap("list accounts", err)
 	}
 
 	return buildTree(accounts), nil
 }
 
-// ListIncomes 查询收入账户
-func (s *AccountService) ListIncomes(ledgerId int64) ([]*dao.Account, error) {
-	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeIncome)
+func (s *AccountService) ListAll(ledgerId int64) ([]*dao.Account, error) {
+	accounts, err := accountDao.ListByTypes(ledgerId)
 	if err != nil {
-		return nil, e.Wrap("Query account error", err)
+		return nil, e.Wrap("list all accounts", err)
 	}
 
 	return buildTree(accounts), nil
 }
 
-// ListExpenses 查询支出账户
-func (s *AccountService) ListExpenses(ledgerId int64) ([]*dao.Account, error) {
-	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeExpenses)
-	if err != nil {
-		return nil, e.Wrap("Query account error", err)
-	}
-
-	return buildTree(accounts), nil
-}
-
-func (s *AccountService) ListIncomeExpenses(ledgerId int64) ([]*dao.Account, error) {
-
-	incomes, err := accountDao.ListByTypes(ledgerId, acc.TypeIncome)
-	if err != nil {
-		return nil, e.Wrap("Query account error", err)
-	}
-	income := dao.Account{
-		ID:       -1,
-		Name:     "收入",
-		Children: buildTree(incomes),
-	}
-
-	expenses, err := accountDao.ListByTypes(ledgerId, acc.TypeExpenses)
-	if err != nil {
-		return nil, e.Wrap("Query account error", err)
-	}
-	expense := dao.Account{
-		ID:       -2,
-		Name:     "支出",
-		Children: buildTree(expenses),
-	}
-	return []*dao.Account{&income, &expense}, nil
-}
-
-func calc(accountDetails *AccountDetails, account *dao.Account) {
+func calc(accountDetails *AccountOverview, account *dao.Account) {
 	if account.Children == nil {
 		return
 	}

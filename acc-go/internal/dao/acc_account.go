@@ -46,19 +46,8 @@ func (d *AccountDao) BatchInsert(tx *gorm.DB, ledgerId, tLedgerId int64, now int
 	return tx.Exec(sql, ledgerId, now, now, tLedgerId).Error
 }
 
-func (d *AccountDao) Update(account *Account) error {
-	sql := "update acc_account set name = ?, remark = ?, update_time = ? where id = ? and ledger_id = ?"
-	return db.DB.Exec(sql, account.Name, account.Remark, account.UpdateTime, account.ID, account.LedgerId).Error
-}
-
-func (d *AccountDao) UpdateName(ledgerId int64, id int64, name string, updateTime int64) error {
-	sql := "update acc_account set name = ?,  update_time = ? where id = ? and ledger_id = ?"
-	return db.DB.Exec(sql, name, updateTime, id, ledgerId).Error
-}
-
-func (d *AccountDao) UpdateRemark(ledgerId int64, id int64, remark string, updateTime int64) error {
-	sql := "update acc_account set remark = ?,  update_time = ? where id = ? and ledger_id = ?"
-	return db.DB.Exec(sql, remark, updateTime, id, ledgerId).Error
+func (d *AccountDao) Update(ledgerId int64, id int64, cols map[string]interface{}) error {
+	return db.DB.Model(&Account{ID: id}).Where("ledger_id = ?", ledgerId).Updates(cols).Error
 }
 
 func (d *AccountDao) Delete(ledgerId int64, code string) error {
@@ -85,7 +74,12 @@ func (d *AccountDao) List(ledgerId int64) ([]*Account, error) {
 
 func (d *AccountDao) ListByTypes(ledgerId int64, types ...int) ([]*Account, error) {
 	var accounts []*Account
-	err := db.DB.Where("ledger_id = ? and type in ?", ledgerId, types).Order("id asc").Find(&accounts).Error
+	where := "ledger_id = @ledgerId"
+	if len(types) > 0 {
+		where += " and type in @types"
+	}
+	params := map[string]interface{}{"ledgerId": ledgerId, "types": types}
+	err := db.DB.Where(where, params).Order("id asc").Find(&accounts).Error
 	return accounts, err
 }
 

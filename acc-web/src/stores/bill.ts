@@ -1,5 +1,5 @@
 import {makeAutoObservable} from "mobx";
-import {listAccounts, listExpenses, listIncomeExpenses, listIncomes, saveAccount} from "@/services/account";
+import {listAccounts, listDebts, listExpenses, listIncomeExpenses, listIncomes, saveAccount} from "@/services/account";
 import {listProjects} from "@/services/project";
 import {listMembers} from "@/services/member";
 import {listSuppliers} from "@/services/supplier";
@@ -25,6 +25,7 @@ export class BillStore {
     suppliers = [];
     incomes = [];
     expenses = [];
+    debts = [];
 
     params: TransactionParams = {
         startDate: null,
@@ -52,6 +53,7 @@ export class BillStore {
         this.listIncomes();
         this.listExpenses();
         this.listIncomeExpenses();
+        this.listDebts();
         this.listCpAccounts();
         this.listProjects();
         this.listMembers();
@@ -61,6 +63,7 @@ export class BillStore {
     setParams(params: any) {
         this.params = {...this.params, ...params}
     }
+
 
     * listIncomes(): any {
         const r = yield listIncomes();
@@ -75,6 +78,11 @@ export class BillStore {
     * listIncomeExpenses(): any {
         const r = yield listIncomeExpenses();
         this.accounts = r.data;
+    }
+
+    * listDebts(): any {
+        const r = yield listDebts();
+        this.debts = r.data;
     }
 
     * listCpAccounts(): any {

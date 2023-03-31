@@ -8,9 +8,9 @@ type TransactionTotalBO struct {
 }
 
 type TransactionTotalVO struct {
-	Income  decimal.Decimal `json:"income"`
-	Expense decimal.Decimal `json:"expense"`
-	Balance decimal.Decimal `json:"balance"`
+	Income  string `json:"income"`
+	Expense string `json:"expense"`
+	Balance string `json:"balance"`
 }
 
 type TransactionBO struct {
@@ -28,16 +28,16 @@ type TransactionBO struct {
 }
 
 type TransactionVO struct {
-	Id          int64           `json:"id"`
-	TradingTime string          `json:"tradingTime"`
-	Type        string          `json:"type"`
-	Account     string          `json:"account"`
-	CpAccount   string          `json:"cpAccount"`
-	Project     string          `json:"project"`
-	Member      string          `json:"member"`
-	Supplier    string          `json:"supplier"`
-	Amount      decimal.Decimal `json:"amount"`
-	Remark      string          `json:"remark"`
+	Id          int64  `json:"id"`
+	TradingTime string `json:"tradingTime"`
+	Type        string `json:"type"`
+	Account     string `json:"account"`
+	CpAccount   string `json:"cpAccount"`
+	Project     string `json:"project"`
+	Member      string `json:"member"`
+	Supplier    string `json:"supplier"`
+	Amount      string `json:"amount"`
+	Remark      string `json:"remark"`
 }
 
 type TransactionQuery struct {

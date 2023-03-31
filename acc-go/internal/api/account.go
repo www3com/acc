@@ -2,8 +2,8 @@ package api
 
 import (
 	"acc/internal/context"
+	"acc/internal/model"
 	"acc/internal/pkg/r"
-	"acc/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,42 +23,22 @@ func ListAccounts(c *gin.Context) {
 		r.RenderFail(c, err)
 		return
 	}
-	accounts, err := accountService.ListAccounts(ledgerId)
+	accounts, err := accountService.List(ledgerId)
 	r.Render(c, accounts, err)
 }
 
-func ListIncomes(c *gin.Context) {
+func ListAllAccounts(c *gin.Context) {
 	ledgerId, err := context.GetLedgerId(c)
 	if err != nil {
 		r.RenderFail(c, err)
 		return
 	}
-	accounts, err := accountService.ListIncomes(ledgerId)
+	accounts, err := accountService.ListAll(ledgerId)
 	r.Render(c, accounts, err)
 }
 
-func ListExpenses(c *gin.Context) {
-	ledgerId, err := context.GetLedgerId(c)
-	if err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-	accounts, err := accountService.ListExpenses(ledgerId)
-	r.Render(c, accounts, err)
-}
-
-func ListIncomeExpenses(c *gin.Context) {
-	ledgerId, err := context.GetLedgerId(c)
-	if err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-	accounts, err := accountService.ListIncomeExpenses(ledgerId)
-	r.Render(c, accounts, err)
-}
-
-func SaveAccount(c *gin.Context) {
-	var account service.Account
+func CreateAccount(c *gin.Context) {
+	var account model.AccountBO
 	if err := r.BindAndValid(c, &account); err != nil {
 		r.RenderFail(c, err)
 		return
@@ -70,13 +50,24 @@ func SaveAccount(c *gin.Context) {
 		return
 	}
 
-	if account.Id != 0 {
-		err := accountService.Update(ledgerId, &account)
-		r.Render(c, nil, err)
+	err = accountService.Create(ledgerId, &account)
+	r.Render(c, nil, err)
+}
+
+func UpdateAccount(c *gin.Context) {
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
 		return
 	}
 
-	err = accountService.Create(ledgerId, &account)
+	var account model.UpdateAccountBO
+	if err := r.BindAndValid(c, &account); err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	err = accountService.Update(ledgerId, &account)
 	r.Render(c, nil, err)
 }
 
@@ -87,7 +78,7 @@ func DeleteAccount(c *gin.Context) {
 		return
 	}
 
-	var account service.DeleteAccount
+	var account model.DeleteAccountBO
 	if err := r.BindAndValid(c, &account); err != nil {
 		r.RenderFail(c, err)
 		return
@@ -95,56 +86,5 @@ func DeleteAccount(c *gin.Context) {
 
 	account.LedgerId = ledgerId
 	err = accountService.Delete(&account)
-	r.Render(c, nil, err)
-}
-
-func UpdateName(c *gin.Context) {
-	ledgerId, err := context.GetLedgerId(c)
-	if err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-
-	var account service.UpdateName
-	if err := r.BindAndValid(c, &account); err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-
-	err = accountService.UpdateName(ledgerId, &account)
-	r.Render(c, nil, err)
-}
-
-func UpdateRemark(c *gin.Context) {
-	ledgerId, err := context.GetLedgerId(c)
-	if err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-
-	var account service.UpdateRemark
-	if err := r.BindAndValid(c, &account); err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-
-	err = accountService.UpdateRemark(ledgerId, &account)
-	r.Render(c, nil, err)
-}
-
-func UpdateBalance(c *gin.Context) {
-	ledgerId, err := context.GetLedgerId(c)
-	if err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-
-	var account service.UpdateBalance
-	if err := r.BindAndValid(c, &account); err != nil {
-		r.RenderFail(c, err)
-		return
-	}
-
-	err = accountService.UpdateBalance(ledgerId, &account)
 	r.Render(c, nil, err)
 }

@@ -20,6 +20,10 @@ export async function listIncomeExpenses() {
     return await request.get('/api/account/income-expenses');
 }
 
+export async function listDebts() {
+    return await request.get('/api/account/debts');
+}
+
 export async function saveAccount(account: any) {
     return await request.post('/api/account', account);
 }
