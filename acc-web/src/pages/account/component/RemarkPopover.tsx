@@ -3,14 +3,14 @@ import {Button, Form, Input, Modal, Popover, Space} from 'antd';
 import {inject, observer} from 'mobx-react';
 import {EditOutlined} from '@ant-design/icons';
 import styles from '../style.less'
-import {updateRemark} from "@/services/account";
+import {updateAccount} from "@/services/account";
 
 
 const RemarkPopover = ({record}: any) => {
 
     const [open, setOpen] = useState(false);
     const onOk = async (values: any) => {
-        await updateRemark(record.id, values.remark);
+        await updateAccount({type: 'remark', id: record.id, remark: values.remark});
         record.remark = values.remark;
         setOpen(false);
     };

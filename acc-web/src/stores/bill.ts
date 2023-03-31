@@ -1,5 +1,5 @@
 import {makeAutoObservable} from "mobx";
-import {listAccounts, listDebts, listExpenses, listIncomeExpenses, listIncomes, saveAccount} from "@/services/account";
+import {listAccounts, listAccountsByTypes} from "@/services/account";
 import {listProjects} from "@/services/project";
 import {listMembers} from "@/services/member";
 import {listSuppliers} from "@/services/supplier";
@@ -50,11 +50,7 @@ export class BillStore {
         makeAutoObservable(this);
         this.listTransactions();
         this.listTotalTransaction();
-        this.listIncomes();
-        this.listExpenses();
-        this.listIncomeExpenses();
-        this.listDebts();
-        this.listCpAccounts();
+        this.listAccounts();
         this.listProjects();
         this.listMembers();
         this.listSuppliers();
@@ -64,30 +60,12 @@ export class BillStore {
         this.params = {...this.params, ...params}
     }
 
-
-    * listIncomes(): any {
-        const r = yield listIncomes();
-        this.incomes = r.data;
-    }
-
-    * listExpenses(): any {
-        const r = yield listExpenses();
-        this.expenses = r.data;
-    }
-
-    * listIncomeExpenses(): any {
-        const r = yield listIncomeExpenses();
-        this.accounts = r.data;
-    }
-
-    * listDebts(): any {
-        const r = yield listDebts();
-        this.debts = r.data;
-    }
-
-    * listCpAccounts(): any {
-        const r = yield listAccounts();
-        this.cpAccounts = r.data;
+    * listAccounts(): any {
+        this.incomes = yield listAccountsByTypes([5]);
+        this.expenses = yield listAccountsByTypes([6]);
+        this.debts = yield listAccountsByTypes([3]);
+        this.accounts = yield listAccountsByTypes([5, 6]);
+        this.cpAccounts = yield listAccountsByTypes([1, 2, 3]);
     }
 
     * listProjects(): any {

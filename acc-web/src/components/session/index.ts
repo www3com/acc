@@ -1,5 +1,4 @@
 const TOKEN_KEY = 'ACC_TOKEN';
-const STORAGE_LEDGER_KEY = 'ACC_CURRENT_LEDGER';
 
 export function getToken() {
   return sessionStorage.getItem(TOKEN_KEY);

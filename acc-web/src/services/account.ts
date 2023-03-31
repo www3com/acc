@@ -1,45 +1,48 @@
 import request from '@/components/Request';
 
+const ACCOUNTS_CACHE_KEY = 'ACCOUNTS';
+
 export async function getOverview() {
-    return await request.get('/api/account/overview');
+    return await request.get('/api/accounts/overview');
 }
 
 export async function listAccounts() {
     return await request.get('/api/accounts');
 }
 
-export async function listIncomes() {
-    return await request.get('/api/account/incomes');
-}
-
-export async function listExpenses() {
-    return await request.get('/api/account/expenses');
-}
-
-export async function listIncomeExpenses() {
-    return await request.get('/api/account/income-expenses');
-}
-
-export async function listDebts() {
-    return await request.get('/api/account/debts');
+export async function listAccountsByTypes(types: number[]) {
+    let accounts = await listAllAccounts();
+    let arr = [];
+    for (const account of accounts) {
+        if (types.includes(account.type)) {
+            arr.push(account)
+        }
+    }
+    return arr;
 }
 
 export async function saveAccount(account: any) {
-    return await request.post('/api/account', account);
+    sessionStorage.removeItem(ACCOUNTS_CACHE_KEY);
+    return await request.post('/api/accounts', account);
 }
 
 export async function deleteAccount(code: string) {
-    return await request.delete('/api/account', {code: code});
+    sessionStorage.removeItem(ACCOUNTS_CACHE_KEY);
+    return await request.delete('/api/accounts', {code: code});
 }
 
-export async function updateName(id: number, name: string) {
-    return await request.put('/api/account/name', {id: id, name: name});
+export async function updateAccount(account: any) {
+    sessionStorage.removeItem(ACCOUNTS_CACHE_KEY);
+    return await request.put('/api/accounts', account);
 }
 
-export async function updateRemark(id: number, remark: string) {
-    return await request.put('/api/account/remark', {id: id, remark: remark});
-}
 
-export async function updateBalance(id: number, amount: number) {
-    return await request.put('/api/account/balance', {id: id, amount: amount});
+async function listAllAccounts() {
+    let json = sessionStorage.getItem(ACCOUNTS_CACHE_KEY);
+    if (json != null) {
+        return JSON.parse(json);
+    }
+    let r = await request.get('/api/accounts/all');
+    sessionStorage.setItem(ACCOUNTS_CACHE_KEY, JSON.stringify(r.data))
+    return r.data;
 }

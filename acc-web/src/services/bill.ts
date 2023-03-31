@@ -5,9 +5,9 @@ export async function listTransactions(params: any) {
 }
 
 export async function listTotalTransaction(params: any) {
-    return await request.get('/api/transaction/total', params);
+    return await request.get('/api/transactions/total', params);
 }
 
 export async function saveTransaction(params: any) {
-    return await request.post('/api/transaction', params);
+    return await request.post('/api/transactions', params);
 }

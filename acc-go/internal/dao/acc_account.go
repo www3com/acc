@@ -11,7 +11,7 @@ type Account struct {
 	CreateTime int64           `json:"-"`
 	UpdateTime int64           `json:"-"`
 	LedgerId   int64           `json:"-"`
-	Type       int             `json:"-"`
+	Type       int             `json:"type"`
 	Name       string          `json:"name"`
 	Code       string          `json:"code"`
 	Level      int             `json:"level"`

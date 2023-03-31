@@ -36,8 +36,10 @@ export default ({title, children, onOk, bodyStyle}: ItemProps) => {
 
     return <div ref={ref} className={styles.searchItem}>
         <Space size={5} onClick={event => setVisible(true)}>{title}<DownOutlined/></Space>
-        <div className={visible ? classnames(styles.active, styles.innerItem) : styles.innerItem} style={bodyStyle}>
-            {children}
+        <div className={visible ? classnames(styles.active, styles.dropdown) : styles.dropdown} style={bodyStyle}>
+            <div className={styles.inner}>
+                {children}
+            </div>
             <Divider style={{margin: '8px 0px 8px 0px'}}/>
             <Space style={{width: '100%', direction: 'rtl', paddingRight: 10}}>
                 <Button type='primary' size='small' onClick={okHandler}>确定</Button>

@@ -11,18 +11,20 @@
   padding: 5px 15px;
   cursor: pointer;
 
-  .innerItem {
+  .dropdown {
     display: none;
     background-color: white;
     position: absolute;
     min-width: 200px;
-    max-height: 400px;
-    overflow: auto;
     top: 32px;
     z-index: 1000;
-    left: 0px;
+    left: 0;
     border: 1px solid #eee;
     padding: 10px 0px;
+    .inner {
+      max-height: 350px;
+      overflow: auto;
+    }
   }
   .active {
     display: inline;

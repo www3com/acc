@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {Button, Form, Input, Modal, Popover, Space} from 'antd';
 import {EditOutlined} from '@ant-design/icons';
 import styles from '../style.less'
-import {updateName} from "@/services/account";
+import {updateAccount} from "@/services/account";
 
 
 const EditPopover = ({record}: any) => {
 
     const [open, setOpen] = useState(false);
     const onOk = async (values: any) => {
-        await updateName(record.id, values.name);
+        await updateAccount({type: 'name', id: record.id, name: values.name});
         record.name = values.name;
         setOpen(false);
     };

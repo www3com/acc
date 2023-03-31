@@ -12,7 +12,7 @@ type AccountBO struct {
 }
 
 type UpdateAccountBO struct {
-	Type   int             `json:"type"`
+	Type   string          `json:"type"`
 	Id     int64           `form:"id" binding:"required"`
 	Name   string          `form:"name"`
 	Remark string          `form:"remark"`

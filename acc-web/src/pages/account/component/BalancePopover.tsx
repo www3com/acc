@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import {Button, Form, Input, InputNumber, Popover, Space} from 'antd';
 import {EditOutlined} from '@ant-design/icons';
 import styles from '../style.less'
-import {updateBalance} from "@/services/account";
+import {updateAccount} from "@/services/account";
 
 const BalancePopover = ({record}: any) => {
     const [open, setOpen] = useState(false);
     const onOk = async (values: any) => {
-        await updateBalance(values.id, record.balance - values.balance);
+        await updateAccount({type: 'balance', id: record.id, amount: record.balance - values.balance});
         record.balance = values.balance;
         setOpen(false);
     };

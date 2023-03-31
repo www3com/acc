@@ -64,11 +64,11 @@ func (s *AccountService) Update(ledgerId int64, account *model.UpdateAccountBO) 
 	cols := make(map[string]interface{})
 	cols["update_time"] = now
 	switch account.Type {
-	case 1:
+	case "name":
 		cols["name"] = account.Name
-	case 2:
+	case "remark":
 		cols["remark"] = account.Remark
-	case 3:
+	case "balance":
 	}
 	return accountDao.Update(ledgerId, account.Id, cols)
 }
