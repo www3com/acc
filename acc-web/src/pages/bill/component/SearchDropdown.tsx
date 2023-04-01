@@ -4,14 +4,14 @@ import {DownOutlined} from "@ant-design/icons";
 import styles from "@/pages/bill/style.less";
 import classnames from 'classnames';
 
-interface ItemProps {
+export interface SearchDropdownProps {
     title: string,
     children?: any,
     onOk?: Function,
     bodyStyle?: any
 }
 
-export default ({title, children, onOk, bodyStyle}: ItemProps) => {
+export default ({title, children, onOk, bodyStyle}: SearchDropdownProps) => {
     const ref = useRef<HTMLDivElement | null>(null);
     const [visible, setVisible] = useState(false)
     const handleClick = (e: any) => {

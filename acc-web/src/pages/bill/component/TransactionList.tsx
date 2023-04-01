@@ -4,10 +4,9 @@ import {Card, Col, Divider, Row, Space, Table} from "antd";
 import Search from "@/pages/bill/component/Search";
 import type {ColumnsType} from 'antd/es/table';
 import TransactionDetail from "@/pages/bill/component/TransactionDetail";
-import RemarkPopover from "@/pages/account/component/RemarkPopover";
 import React from "react";
 
-const main = ({store}: any) => {
+const transactionList = ({store}: any) => {
     const columns: ColumnsType<any> = [
         {title: '日期', dataIndex: 'tradingTime', key: 'tradingTime', width: '120px', align: 'center'},
         {title: '业务类型', dataIndex: 'type', key: 'type', width: '80px', align: 'center'},
@@ -53,4 +52,4 @@ const main = ({store}: any) => {
     );
 };
 
-export default inject('store')(observer(main))
+export default inject('store')(observer(transactionList))

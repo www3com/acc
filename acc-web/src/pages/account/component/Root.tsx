@@ -1,10 +1,9 @@
 import React, {useEffect} from 'react';
-import {Card, Divider, Dropdown, message, Space, Statistic, Table, Modal, Tooltip} from 'antd';
+import {Card, Divider, Space, Statistic, Table, Modal, Tooltip} from 'antd';
 
 import {
-    CloseOutlined, DeleteOutlined,
-    DownOutlined, ExclamationCircleOutlined, MinusOutlined,
-    PayCircleOutlined, PlusCircleOutlined, PlusOutlined, RedEnvelopeOutlined,
+    DeleteOutlined, ExclamationCircleOutlined,
+    PayCircleOutlined, PlusCircleOutlined, RedEnvelopeOutlined,
     TransactionOutlined,
 } from '@ant-design/icons';
 import {inject, observer} from 'mobx-react';

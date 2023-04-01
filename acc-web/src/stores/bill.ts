@@ -7,16 +7,25 @@ import {listTotalTransaction, listTransactions, saveTransaction} from "@/service
 import {Dayjs} from "dayjs";
 
 interface TransactionParams {
-    startDate: Dayjs | null,
-    endDate: Dayjs | null,
-    accounts: number[],
-    cpAccounts: number[],
-    projects: number[],
-    members: number[],
-    suppliers: number[]
+    startTime: Dayjs | null,
+    endTime: Dayjs | null,
+    accounts: [],
+    cpAccounts: [],
+    projects: [],
+    members: [],
+    suppliers: []
 }
 
 export class BillStore {
+    params: TransactionParams = {
+        startTime: null,
+        endTime: null,
+        accounts: [],
+        cpAccounts: [],
+        projects: [],
+        members: [],
+        suppliers: []
+    };
 
     accounts = [];
     cpAccounts = [];
@@ -26,16 +35,6 @@ export class BillStore {
     incomes = [];
     expenses = [];
     debts = [];
-
-    params: TransactionParams = {
-        startDate: null,
-        endDate: null,
-        accounts: [],
-        cpAccounts: [],
-        projects: [],
-        members: [],
-        suppliers: []
-    };
 
     transactions = [];
     totalTransaction = {
@@ -86,8 +85,8 @@ export class BillStore {
     * listTransactions(): any {
         const p = {
             ...this.params,
-            startDate: this.params.startDate?.valueOf(),
-            endDate: this.params.endDate?.valueOf(),
+            startTime: this.params.startTime?.valueOf(),
+            endTime: this.params.endTime?.valueOf(),
         }
         const r = yield listTransactions(p)
         this.transactions = r.data;
@@ -96,8 +95,8 @@ export class BillStore {
     * listTotalTransaction(): any {
         const p = {
             ...this.params,
-            startDate: this.params.startDate?.valueOf(),
-            endDate: this.params.endDate?.valueOf(),
+            startTime: this.params.startTime?.valueOf(),
+            endTime: this.params.endTime?.valueOf(),
         }
         const r = yield listTotalTransaction(p)
         this.totalTransaction = r.data;

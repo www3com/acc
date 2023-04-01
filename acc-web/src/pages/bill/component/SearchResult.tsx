@@ -1,6 +1,4 @@
 import {Col, Row} from 'antd';
-
-
 import React from "react";
 import {CloseOutlined} from "@ant-design/icons";
 import styles from "@/pages/bill/style.less";

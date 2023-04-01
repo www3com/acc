@@ -1,29 +1,27 @@
-import {Col, ConfigProvider, Layout, Row} from 'antd';
-import zhCN from 'antd/locale/zh_CN';
+import {App, Col, ConfigProvider, Layout, Row} from 'antd';
 import {Provider} from "mobx-react";
 import style from "@/pages/bill/style.less";
 import {BillStore} from "@/stores/bill";
-import Top from "@/pages/bill/component/Top";
-import Main from "@/pages/bill/component/Main";
-import { theme } from '@/components/Theme';
+import TransactionTabs from "@/pages/bill/component/TransactionTabs";
+import TransactionList from "@/pages/bill/component/TransactionList";
 
 const store = new BillStore();
 
-const {Header, Content} = Layout
-
 export default () => {
     return (
-        <Provider store={store}>
-            <ConfigProvider>
-                <Row className={style.row}>
-                    <Col span={24} style={{padding: '0px 12px'}}>
-                        <Top/>
-                    </Col>
-                    <Col span={24}>
-                        <Main/>
-                    </Col>
-                </Row>
-            </ConfigProvider>
-        </Provider>
+            <Provider store={store}>
+                <ConfigProvider>
+
+                    <Row className={style.row} gutter={[0, 4]}>
+                        <Col span={24}>
+                            <TransactionTabs/>
+                        </Col>
+                        <Col span={24}>
+                            <TransactionList/>
+                        </Col>
+                    </Row>
+
+                </ConfigProvider>
+            </Provider>
     );
 }
