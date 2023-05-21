@@ -249,9 +249,7 @@ VALUES (1, 6, '宠物', '1021.05', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
 VALUES (1, 6, '坏账', '1021.06', 2, NULL, 1, NULL);
 INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 4, '余额调整', '9998', 1, NULL, 1, NULL);
-INSERT INTO public.tpl_account (ledger_id, type, name, code, level, icon, currency_id, remark)
-VALUES (1, 6, '余额调整', '9999', 1, NULL, 1, NULL);
+VALUES (1, 4, '所有者权益', '1050', 1, NULL, 1, NULL);
 
 -- 项目
 create table tpl_project

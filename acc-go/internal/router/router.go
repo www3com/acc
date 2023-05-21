@@ -40,9 +40,9 @@ func InitRouter() *gin.Engine {
 	root.DELETE("/accounts", api.DeleteAccount)    // 删除账户
 
 	// 交易
-	root.GET("/transactions", api.ListTransaction)            // 查询交易
-	root.GET("/transactions/total", api.ListTotalTransaction) // 查询总额、结余
-	root.POST("/transactions", api.CreateTransaction)         // 保存交易
+	root.POST("/transactions/list", api.ListTransaction)       // 查询交易
+	root.POST("/transactions/total", api.ListTotalTransaction) // 查询总额、结余
+	root.POST("/transactions", api.CreateTransaction)          // 保存交易
 
 	// 成员
 	root.GET("/members", api.ListMembers) // 查询成员列表

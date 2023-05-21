@@ -72,6 +72,12 @@ func (d *AccountDao) List(ledgerId int64) ([]*Account, error) {
 	return accounts, err
 }
 
+func (d *AccountDao) ListByIds(ledgerId int64, accountIds ...int64) ([]*Account, error) {
+	var accounts []*Account
+	err := db.DB.Where("ledger_id = ? and id in ?", ledgerId, accountIds).Find(&accounts).Error
+	return accounts, err
+}
+
 func (d *AccountDao) ListByTypes(ledgerId int64, types ...int) ([]*Account, error) {
 	var accounts []*Account
 	where := "ledger_id = @ledgerId"

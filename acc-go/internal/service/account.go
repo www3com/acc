@@ -6,18 +6,12 @@ import (
 	"acc/internal/dao"
 	"acc/internal/model"
 	"acc/internal/pkg/code"
-	"github.com/shopspring/decimal"
 	"github.com/upbos/go-saber/e"
 	"github.com/upbos/go-saber/log"
+	"gorm.io/gorm"
 	"time"
 )
 
-type AccountOverview struct {
-	Total     decimal.Decimal `json:"total"`
-	Debt      decimal.Decimal `json:"debt"`
-	NetAmount decimal.Decimal `json:"netAmount"`
-	Details   []*dao.Account  `json:"details"`
-}
 type AccountService struct{}
 
 // Create 创建账户
@@ -59,18 +53,22 @@ func (s *AccountService) Create(ledgerId int64, account *model.AccountBO) error 
 }
 
 // Update 更新账户
-func (s *AccountService) Update(ledgerId int64, account *model.UpdateAccountBO) error {
+func (s *AccountService) Update(ledgerId int64, userId int64, account *model.UpdateAccountBO) error {
 	now := time.Now().UnixMicro()
 	cols := make(map[string]interface{})
 	cols["update_time"] = now
 	switch account.Type {
 	case "name":
 		cols["name"] = account.Name
+		return accountDao.Update(ledgerId, account.Id, cols)
 	case "remark":
 		cols["remark"] = account.Remark
+		return accountDao.Update(ledgerId, account.Id, cols)
 	case "balance":
+		return transactionService.AdjustBalance(ledgerId, userId, account.Id, account.Amount)
 	}
-	return accountDao.Update(ledgerId, account.Id, cols)
+
+	return nil
 }
 
 func (s *AccountService) Delete(account *model.DeleteAccountBO) error {
@@ -89,7 +87,7 @@ func (s *AccountService) Delete(account *model.DeleteAccountBO) error {
 	return accountDao.Delete(account.LedgerId, account.Code)
 }
 
-func (s *AccountService) Overview(ledgerId int64) (*AccountOverview, error) {
+func (s *AccountService) Overview(ledgerId int64) (*model.AccountOverview, error) {
 
 	accounts, err := accountDao.ListByTypes(ledgerId, acc.TypeAsset, acc.TypeReceivables, acc.TypeDebt)
 	if err != nil {
@@ -112,7 +110,7 @@ func (s *AccountService) Overview(ledgerId int64) (*AccountOverview, error) {
 		parent.Children = append(parent.Children, account)
 	}
 
-	var accountDetails = &AccountOverview{}
+	var accountDetails = &model.AccountOverview{}
 	// 计算金额
 	for _, account := range calcAccounts {
 		calc(accountDetails, account)
@@ -149,7 +147,7 @@ func (s *AccountService) ListAll(ledgerId int64) ([]*dao.Account, error) {
 	return buildTree(accounts), nil
 }
 
-func calc(accountDetails *AccountOverview, account *dao.Account) {
+func calc(accountDetails *model.AccountOverview, account *dao.Account) {
 	if account.Children == nil {
 		return
 	}
@@ -182,4 +180,15 @@ func buildTree(accounts []*dao.Account) []*dao.Account {
 	}
 
 	return calcAccounts
+}
+
+func updateAccount(tx *gorm.DB, balance model.UpdateAccountBalanceBO) error {
+	switch balance.IncreaseAccountType {
+	case acc.TypeAsset, acc.TypeReceivables:
+
+	}
+	if balance.IncreaseAccountType == acc.TypeAsset {
+
+	}
+
 }

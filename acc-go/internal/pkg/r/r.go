@@ -6,7 +6,6 @@ import (
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/upbos/go-saber/e"
-	"github.com/upbos/go-saber/log"
 	"golang.org/x/text/language"
 	"net/http"
 	"strconv"
@@ -50,7 +49,6 @@ func Render(c *gin.Context, data interface{}, err error) {
 
 	v, ok := e.UnWrap(err)
 	if !ok {
-		log.Error(err, "")
 		render(c, http.StatusInternalServerError, e.ERROR, nil, data)
 		return
 	}

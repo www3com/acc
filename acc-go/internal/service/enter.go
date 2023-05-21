@@ -12,5 +12,6 @@ var (
 	tplLedgerDao   = new(dao.TplLedgerDao)
 	transactionDao = new(dao.TransactionDao)
 
-	ledgerService = new(LedgerService)
+	ledgerService      = new(LedgerService)
+	transactionService = new(TransactionService)
 )

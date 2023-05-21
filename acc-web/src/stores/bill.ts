@@ -57,6 +57,8 @@ export class BillStore {
 
     setParams(params: any) {
         this.params = {...this.params, ...params}
+        this.listTransactions();
+        this.listTotalTransaction();
     }
 
     * listAccounts(): any {
@@ -83,22 +85,12 @@ export class BillStore {
     }
 
     * listTransactions(): any {
-        const p = {
-            ...this.params,
-            startTime: this.params.startTime?.valueOf(),
-            endTime: this.params.endTime?.valueOf(),
-        }
-        const r = yield listTransactions(p)
+        const r = yield listTransactions(this.params)
         this.transactions = r.data;
     }
 
     * listTotalTransaction(): any {
-        const p = {
-            ...this.params,
-            startTime: this.params.startTime?.valueOf(),
-            endTime: this.params.endTime?.valueOf(),
-        }
-        const r = yield listTotalTransaction(p)
+        const r = yield listTotalTransaction(this.params)
         this.totalTransaction = r.data;
     }
 

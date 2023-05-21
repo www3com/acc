@@ -64,10 +64,10 @@ func buildWhere(tran *model.TransactionQuery) string {
 		where += " and supplier_id = @Suppliers"
 	}
 	if tran.StartTime != 0 {
-		where += " and trading_time >= @StartDate"
+		where += " and trading_time >= @StartTime"
 	}
 	if tran.EndTime != 0 {
-		where += " and trading_time <= @EndDate"
+		where += " and trading_time <= @EndTime"
 	}
 	return where
 }

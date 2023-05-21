@@ -3,20 +3,20 @@ package account
 const (
 
 	// TypeAsset 账户类型 - 资产
-	TypeAsset = 1
+	TypeAsset = iota + 1
 
 	// TypeReceivables 账户类型 - 应收款（债权）
-	TypeReceivables = 2
+	TypeReceivables
 
 	// TypeDebt 账户类型 - 负债
-	TypeDebt = 3
+	TypeDebt
 
 	// TypeEquity 账户类型 - 权益
-	TypeEquity = 4
+	TypeEquity
 
 	// TypeIncome 账户类型 - 收入
-	TypeIncome = 5
+	TypeIncome
 
 	// TypeExpenses 账户类型 - 支出
-	TypeExpenses = 6
+	TypeExpenses
 )

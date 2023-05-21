@@ -55,11 +55,6 @@ func CreateAccount(c *gin.Context) {
 }
 
 func UpdateAccount(c *gin.Context) {
-	ledgerId, err := context.GetLedgerId(c)
-	if err != nil {
-		r.RenderFail(c, err)
-		return
-	}
 
 	var account model.UpdateAccountBO
 	if err := r.BindAndValid(c, &account); err != nil {
@@ -67,7 +62,18 @@ func UpdateAccount(c *gin.Context) {
 		return
 	}
 
-	err = accountService.Update(ledgerId, &account)
+	ledgerId, err := context.GetLedgerId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+
+	userId, err := context.GetUserId(c)
+	if err != nil {
+		r.RenderFail(c, err)
+		return
+	}
+	err = accountService.Update(ledgerId, userId, &account)
 	r.Render(c, nil, err)
 }
 

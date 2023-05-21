@@ -47,6 +47,6 @@ type TransactionQuery struct {
 	Projects   []int64 `form:"projects"`
 	Members    []int64 `form:"members"`
 	Suppliers  []int64 `form:"suppliers"`
-	StartTime  int64   `form:"startDate"`
-	EndTime    int64   `form:"startDate"`
+	StartTime  int64   `form:"startTime"`
+	EndTime    int64   `form:"endTime"`
 }

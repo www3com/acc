@@ -1,8 +1,16 @@
 package model
 
 import (
+	"acc/internal/dao"
 	"github.com/shopspring/decimal"
 )
+
+type AccountOverview struct {
+	Total     decimal.Decimal `json:"total"`
+	Debt      decimal.Decimal `json:"debt"`
+	NetAmount decimal.Decimal `json:"netAmount"`
+	Details   []*dao.Account  `json:"details"`
+}
 
 type AccountBO struct {
 	Id       int64  `json:"id"`
@@ -22,4 +30,13 @@ type UpdateAccountBO struct {
 type DeleteAccountBO struct {
 	LedgerId int64
 	Code     string `form:"code"`
+}
+
+type UpdateAccountBalanceBO struct {
+	ledgerId            int64
+	IncreaseAccountType int
+	IncreaseAccountId   int64
+	DecreaseAccountType int
+	DecreaseAccountId   int64
+	amount              decimal.Decimal
 }

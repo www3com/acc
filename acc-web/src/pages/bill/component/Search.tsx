@@ -44,12 +44,22 @@ const search: FC = ({store}: any) => {
     }
 
     const onCloseAll = () => {
-        onClose('date')
-        onClose('account')
-        onClose('cpAccount')
-        onClose('project')
-        onClose('member')
-        onClose('supplier')
+        dateRef.current?.reset();
+        accountRef.current?.reset();
+        cpAccountRef.current?.reset();
+        projectRef.current?.reset();
+        memberRef.current?.reset();
+        supplierRef.current?.reset();
+        store.setParams({
+            startTime: null,
+            endTime: null,
+            accounts: [],
+            cpAccounts: [],
+            projects: [],
+            members: [],
+            suppliers: []
+        });
+
     }
     let dateName = store.params.startTime == null ? "" :
         store.params.startTime.format('YYYY-MM-DD') + " 至 " + store.params.endTime.format('YYYY-MM-DD')

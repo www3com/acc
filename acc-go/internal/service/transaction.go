@@ -8,6 +8,8 @@ import (
 	"acc/internal/model"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
+	"github.com/upbos/go-saber/db"
+	"github.com/upbos/go-saber/log"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"gorm.io/gorm"
@@ -18,45 +20,51 @@ type TransactionService struct{}
 
 var p = message.NewPrinter(language.English)
 
-func (s *TransactionService) InsertBalance(tx *gorm.DB, ledgerId int64, userId int64, accountId int64, amount decimal.Decimal) error {
+func (s *TransactionService) AdjustBalance(ledgerId int64, userId int64, accountId int64, amount decimal.Decimal) error {
+	accounts, err := accountDao.ListByIds(ledgerId, increaseAccountId, decreaseAccountId)
+	if err != nil {
+		return err
+	}
+
+	if len(accounts) != 2 {
+		return errors.New("the query account returns not two results")
+	}
+	var debitAccount, creditAccount *dao.Account
+	if accounts[0].ID == debitAccountId {
+		debitAccount = accounts[0]
+		creditAccount = accounts[1]
+	} else {
+		debitAccount = accounts[1]
+		creditAccount = accounts[0]
+	}
 	current, err := accountDao.Get(ledgerId, accountId)
 	if err != nil {
 		return errors.WithMessage(err, "get account when adjusting balance")
 	}
 
 	now := time.Now().UnixMicro()
-	transDO := dao.Transaction{
-		CreateTime: now,
-		LedgerId:   ledgerId,
-		Amount:     amount.Abs(),
-		UserId:     userId,
+	tranDO := dao.Transaction{
+		TradingTime: time.Now().UnixMilli(),
+		CreateTime:  now,
+		LedgerId:    ledgerId,
+		AccountId:   accountId,
+		CpAccountId: consts.TypeEquityAccount,
+		Amount:      amount,
+		UserId:      userId,
 	}
 
 	switch current.Type {
-	case acc.TypeAsset, acc.TypeReceivables:
-		// 如果是正数
-		if amount.IsPositive() {
-			transDO.AccountId = consts.AccountBalanceIncome
-			transDO.CpAccountId = accountId
-			transDO.Type = t.TypeIncome
-		} else {
-			transDO.AccountId = consts.AccountBalanceExpenses
-			transDO.CpAccountId = accountId
-			transDO.Type = t.TypeExpenses
-		}
-	case acc.TypeDebt, acc.TypeEquity:
-		// 如果是正数
-		if amount.IsPositive() {
-			transDO.AccountId = consts.AccountBalanceExpenses
-			transDO.CpAccountId = accountId
-			transDO.Type = t.TypeExpenses
-		} else {
-			transDO.AccountId = consts.AccountBalanceIncome
-			transDO.CpAccountId = accountId
-			transDO.Type = t.TypeIncome
-		}
+	case acc.TypeAsset:
+		tranDO.Type = t.TypeBalanceChange
+	case acc.TypeReceivables:
+		tranDO.Type = t.TypeReceivablesChange
+	case acc.TypeDebt:
+		tranDO.Type = t.TypeDebtChange
+	default:
+		return errors.New("Only balance changes, debt changes and liability changes are supported")
 	}
-	if err := transactionDao.Insert(tx, &transDO); err != nil {
+
+	if err := transactionDao.Insert(db.DB, &tranDO); err != nil {
 		return err
 	}
 	return nil
@@ -79,15 +87,13 @@ func (s *TransactionService) Insert(tx *gorm.DB, tran *model.TransactionBO) erro
 		UserId:      tran.UserId,
 	}
 
-	if err := transactionDao.Insert(tx, &transDO); err != nil {
-		return err
-	}
-	return nil
+	return transactionDao.Insert(tx, &transDO)
 }
 
 func (s *TransactionService) ListTotal(tran *model.TransactionQuery) (*model.TransactionTotalVO, error) {
 	totals, err := transactionDao.ListTotal(tran)
 	if err != nil {
+		log.Error(err, "list total account")
 		return nil, err
 	}
 
@@ -116,22 +122,27 @@ func (s *TransactionService) ListTotal(tran *model.TransactionQuery) (*model.Tra
 func (s *TransactionService) List(tran *model.TransactionQuery) ([]*model.TransactionVO, error) {
 	dos, err := transactionDao.List(tran)
 	if err != nil {
+		log.Error(err, "list transaction")
 		return nil, err
 	}
 	accounts, err := accountDao.List(tran.LedgerId)
 	if err != nil {
+		log.Error(err, "list transaction")
 		return nil, err
 	}
 	projects, err := projectDao.ListAll(tran.LedgerId)
 	if err != nil {
+		log.Error(err, "list transaction")
 		return nil, err
 	}
 	members, err := memberDao.ListAll(tran.LedgerId)
 	if err != nil {
+		log.Error(err, "list transaction")
 		return nil, err
 	}
 	suppliers, err := supplierDao.ListAll(tran.LedgerId)
 	if err != nil {
+		log.Error(err, "list transaction")
 		return nil, err
 	}
 	var vos []*model.TransactionVO
