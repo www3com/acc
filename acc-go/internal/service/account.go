@@ -100,10 +100,23 @@ func (s *AccountService) Overview(ledgerId int64) (*model.AccountOverview, error
 	}
 
 	// 构造树
-	var calcAccounts []*dao.Account
+	var calcAccounts []*model.AccountVO
 	for _, account := range accounts {
 		if code.Level(account.Code) == 1 {
-			calcAccounts = append(calcAccounts, account)
+			vo := model.AccountVO{
+				ID:         account.ID,
+				Type:       account.Type,
+				Name:       account.Name,
+				Code:       account.Code,
+				Level:      account.Level,
+				Debit:      account.Debit,
+				Credit:     account.Credit,
+				Balance:    account.Balance,
+				Icon:       account.Icon,
+				CurrencyId: account.CurrencyId,
+				Remark:     account.Remark,
+			}
+			calcAccounts = append(calcAccounts, &vo)
 			continue
 		}
 		parent := accountMap[code.Parent(account.Code)]
@@ -147,7 +160,7 @@ func (s *AccountService) ListAll(ledgerId int64) ([]*dao.Account, error) {
 	return buildTree(accounts), nil
 }
 
-func calc(accountDetails *model.AccountOverview, account *dao.Account) {
+func calc(accountDetails *model.AccountOverview, account *model.AccountVO) {
 	if account.Children == nil {
 		return
 	}
@@ -190,5 +203,7 @@ func updateAccount(tx *gorm.DB, balance model.UpdateAccountBalanceBO) error {
 	if balance.IncreaseAccountType == acc.TypeAsset {
 
 	}
+
+	return nil
 
 }

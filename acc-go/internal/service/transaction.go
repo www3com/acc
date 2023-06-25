@@ -21,7 +21,7 @@ type TransactionService struct{}
 var p = message.NewPrinter(language.English)
 
 func (s *TransactionService) AdjustBalance(ledgerId int64, userId int64, accountId int64, amount decimal.Decimal) error {
-	accounts, err := accountDao.ListByIds(ledgerId, increaseAccountId, decreaseAccountId)
+	accounts, err := accountDao.ListByIds(ledgerId, accountId)
 	if err != nil {
 		return err
 	}
@@ -29,14 +29,14 @@ func (s *TransactionService) AdjustBalance(ledgerId int64, userId int64, account
 	if len(accounts) != 2 {
 		return errors.New("the query account returns not two results")
 	}
-	var debitAccount, creditAccount *dao.Account
-	if accounts[0].ID == debitAccountId {
-		debitAccount = accounts[0]
-		creditAccount = accounts[1]
-	} else {
-		debitAccount = accounts[1]
-		creditAccount = accounts[0]
-	}
+	//var debitAccount, creditAccount *dao.Account
+	//if accounts[0].ID == debitAccountId {
+	//	debitAccount = accounts[0]
+	//	creditAccount = accounts[1]
+	//} else {
+	//	debitAccount = accounts[1]
+	//	creditAccount = accounts[0]
+	//}
 	current, err := accountDao.Get(ledgerId, accountId)
 	if err != nil {
 		return errors.WithMessage(err, "get account when adjusting balance")

@@ -7,6 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
+type TransactionTotal struct {
+	Type   int ``
+	Amount decimal.Decimal
+}
+
 type Transaction struct {
 	ID          int64 `gorm:"primary_key"`
 	CreateTime  int64 `json:"-"`
@@ -39,8 +44,8 @@ func (d *TransactionDao) List(tran *model.TransactionQuery) ([]*Transaction, err
 	return transactions, err
 }
 
-func (d *TransactionDao) ListTotal(tran *model.TransactionQuery) ([]*model.TransactionTotalBO, error) {
-	var transactions []*model.TransactionTotalBO
+func (d *TransactionDao) ListTotal(tran *model.TransactionQuery) ([]*TransactionTotal, error) {
+	var transactions []*TransactionTotal
 	sql := "select" + " Type, sum(amount) Amount from acc_transaction where type in(1,2) and " + buildWhere(tran) + " group by type"
 	err := db.DB.Table("acc_transaction").Raw(sql, tran).Scan(&transactions).Error
 	return transactions, err

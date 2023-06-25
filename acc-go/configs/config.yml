@@ -4,10 +4,10 @@ server:
 
 # Database configuration
 data-source:
-  host: localhost
-  port: 5432
-  user: postgres
-  password: postgres
+  host: ${ACC_DB_HOST}
+  port: ${ACC_DB_PORT}
+  user: ${ACC_DB_USER}
+  password: ${ACC_DB_PASSWORD}
   database: acc
 
 # Send email configuration

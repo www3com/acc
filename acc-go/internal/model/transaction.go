@@ -2,11 +2,6 @@ package model
 
 import "github.com/shopspring/decimal"
 
-type TransactionTotalBO struct {
-	Type   int ``
-	Amount decimal.Decimal
-}
-
 type TransactionTotalVO struct {
 	Income  string `json:"income"`
 	Expense string `json:"expense"`

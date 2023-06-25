@@ -8,7 +8,7 @@ import {
     LineChartOutlined
 } from "@ant-design/icons";
 
-import RightContent from "@/pages/layout/component/RightContent";
+import RightContent from "@/layouts/component/RightContent";
 import {history, useLocation} from "umi";
 
 const onClick = ({key}: any) => {

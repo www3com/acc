@@ -3,7 +3,7 @@ import style from './style.less'
 import zhCN from 'antd/locale/zh_CN';
 import Footer1 from "@/components/Footer";
 import {Outlet} from 'umi';
-import Top from "@/pages/layout/component/Top";
+import Top from "@/layouts/component/Top";
 import {LayoutStore} from "@/stores/layout";
 import {Provider} from "mobx-react";
 import {theme} from '@/components/Theme';
